@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover', // or 'stretch' or 'contain'
+    resizeMode: 'cover',
   },
   button: {
     width: buttonWidth,
