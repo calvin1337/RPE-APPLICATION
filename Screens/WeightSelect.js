@@ -25,6 +25,7 @@ export default function WeightPicker({route}) {
       <View style={styles.weightContainer}>
       <Text style={{textAlign:'center', color: 'white'}} >Weight Selector</Text>
       </View>
+      <Text style={{textAlign:'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight:'200'}}>You can change this later</Text>
       </View>
         <View style={styles.bottomContainer}>
           <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor: '#AEAEAE'}]} onPress={() => selectWeight("test")} >

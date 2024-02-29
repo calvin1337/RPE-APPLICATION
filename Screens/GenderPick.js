@@ -32,7 +32,6 @@ export default function GenderPick() {
       </View>
     </View>
     </ImageBackground>
-
   )
 }
 
@@ -59,5 +58,4 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 100
   }
- 
 });
