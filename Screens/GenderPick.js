@@ -48,11 +48,12 @@ const styles = StyleSheet.create({
     resizeMode: 'cover', // or 'stretch' or 'contain'
   },
   button: {
-    textAlign: 'center',
-    padding: 20,
-    borderRadius: 50,
-    backgroundColor: 'rgba(27, 23, 39, 0.8)',
-    borderRadius: buttonWidth / 2
+    width: buttonWidth,
+      height: buttonWidth, 
+      borderRadius: buttonWidth / 2, 
+      backgroundColor: 'rgba(27, 23, 39, 0.8)',
+      alignItems: 'center',
+      justifyContent: 'center',
     
   },
   buttonContainer: {

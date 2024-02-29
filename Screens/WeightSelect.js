@@ -27,10 +27,10 @@ export default function WeightPicker({route}) {
       </View>
       </View>
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor: '#AEAEAE'}]} onPress={() => selectWeight("")} >
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor: '#AEAEAE'}]} onPress={() => selectWeight("test")} >
             <Text style={styles.buttonText}>Skip</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor:'#66AEC5'}]}  onPress={() => selectWeight("")}>
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor:'#66AEC5'}]}  onPress={() => selectWeight("test")}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
@@ -58,7 +58,7 @@ export default function WeightPicker({route}) {
       marginVertical: 10,
     },
     buttonText: {
-      color: '#ffffff', 
+      color: '#030303', 
       fontWeight: 'bold',
       textAlign: 'center'
     },
