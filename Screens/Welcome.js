@@ -51,13 +51,13 @@ export default function Home({ setSignedIn} ) {
       marginVertical: 10,
     },
     buttonText: {
-      color: '#ffffff', 
+      color: '#030303', 
       fontWeight: 'bold',
       textAlign: 'center'
     },
     backgroundImage: {
       flex: 1,
-      resizeMode: 'cover', // or 'stretch' or 'contain'
+      resizeMode: 'cover', 
     },
   
    
