@@ -1,23 +1,36 @@
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.4; 
 
 export default function WeightPicker({route}) {
   const { Gender } = route.params;
+  const navigation = useNavigation();
 
-  
+  const selectWeight = (weight) => {
+    navigation.navigate('LoginInfo', { Gender: Gender, Weight: weight  });
+
+  }
   
     return (
       <ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?q=80&w=1948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }} style={styles.backgroundImage}> 
       <View style={styles.container}>
-        <Text>{Gender}</Text>
+      <View style={styles.topContainer}>
+      <Text style={{textAlign:'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold'}}>Select Your Weight</Text>
+      <Text style={{textAlign:'center', margin: 10, color: '#EDF2F4', fontSize: 16, fontWeight: '500'}}>155 lbs</Text>      
+      <Text style={{textAlign:'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight:'300'}}>72 kg</Text>      
+      {/* Weight Selector to be added */}
+      <View style={styles.weightContainer}>
+      <Text style={{textAlign:'center', color: 'white'}} >Weight Selector</Text>
+      </View>
+      </View>
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor: '#AEAEAE'}]} >
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor: '#AEAEAE'}]} onPress={() => selectWeight("")} >
             <Text style={styles.buttonText}>Skip</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor:'#66AEC5'}]} >
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor:'#66AEC5'}]}  onPress={() => selectWeight("")}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
@@ -29,7 +42,7 @@ export default function WeightPicker({route}) {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'flex-end',
+      justifyContent:'space-between',
       backgroundColor: 'rgba(43, 45, 66, 0.7)'
     },
     bottomContainer: {
@@ -51,8 +64,18 @@ export default function WeightPicker({route}) {
     },
     backgroundImage: {
       flex: 1,
-      resizeMode: 'cover', // or 'stretch' or 'contain'
+      resizeMode: 'cover', 
     },
-  
+    topContainer: {
+      alignItems: 'center',
+      width: '100%',
+      paddingTop: 100
+    },
+    weightContainer: {
+      justifyContent: 'center',
+      height: 300,
+      width: '90%',
+      backgroundColor: '#2B2D42'
+    }
    
   });

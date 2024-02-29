@@ -12,7 +12,8 @@ import Graphs from './Screens/Graph';
 import Welcome from "./Screens/Welcome"
 import InSport from "./Screens/InSport";
 import GenderPick from './Screens/GenderPick';
-import WeightPicker from './Screens/WeightSelect';
+import LoginInformation from './Screens/LoginInfo';
+import WeightPicker from './Screens/weightSelect';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -107,6 +108,7 @@ const WelcomeStack = ({ setSignedIn }) => {
       </Stack.Screen>
       <Stack.Screen name="GenderPick" component={GenderPick} />
       <Stack.Screen name="WeightPicker" component={WeightPicker} />
+      <Stack.Screen name="LoginInfo" component={LoginInformation} />
     </Stack.Navigator>
   );
 }

@@ -7,6 +7,7 @@ const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.5; 
 
 export default function GenderPick() {
+  
   const navigation = useNavigation();
   const selectGender = (gender) => {
     navigation.navigate('WeightPicker', { Gender: gender });
