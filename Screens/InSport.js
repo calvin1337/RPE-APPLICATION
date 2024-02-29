@@ -34,6 +34,22 @@ export default function InSport({navigation, route}) {
       <View style={styles.row}>
         <Text style={styles.text}>5. Hard</Text>
       </View>
+      <View style={styles.row}>
+        <Text style={styles.text}>6. - </Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.text}>7. Very Hard</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.text}>8. - </Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.text}>9. - </Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.text}>10. Maximal</Text>
+      </View>
+
     </View>
     <View style={styles.inputContainer}>
       <TimePicker />
