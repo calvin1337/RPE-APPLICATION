@@ -1,17 +1,16 @@
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import React from 'react'
+import React from 'react';
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.5; 
+const buttonWidth = width * 0.5;
 
 export default function GenderPick() {
   
   const navigation = useNavigation();
   const selectGender = (gender) => {
     navigation.navigate('WeightPicker', { Gender: gender });
-
   }
 
   return (
@@ -19,20 +18,21 @@ export default function GenderPick() {
 
     <View style={styles.container}>
       <View>
-        <TouchableOpacity style={styles.button} onPress={() => selectGender("Male")}>
-        <Ionicons name="man" size={100} color="white" style={{textAlign: 'center', width: buttonWidth,  }}/>
-        <Text style={{textAlign:'center', margin: 10, color: 'white'}}>Male</Text>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => selectGender("Male")}>
+          <View style={styles.button}>
+            <Ionicons name="man" size={100} color="white" style={{ textAlign: 'center' }} />
+            <Text style={{ textAlign: 'center', margin: 10, color: 'white' }}>Male</Text>
+          </View>
         </TouchableOpacity>
-        <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => selectGender("Female")}>
-        <Ionicons name="woman" size={100} color="white" style={{textAlign: 'center', width: buttonWidth }} />
-        <Text style={{textAlign:'center', margin: 10, color: 'white'}}>Female</Text>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => selectGender("Female")}>
+          <View style={styles.button}>
+            <Ionicons name="woman" size={100} color="white" style={{ textAlign: 'center' }} />
+            <Text style={{ textAlign: 'center', margin: 10, color: 'white' }}>Female</Text>
+          </View>
         </TouchableOpacity>
-        </View>
       </View>
     </View>
     </ImageBackground>
-
   )
 }
 
@@ -47,17 +47,16 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
   },
+  buttonContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
   button: {
     width: buttonWidth,
-      height: buttonWidth, 
-      borderRadius: buttonWidth / 2, 
-      backgroundColor: 'rgba(27, 23, 39, 0.8)',
-      alignItems: 'center',
-      justifyContent: 'center',
-    
+    height: buttonWidth,
+    borderRadius: buttonWidth / 2,
+    backgroundColor: 'rgba(27, 23, 39, 0.8)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  buttonContainer: {
-    marginTop: 100
-  }
- 
 });
