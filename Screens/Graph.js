@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     alignItems: 'center',
-    width: '75%', // Adjust width to fit buttons evenly in a row
+    width: '100%', // Adjust width to fit buttons evenly in a row
   },
   buttonText: {
     color: 'white',
