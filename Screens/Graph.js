@@ -80,14 +80,14 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   box: {
-    
+    width: buttonWidth,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
   },
   emptyBox: {
-    //width: buttonWidth,
+    width: buttonWidth,
     height: buttonWidth,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 10,
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
+    width: buttonWidth,
     backgroundColor: 'rgba(43, 45, 66, 0.8)',
     padding: 10,
     borderRadius: 5,
