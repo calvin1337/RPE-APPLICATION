@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.5;
+const buttonWidth = width * 0.9;
 
 export default function AnalyticsPage() {
   const navigation = useNavigation();
