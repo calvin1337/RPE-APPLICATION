@@ -36,7 +36,7 @@ export default function AnalyticsPage() {
         </View>
 
         <View style={styles.box}>
-          <Text style={styles.heading}>Graph timescale:</Text>
+          <Text style={styles.heading}>Graph Timescale:</Text>
           <TouchableOpacity style={styles.button} onPress={() => selectDuration('Daily')}>
             <Text style={styles.text}>Daily</Text>
           </TouchableOpacity>
@@ -69,7 +69,7 @@ export default function AnalyticsPage() {
 
 const styles = StyleSheet.create({
   container: {
-    width: 90%,
+    width: buttonWidth,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   box: {
-    width: 90%,
+    width: buttonWidth,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 10,
     padding: 20,
