@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.5;
+const buttonWidth = width * 0.05;
 
 export default function GenderPick() {
   
@@ -20,13 +20,13 @@ export default function GenderPick() {
       <View>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => selectGender("Male")}>
           <View style={styles.button}>
-            <Ionicons name="man" size={10} color="white" style={{ textAlign: 'center' }} />
+            <Ionicons name="man" size={100} color="white" style={{ textAlign: 'center' }} />
             <Text style={{ textAlign: 'center', margin: 10, color: 'white' }}>Male</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => selectGender("Female")}>
           <View style={styles.button}>
-            <Ionicons name="woman" size={10} color="white" style={{ textAlign: 'center' }} />
+            <Ionicons name="woman" size={100} color="white" style={{ textAlign: 'center' }} />
             <Text style={{ textAlign: 'center', margin: 10, color: 'white' }}>Female</Text>
           </View>
         </TouchableOpacity>
