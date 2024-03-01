@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.25;
+const buttonWidth = width * 0.5;
 
 export default function GenderPick() {
   
