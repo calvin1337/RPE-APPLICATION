@@ -20,7 +20,7 @@ export default function AnalyticsPage() {
   return (
     <ImageBackground
       source={{
-        uri:
+        uri://need put a different image here as this is the same as the GenderPick.js background
           'https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=1941&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       }}
       style={styles.backgroundImage}
