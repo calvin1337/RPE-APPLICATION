@@ -2,11 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.5;
-
 
 export default function AnalyticsPage() {
   const navigation = useNavigation();
@@ -39,16 +37,16 @@ export default function AnalyticsPage() {
         <View style={styles.box}>
           <Text style={styles.heading}>Graph Timescale:</Text>
           <TouchableOpacity style={styles.button} onPress={() => selectDuration('Daily')}>
-            <Text style={styles.text}>Daily</Text>
+            <Text style={styles.buttonText}>Daily</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => selectDuration('Weekly')}>
-            <Text style={styles.text}>Weekly</Text>
+            <Text style={styles.buttonText}>Weekly</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => selectDuration('Bi-Weekly')}>
-            <Text style={styles.text}>Bi-Weekly</Text>
+            <Text style={styles.buttonText}>Bi-Weekly</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => selectDuration('Monthly')}>
-            <Text style={styles.text}>Monthly</Text>
+            <Text style={styles.buttonText}>Monthly</Text>
           </TouchableOpacity>
         </View>
 
@@ -57,10 +55,10 @@ export default function AnalyticsPage() {
         <View style={styles.box}>
           <Text style={styles.heading}>Attribute Boxes:</Text>
           <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Duration Only')}>
-            <Text style={styles.text}>Duration Only</Text>
+            <Text style={styles.buttonText}>Duration Only</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Average Ratings')}>
-            <Text style={styles.text}>Average Ratings</Text>
+            <Text style={styles.buttonText}>Average Ratings</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   box: {
-    width: buttonWidth,
+    width: '90%',
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 10,
     padding: 20,
@@ -104,10 +102,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    width: buttonWidth,
     backgroundColor: 'rgba(43, 45, 66, 0.8)',
-    padding: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 5,
-    marginBottom: 5,
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
