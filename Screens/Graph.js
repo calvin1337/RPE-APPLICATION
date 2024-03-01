@@ -69,7 +69,6 @@ export default function AnalyticsPage() {
 
 const styles = StyleSheet.create({
   container: {
-    width: buttonWidth,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
