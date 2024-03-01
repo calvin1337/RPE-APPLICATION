@@ -36,30 +36,34 @@ export default function AnalyticsPage() {
 
         <View style={styles.box}>
           <Text style={styles.heading}>Graph Timescale:</Text>
-          <TouchableOpacity style={styles.button} onPress={() => selectDuration('Daily')}>
-            <Text style={styles.buttonText}>Daily</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => selectDuration('Weekly')}>
-            <Text style={styles.buttonText}>Weekly</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => selectDuration('Bi-Weekly')}>
-            <Text style={styles.buttonText}>Bi-Weekly</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => selectDuration('Monthly')}>
-            <Text style={styles.buttonText}>Monthly</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Daily')}>
+              <Text style={styles.buttonText}>Daily</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Weekly')}>
+              <Text style={styles.buttonText}>Weekly</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Bi-Weekly')}>
+              <Text style={styles.buttonText}>Bi-Weekly</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Monthly')}>
+              <Text style={styles.buttonText}>Monthly</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.emptyBox}></View>
 
         <View style={styles.box}>
           <Text style={styles.heading}>Attribute Boxes:</Text>
-          <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Duration Only')}>
-            <Text style={styles.buttonText}>Duration Only</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Average Ratings')}>
-            <Text style={styles.buttonText}>Average Ratings</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Duration Only')}>
+              <Text style={styles.buttonText}>Duration Only</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Average Ratings')}>
+              <Text style={styles.buttonText}>Average Ratings</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ImageBackground>
@@ -101,6 +105,11 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 5,
   },
+  buttonGroup: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
   button: {
     backgroundColor: 'rgba(43, 45, 66, 0.8)',
     paddingVertical: 12,
@@ -108,6 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     alignItems: 'center',
+    width: '45%', // Adjust width to fit buttons evenly in a row
   },
   buttonText: {
     color: 'white',
