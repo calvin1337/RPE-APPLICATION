@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   box: {
-    width: buttonWidth,
+    
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 10,
     padding: 20,
