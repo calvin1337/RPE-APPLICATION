@@ -69,7 +69,7 @@ export default function AnalyticsPage() {
 
 const styles = StyleSheet.create({
   container: {
-    width: buttonWidth,
+    width: 90%,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   box: {
-    width: buttonWidth,
+    width: 90%,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 10,
     padding: 20,
