@@ -6,6 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.9;
+const buttonWidth2 = width * 0.5;
 
 export default function AnalyticsPage() {
   const navigation = useNavigation();
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
+    width:buttonWidth2,
     backgroundColor: 'rgba(43, 45, 66, 0.8)',
     padding: 10,
     borderRadius: 5,
