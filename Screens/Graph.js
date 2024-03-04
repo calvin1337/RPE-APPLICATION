@@ -31,7 +31,7 @@ export default function AnalyticsPage() {
           <Text style={styles.text}>Weekly</Text>
           <Text style={styles.text}>Total Sum: 1370</Text>
           <Text style={styles.text}>Average: 190</Text>
-          <Text style={styles.text}>Sessions: 14</Text>
+          <Text style={styles.text}>Sessions: 11</Text>
         </View>
 
         <View style={styles.box}>
