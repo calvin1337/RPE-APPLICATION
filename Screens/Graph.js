@@ -64,9 +64,9 @@ export default function AnalyticsPage() {
             width={width * 0.9}
             height={200}
             chartConfig={{
-              backgroundGradientFrom: '#1E2923',
+              backgroundGradientFrom: 'blue',
               backgroundGradientFromOpacity: 1,
-              backgroundGradientTo: '#08130D',
+              backgroundGradientTo: 'red',
               backgroundGradientToOpacity: 1,
               color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
               strokeWidth: 4, // Thinner bars
