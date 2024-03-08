@@ -20,10 +20,10 @@ export default function AnalyticsPage() {
 
   // Sample data
   const data = {
-    labels: ['04/09/2023', '05/09/2023', '06/09/2023', '07/09/2023', '08/09/2023', '11/09/2023', '12/09/2023', '13/09/2023', '14/09/2023', '15/09/2023', '18/09/2023'],
+    labels: ['04/09/2023', '05/09/2023', '06/09/2023', '07/09/2023', '08/09/2023', '11/09/2023', '12/09/2023'],
     datasets: [
       {
-        data: [350, 180, 432, 408, 440, 400, 320, 415, 385, 406, 356],
+        data: [350, 180, 432, 408, 440, 400, 320],
         color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
       },
     ],
@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
   },
   graph: {
     width: '90%',
-    height:300,
     //backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
     marginBottom: 10,
