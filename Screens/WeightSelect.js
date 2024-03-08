@@ -1,16 +1,10 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.4;
 const Items = Array.from(Array(100).keys());
-
-const renderItem = (item, index) => (
-  <View style={[styles.item, { width: 80 }]}>
-    <Text style={styles.itemText}>{item}</Text>
-  </View>
-);
 
 export default function WeightPicker({ route }) {
   const { Gender } = route.params;
@@ -21,12 +15,12 @@ export default function WeightPicker({ route }) {
   };
 
   return (
-    <ImageBackground style={styles.backgroundImage}
+    <ImageBackground
+      style={styles.backgroundImage}
       source={{
         uri:
           'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?q=80&w=1948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       }}
-     
     >
       <View style={styles.container}>
         <View style={styles.topContainer}>
@@ -41,8 +35,18 @@ export default function WeightPicker({ route }) {
           </Text>
           {/* Weight Selector */}
           <View style={styles.weightContainer}>
-            <Text style={{ textAlign: 'center', color: 'white' }}>Weight Selector</Text>
-            
+            <Text style={{ textAlign: 'center', color: 'white', marginBottom: 10 }}>Weight Selector</Text>
+            <ScrollView
+              horizontal
+              contentContainerStyle={{ alignItems: 'center' }}
+              showsHorizontalScrollIndicator={false}
+            >
+              {Items.map((item, index) => (
+                <TouchableOpacity key={index} style={styles.item} onPress={() => selectWeight(item)}>
+                  <Text style={styles.itemText}>{item}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight: '200' }}>
             You can change this later
@@ -91,7 +95,6 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-
   },
   topContainer: {
     alignItems: 'center',
@@ -103,11 +106,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     height: 300,
-
   },
   item: {
     alignItems: 'center',
     justifyContent: 'center',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 1,
+    borderColor: 'white',
+    marginHorizontal: 5,
   },
   itemText: {
     color: 'white',
