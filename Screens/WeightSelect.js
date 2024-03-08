@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.4;
-const Items = Array.from({ length: 121 }, (_, index) => `${index + 30} kg`); // kg array from 30 to 150
+const startWeight = 30;
+const endWeight = 150;
+const increment = 0.5;
+
+const generateItems = () => {
+  const items = [];
+  for (let i = startWeight; i <= endWeight; i += increment) {
+    items.push(`${i} kg`);
+  }
+  return items;
+};
+
+const Items = generateItems();
 
 export default function WeightPicker({ route }) {
   const { Gender } = route.params;
   const navigation = useNavigation();
+  const scrollViewRef = useRef(null);
 
   const selectWeight = (weight) => {
     navigation.navigate('LoginInfo', { Gender: Gender, Weight: weight });
   };
+
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      const initialOffset = ((Items.length - 1) / 2) * 85; // Assuming each item width is 80 with 5 margin, adjust as needed
+      scrollViewRef.current.scrollTo({ x: initialOffset, animated: false });
+    }
+  }, []);
 
   return (
     <ImageBackground
@@ -33,6 +53,7 @@ export default function WeightPicker({ route }) {
             <View style={styles.scrollContainer}>
               <ScrollView
                 horizontal
+                ref={scrollViewRef}
                 contentContainerStyle={styles.scrollContentContainer}
                 showsHorizontalScrollIndicator={false}
               >
