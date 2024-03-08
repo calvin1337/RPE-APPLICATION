@@ -35,7 +35,7 @@ export default function WeightPicker({ route }) {
             Select Your Weight
           </Text>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 16, fontWeight: '500' }}>
-            156 lbs
+            155 lbs
           </Text>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight: '300' }}>
             72 kg
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     height: 300,
-    backgroundColor: 'rgba(43, 0, 0, 0)'
+    backgroundColor: 'rgba(43, 0, 0, 0.5)',
   },
   item: {
     alignItems: 'center',
