@@ -73,12 +73,12 @@ export default function WeightPicker({ route }) {
           <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#AEAEAE' }]} onPress={() => selectWeight('Empty')}>
             <Text style={styles.buttonText}>Skip</Text>
           </TouchableOpacity>
-          {/*<TouchableOpacity
+          <TouchableOpacity
             style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]}
-            onPress={() => selectWeight('158lb/72kg')}
+            //onPress={() => selectWeight('158lb/72kg')}
           >
             <Text style={styles.buttonText}>Continue</Text>
-                </TouchableOpacity>*/}
+          </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
