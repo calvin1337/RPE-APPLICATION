@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.4;
-const Items = Array.from({ length: 121 }, (_, index) => index + 30); // Adjusted array from 30 to 150
+const Items = Array.from({ length: 121 }, (_, index) => `${index + 30} kg`); // kg array from 30 to 150
 
 export default function WeightPicker({ route }) {
   const { Gender } = route.params;
