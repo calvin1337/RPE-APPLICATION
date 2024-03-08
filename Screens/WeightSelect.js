@@ -47,7 +47,7 @@ export default function WeightPicker({ route }) {
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold' }}>
             Select Your Weight
           </Text>
-          {/* Weight Selector */}
+          
           <View style={styles.weightContainer}>
             <Text style={{ textAlign: 'center', color: 'white', marginBottom: 10 }}>Weight Selector</Text>
             <View style={styles.scrollContainer}>
