@@ -36,17 +36,19 @@ export default function WeightPicker({ route }) {
           {/* Weight Selector */}
           <View style={styles.weightContainer}>
             <Text style={{ textAlign: 'center', color: 'white', marginBottom: 10 }}>Weight Selector</Text>
-            <ScrollView
-              horizontal
-              contentContainerStyle={{ alignItems: 'center' }}
-              showsHorizontalScrollIndicator={false}
-            >
-              {Items.map((item, index) => (
-                <TouchableOpacity key={index} style={styles.item} onPress={() => selectWeight(item)}>
-                  <Text style={styles.itemText}>{item}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+            <View style={styles.scrollContainer}>
+              <ScrollView
+                horizontal
+                contentContainerStyle={styles.scrollContentContainer}
+                showsHorizontalScrollIndicator={false}
+              >
+                {Items.map((item, index) => (
+                  <TouchableOpacity key={index} style={styles.item} onPress={() => selectWeight(item)}>
+                    <Text style={styles.itemText}>{item}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
           </View>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight: '200' }}>
             You can change this later
@@ -58,7 +60,7 @@ export default function WeightPicker({ route }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]}
-            onPress={() => selectWeight('158lb/72kg')}
+            //onPress={() => selectWeight('158lb/72kg')}
           >
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
@@ -106,6 +108,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     height: 300,
+  },
+  scrollContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  scrollContentContainer: {
+    alignItems: 'center',
   },
   item: {
     alignItems: 'center',
