@@ -64,8 +64,8 @@ export default function AnalyticsPage() {
             width={width * 0.9}
             height={200}
             chartConfig={{
-              backgroundGradientFrom: '43, 45, 66, 0.7',
-              backgroundGradientTo: '43, 45, 66, 0.7',
+              backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
+              backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
               barPercentage: 0.7,
              
               fillShadowGradient: `rgba(1, 122, 205, 1)`,
