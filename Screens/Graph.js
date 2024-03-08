@@ -75,20 +75,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom:60,
   },
   box: {
     width: '90%',
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
     padding: 20,
-    marginBottom: 60,
+    marginBottom:5,
   },
   emptyBox: {
     width: '90%',
     height: buttonWidth,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   heading: {
     fontSize: 20,
