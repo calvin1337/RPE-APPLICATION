@@ -22,12 +22,12 @@ export default function WeightPicker({ route }) {
   };
 
   return (
-    <ImageBackground
+    <ImageBackground style={styles.backgroundImage}
       source={{
         uri:
           'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?q=80&w=1948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       }}
-      style={styles.backgroundImage}
+      
     >
       <View style={styles.container}>
         <View style={styles.topContainer}>
@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)', // Darken the background
   },
   bottomContainer: {
     flexDirection: 'column',
@@ -91,6 +90,8 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darken the background
+
   },
   topContainer: {
     alignItems: 'center',
