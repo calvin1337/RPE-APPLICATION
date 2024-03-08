@@ -8,7 +8,7 @@ const buttonWidth = width * 0.4;
 const Items = Array.from(Array(100).keys());
 
 const renderItem = (item, index) => (
-  <View style={styles.item}>
+  <View style={[styles.item, { width: 80 }]}>
     <Text style={styles.itemText}>{item}</Text>
   </View>
 );
@@ -27,7 +27,7 @@ export default function WeightPicker({ route }) {
         uri:
           'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?q=80&w=1948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       }}
-      
+     
     >
       <View style={styles.container}>
         <View style={styles.topContainer}>
@@ -64,6 +64,7 @@ export default function WeightPicker({ route }) {
     </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
