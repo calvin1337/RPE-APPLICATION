@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
+    backgroundColor: 'rgba(43, 45, 66, 0.7)',
   },
   bottomContainer: {
     flexDirection: 'column',
@@ -90,7 +91,6 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darken the background
 
   },
   topContainer: {
@@ -102,8 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
-    //backgroundColor: 'transparent', // Change to transparent to remove the blue box
-    //height: 300,
+    height: 300,
   },
   item: {
     alignItems: 'center',
