@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
@@ -18,13 +18,7 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <ImageBackground
-      source={{
-        uri://need put a different image here as this is the same as the GenderPick.js background
-          'https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=1941&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      }}
-      style={styles.backgroundImage}
-    >
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.box}>
           <Text style={styles.heading}>Stats:</Text>
@@ -66,20 +60,21 @@ export default function AnalyticsPage() {
           </View>
         </View>
       </View>
-    </ImageBackground>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(43, 45, 66, 0.7)',
   },
-  backgroundImage: {
+  container: {
     flex: 1,
-    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   box: {
     width: '90%',
