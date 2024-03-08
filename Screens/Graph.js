@@ -69,7 +69,7 @@ export default function AnalyticsPage() {
               backgroundGradientTo: '#08130D',
               backgroundGradientToOpacity: 0.5,
               color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
-              strokeWidth: 1, // Thinner bars
+              strokeWidth: 0.2, // Thinner bars
             }}
             style={styles.chart}
             verticalLabelRotation={30}
