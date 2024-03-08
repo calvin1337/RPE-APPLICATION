@@ -79,15 +79,15 @@ const styles = StyleSheet.create({
   box: {
     width: '90%',
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
-    borderRadius: 10,
-    padding: 50,
+    borderRadius: 5,
+    padding: 20,
     marginBottom: 60,
   },
   emptyBox: {
     width: '90%',
     height: buttonWidth,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
-    borderRadius: 10,
+    borderRadius: 5,
     marginBottom: 20,
   },
   heading: {
