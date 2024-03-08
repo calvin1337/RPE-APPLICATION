@@ -64,12 +64,15 @@ export default function AnalyticsPage() {
             width={width * 0.9}
             height={200}
             chartConfig={{
-              backgroundGradientFrom: 'blue',
-              backgroundGradientFromOpacity: 1,
-              backgroundGradientTo: 'red',
-              backgroundGradientToOpacity: 1,
-              color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
-              strokeWidth: 4, // Thinner bars
+              backgroundGradientFrom: "#fff",
+              backgroundGradientTo: "#fff",
+              barPercentage: 0.7,
+             
+              fillShadowGradient: `rgba(1, 122, 205, 1)`,
+              fillShadowGradientOpacity: 1,
+              decimalPlaces: 0, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+              labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
             }}
             style={styles.chart}
             verticalLabelRotation={30}
