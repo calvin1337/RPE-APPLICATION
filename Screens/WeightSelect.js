@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.4; 
+const buttonWidth = width * 0.4;
 
 export default function WeightPicker({ route }) {
   const { Gender } = route.params;
   const navigation = useNavigation();
+  const [selectedWeight, setSelectedWeight] = useState("155 lbs");
 
-  const selectWeight = (weight) => {
-    navigation.navigate('LoginInfo', { Gender: Gender, Weight: weight });
+  const selectWeight = () => {
+    navigation.navigate('LoginInfo', { Gender: Gender, Weight: selectedWeight });
+  }
+
+  // Function to handle weight selection
+  const handleWeightSelection = (weight) => {
+    setSelectedWeight(weight);
+  }
+
+  // Generate weight options (you can customize these)
+  const weights = [];
+  for (let i = 80; i <= 300; i++) {
+    weights.push(`${i} lbs / ${Math.round(i * 0.453592)} kg`);
   }
 
   return (
@@ -18,25 +30,21 @@ export default function WeightPicker({ route }) {
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold' }}>Select Your Weight</Text>
-          <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 16, fontWeight: '500' }}>155 lbs</Text>
-          <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight: '300' }}>72 kg</Text>
-          {/* Weight Selector */}
-          <View style={styles.weightContainer}>
-            <ScrollView horizontal contentContainerStyle={{ flexGrow: 1 }}>
-              {[...Array(150)].map((_, index) => (
-                <TouchableOpacity key={index} style={styles.weightItem} onPress={() => selectWeight(`${index + 100} lb / ${Math.round((index + 100) * 0.453592)} kg`)}>
-                  <Text style={styles.weightText}>{`${index + 100} lb`}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
+          <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 16, fontWeight: '500' }}>{selectedWeight}</Text>
+          <ScrollView horizontal contentContainerStyle={styles.weightSelector}>
+            {weights.map((weight, index) => (
+              <TouchableOpacity key={index} style={[styles.weightIndicator, weight === selectedWeight && styles.selectedWeight]} onPress={() => handleWeightSelection(weight)}>
+                <Text style={{ color: 'white' }}>{weight}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight: '200' }}>You can change this later</Text>
         </View>
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#AEAEAE' }]} onPress={() => selectWeight("Empty")}>
+          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#AEAEAE' }]} onPress={() => selectWeight("Empty")} >
             <Text style={styles.buttonText}>Skip</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]} onPress={() => selectWeight("158lb/72kg")}>
+          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]} onPress={selectWeight}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
@@ -77,26 +85,21 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingTop: 100
   },
-  weightContainer: {
-    justifyContent: 'center',
-    height: 100,
-    width: '90%',
-    backgroundColor: '#2B2D42',
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginTop: 20
-  },
-  weightItem: {
+  weightSelector: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderColor: '#EDF2F4',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginHorizontal: 5
+    marginTop: 20,
   },
-  weightText: {
-    color: 'white'
+  weightIndicator: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#2B2D42',
+    marginHorizontal: 5,
+  },
+  selectedWeight: {
+    backgroundColor: '#66AEC5',
   }
 });
