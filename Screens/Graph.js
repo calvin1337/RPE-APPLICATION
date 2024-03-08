@@ -87,14 +87,14 @@ const styles = StyleSheet.create({
     width: '90%',
     height: buttonWidth,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
-    borderRadius: 10,
+    //borderRadius: 10,
     marginBottom: 20,
   },
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   text: {
     color: 'white',
