@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 10,
     padding: 20,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   emptyBox: {
     width: '90%',
