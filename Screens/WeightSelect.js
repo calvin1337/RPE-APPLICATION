@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import HorizontalPicker from '@vseslav/react-native-horizontal-picker';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.4;
@@ -43,7 +42,7 @@ export default function WeightPicker({ route }) {
           {/* Weight Selector */}
           <View style={styles.weightContainer}>
             <Text style={{ textAlign: 'center', color: 'white' }}>Weight Selector</Text>
-            <HorizontalPicker data={Items} renderItem={renderItem} itemWidth={80} />
+            
           </View>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight: '200' }}>
             You can change this later
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     height: 300,
-    //backgroundColor: 'rgba(43, 0, 0, 0.5)',
+
   },
   item: {
     alignItems: 'center',
