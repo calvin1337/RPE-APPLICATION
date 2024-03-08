@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
-
   },
   item: {
     alignItems: 'center',
