@@ -68,7 +68,7 @@ export default function WeightPicker({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     backgroundColor: 'rgba(43, 45, 66, 0.7)',
   },
   bottomContainer: {
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     height: 300,
+    backgroundColor: 'rgba(43, 0, 0, 0)'
   },
   item: {
     alignItems: 'center',
