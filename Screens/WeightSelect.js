@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.4;
-const Items = Array.from(Array(100).keys());
+const Items = Array.from({ length: 121 }, (_, index) => index + 30); // Adjusted array from 30 to 150
 
 export default function WeightPicker({ route }) {
   const { Gender } = route.params;
   const navigation = useNavigation();
-  const [unit, setUnit] = useState('lbs'); // Initial unit is lbs
 
   const selectWeight = (weight) => {
     navigation.navigate('LoginInfo', { Gender: Gender, Weight: weight });
-  };
-
-  const changeUnit = (newUnit) => {
-    setUnit(newUnit);
   };
 
   return (
@@ -28,20 +23,9 @@ export default function WeightPicker({ route }) {
       }}
     >
       <View style={styles.container}>
-        <View style={styles.unitContainer}>
-          <TouchableOpacity style={[styles.unitButton, { backgroundColor: unit === 'lbs' ? '#66AEC5' : '#AEAEAE' }]} onPress={() => changeUnit('lbs')}>
-            <Text style={styles.buttonText}>lbs</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.unitButton, { backgroundColor: unit === 'kg' ? '#66AEC5' : '#AEAEAE' }]} onPress={() => changeUnit('kg')}>
-            <Text style={styles.buttonText}>kg</Text>
-          </TouchableOpacity>
-        </View>
         <View style={styles.topContainer}>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold' }}>
             Select Your Weight
-          </Text>
-          <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 16, fontWeight: '500' }}>
-            155 {unit}
           </Text>
           {/* Weight Selector */}
           <View style={styles.weightContainer}>
@@ -70,7 +54,7 @@ export default function WeightPicker({ route }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]}
-            onPress={() => selectWeight('158lb/72kg')}
+            //onPress={() => selectWeight('158lb/72kg')}
           >
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
@@ -79,6 +63,7 @@ export default function WeightPicker({ route }) {
     </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -110,17 +95,7 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: 'center',
     width: '100%',
-    paddingTop: 20,
-  },
-  unitContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 10,
-  },
-  unitButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
+    paddingTop: 100,
   },
   weightContainer: {
     justifyContent: 'center',
