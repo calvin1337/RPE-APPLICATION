@@ -24,7 +24,7 @@ export default function AnalyticsPage() {
     datasets: [
       {
         data: [350, 180, 432, 408, 440, 400, 320, 415, 385, 406, 356],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // Bar color
+        color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
       },
     ],
   };
@@ -68,8 +68,8 @@ export default function AnalyticsPage() {
               backgroundGradientFromOpacity: 0,
               backgroundGradientTo: '#08130D',
               backgroundGradientToOpacity: 0.5,
-              color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-              strokeWidth: 2,
+              color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
+              strokeWidth: 1, // Thinner bars
             }}
             style={styles.chart}
             verticalLabelRotation={30}
