@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
@@ -8,21 +8,17 @@ const buttonWidth = width * 0.4;
 export default function WeightPicker({ route }) {
   const { Gender } = route.params;
   const navigation = useNavigation();
-  const [selectedWeight, setSelectedWeight] = useState("155 lbs");
+
+  const [selectedWeight, setSelectedWeight] = useState(155); // Initial selected weight in lbs
+  const [selectedUnit, setSelectedUnit] = useState('lbs'); // Initial selected unit
 
   const selectWeight = () => {
-    navigation.navigate('LoginInfo', { Gender: Gender, Weight: selectedWeight });
+    navigation.navigate('LoginInfo', { Gender: Gender, Weight: `${selectedWeight}${selectedUnit}` });
   }
 
-  // Function to handle weight selection
-  const handleWeightSelection = (weight) => {
+  const handleScroll = (event) => {
+    const weight = Math.round(event.nativeEvent.contentOffset.x / 10); // Adjust as needed for scrolling sensitivity
     setSelectedWeight(weight);
-  }
-
-  // Generate weight options (you can customize these)
-  const weights = [];
-  for (let i = 80; i <= 300; i++) {
-    weights.push(`${i} lbs / ${Math.round(i * 0.453592)} kg`);
   }
 
   return (
@@ -30,14 +26,19 @@ export default function WeightPicker({ route }) {
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold' }}>Select Your Weight</Text>
-          <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 16, fontWeight: '500' }}>{selectedWeight}</Text>
-          <ScrollView horizontal contentContainerStyle={styles.weightSelector}>
-            {weights.map((weight, index) => (
-              <TouchableOpacity key={index} style={[styles.weightIndicator, weight === selectedWeight && styles.selectedWeight]} onPress={() => handleWeightSelection(weight)}>
-                <Text style={{ color: 'white' }}>{weight}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 16, fontWeight: '500' }}>{selectedWeight} {selectedUnit}</Text>
+          <View style={styles.weightContainer}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              onScroll={handleScroll}
+              contentContainerStyle={{ paddingHorizontal: width / 2 - 20 }}
+            >
+              {[...Array(300).keys()].map((item) => (
+                <View key={item} style={styles.indicator} />
+              ))}
+            </ScrollView>
+          </View>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight: '200' }}>You can change this later</Text>
         </View>
         <View style={styles.bottomContainer}>
@@ -85,21 +86,18 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingTop: 100
   },
-  weightSelector: {
-    flexDirection: 'row',
+  weightContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+    height: 100,
+    width: '100%',
+    backgroundColor: '#2B2D42',
+    overflow: 'hidden', // Ensure indicators don't overflow container
     marginTop: 20,
   },
-  weightIndicator: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: '#2B2D42',
-    marginHorizontal: 5,
-  },
-  selectedWeight: {
-    backgroundColor: '#66AEC5',
+  indicator: {
+    width: 1,
+    height: 20,
+    backgroundColor: '#EDF2F4',
+    marginRight: 9,
   }
 });
