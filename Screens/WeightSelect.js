@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    //resizeMode: 'cover',
+    resizeMode: 'cover',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darken the background
 
   },
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
-    backgroundColor: 'transparent', // Change to transparent to remove the blue box
-    height: 300,
+    //backgroundColor: 'transparent', // Change to transparent to remove the blue box
+    //height: 300,
   },
   item: {
     alignItems: 'center',
