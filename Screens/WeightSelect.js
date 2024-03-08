@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover',
+    //resizeMode: 'cover',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darken the background
 
   },
