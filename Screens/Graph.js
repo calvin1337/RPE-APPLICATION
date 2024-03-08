@@ -58,7 +58,7 @@ export default function AnalyticsPage() {
           </View>
         </View>
 
-        <View style={styles.emptyBox}>
+        <View style={styles.graph}>
           <BarChart
             data={data}
             width={width * 0.9}
@@ -117,8 +117,9 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 5,
   },
-  emptyBox: {
+  graph: {
     width: '90%',
+    height:300,
     //backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
     marginBottom: 10,
