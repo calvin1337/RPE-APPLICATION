@@ -1,13 +1,25 @@
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import React from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.4; 
 const plusButtonWidth = width * 0.5;
 
-export default function AddPhoto( ) {
 
+
+export default function AddPhoto( { route }) {
+
+  const { Gender, Weight, Email, Password } = route.params;
+
+  const navigation = useNavigation();
+
+  const savePhoto = () => {
+    navigation.navigate('CreateUserAccount', { Gender: Gender, Weight: Weight, Email: Email, Password: Password  });
+    
+  };
   
   
     return (
@@ -17,13 +29,14 @@ export default function AddPhoto( ) {
       <Text style={{textAlign:'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold'}}>Add Photo!</Text>
       <Text style={{textAlign:'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight:'300'}}>Adding a photo will help you customise your account and will help your coach identify you quicker.</Text>      
       <View style={styles.buttonContainer}>
+      {/* Add Photo */}
       <TouchableOpacity style={styles.plusButton} >
         <Ionicons name="add" size={100} color="white" style={{textAlign: 'center', width: plusButtonWidth,  }}/>
         </TouchableOpacity>
         </View>
       </View>
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor:'#66AEC5'}]}>
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor:'#66AEC5'}]} onPress={() => savePhoto("")}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
