@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darken the background
+    backgroundColor: 'rgba(0, 0, 0, 0.05)', // Darken the background
   },
   bottomContainer: {
     flexDirection: 'column',
