@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(43, 45, 66, 0.7)',
   },
   bottomContainer: {
     flexDirection: 'column',
