@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import FusionCharts from 'react-native-fusioncharts';
+import { BarChart } from 'react-native-chart-kit';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.5;
@@ -18,36 +18,15 @@ export default function AnalyticsPage() {
     navigation.navigate('SomeScreen', { Attribute: attribute });
   };
 
-  const chartData = [
-    {
-      label: '04/09/2023',
-      value: '350',
-    },
-    {
-      label: '05/09/2023',
-      value: '180',
-    },
-    {
-      label: '06/09/2023',
-      value: '432',
-    },
-    // Add other data points here
-  ];
-
-  const chartConfig = {
-    type: 'bar2d',
-    width: '100%',
-    height: 300,
-    dataFormat: 'json',
-    dataSource: {
-      chart: {
-        caption: 'sRPE Over Time',
-        xAxisName: 'Date',
-        yAxisName: 'sRPE',
-        theme: 'fusion',
+  // Sample data
+  const data = {
+    labels: ['04/09/2023', '05/09/2023', '06/09/2023', '07/09/2023', '08/09/2023', '11/09/2023', '12/09/2023', '13/09/2023', '14/09/2023', '15/09/2023', '18/09/2023'],
+    datasets: [
+      {
+        data: [350, 180, 432, 408, 440, 400, 320, 415, 385, 406, 356],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // Bar color
       },
-      data: chartData,
-    },
+    ],
   };
 
   return (
@@ -80,12 +59,21 @@ export default function AnalyticsPage() {
         </View>
 
         <View style={styles.emptyBox}>
-          <FusionCharts
-            type={chartConfig.type}
-            width={chartConfig.width}
-            height={chartConfig.height}
-            dataFormat={chartConfig.dataFormat}
-            dataSource={chartConfig.dataSource}
+          <BarChart
+            data={data}
+            width={width * 0.9}
+            height={200}
+            chartConfig={{
+              backgroundGradientFrom: '#1E2923',
+              backgroundGradientFromOpacity: 0,
+              backgroundGradientTo: '#08130D',
+              backgroundGradientToOpacity: 0.5,
+              color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+              strokeWidth: 2,
+            }}
+            style={styles.chart}
+            verticalLabelRotation={30}
+            withInnerLines={false}
           />
         </View>
 
@@ -128,7 +116,6 @@ const styles = StyleSheet.create({
   },
   emptyBox: {
     width: '90%',
-    height: 300,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
     marginBottom: 10,
@@ -160,5 +147,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
+  },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
   },
 });
