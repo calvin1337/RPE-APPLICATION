@@ -72,7 +72,7 @@ export default function AnalyticsPage() {
               fillShadowGradientOpacity: 1,
               decimalPlaces: 0, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
             }}
             style={styles.chart}
             verticalLabelRotation={30}
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   emptyBox: {
     width: '90%',
-    backgroundColor: 'rgba(27, 23, 39, 0.8)',
+    //backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
     marginBottom: 10,
   },
