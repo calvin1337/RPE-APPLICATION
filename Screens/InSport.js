@@ -58,7 +58,7 @@ export default function InSport({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    flex: 1,
     backgroundColor: '#1F283A',
   },
   settingsContainer: {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 20,
+    height: 30,
     paddingHorizontal: 10,
   },
   selected: {
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   scrollView: {
-    height: '100%',
-    marginBottom: 50,
+    flex: 1,
   },
 });
