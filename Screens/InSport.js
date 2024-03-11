@@ -74,12 +74,12 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 25,
     backgroundColor: '#1B1727',
-    borderRadius: 5,
+    borderRadius: 15,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 50,
+    height: 20,
     paddingHorizontal: 10,
   },
   selected: {
