@@ -27,7 +27,7 @@ export default function InSport({ navigation, route }) {
   return (
     <View style={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView>
         <View style={styles.settingsContainer}>
           <Text style={{ fontSize: 20, color: 'white' }}>{selectedSport}</Text>
           <Ionicons name="settings-sharp" size={32} color="white" />
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignSelf: 'center',
     width: '100%',
-    marginTop: 100,
+    marginTop: 40,
     padding: 20,
   },
   RPEcontainer: {
@@ -94,8 +94,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#1B1727',
     borderRadius: 15,
     textAlign: 'center',
-  },
-  scrollView: {
-    flex: 1,
   },
 });
