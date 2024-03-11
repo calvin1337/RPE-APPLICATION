@@ -56,7 +56,14 @@ export default function CreateAccount({ route, setSignedIn }) {
         </View>
         </View>
         <View style={styles.checkboxContainer}>
-        
+        { <TouchableOpacity onPress={() => setChecked(!checked)}>
+                <Ionicons
+                  name={checked ? 'checkbox' : 'checkbox-outline'}
+                  size={24}
+                  color={checked ? '#66AEC5' : '#EDF2F4'}
+                />
+          </TouchableOpacity>
+        }
         </View>
       
       </View>
