@@ -72,9 +72,9 @@ const styles = StyleSheet.create({
   },
   RPEcontainer: {
     padding: 20,
-    margin: 5,
+    margin: 25,
     backgroundColor: '#1B1727',
-    borderRadius: 15,
+    borderRadius: 5,
   },
   row: {
     flexDirection: 'row',
