@@ -1,7 +1,8 @@
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.4; 
@@ -55,7 +56,14 @@ export default function CreateAccount({ route, setSignedIn }) {
         </View>
         </View>
         <View style={styles.checkboxContainer}>
-        {/* Add Checkbox */}
+        { <TouchableOpacity onPress={() => setChecked(!checked)}>
+                <Ionicons
+                  name={checked ? 'checkbox' : 'checkbox-outline'}
+                  size={24}
+                  color={checked ? '#66AEC5' : '#EDF2F4'}
+                />
+          </TouchableOpacity>
+        }
         </View>
       
       </View>
