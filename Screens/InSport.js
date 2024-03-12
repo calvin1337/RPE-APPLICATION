@@ -60,6 +60,7 @@ export default function InSport({ navigation, route }) {
 
 const styles = StyleSheet.create({
   scrollContainer: {
+    height: '150%',
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',   
