@@ -25,6 +25,7 @@ export default function InSport({ navigation, route }) {
   };
 
   return (
+    <view style={{flex:1}}> 
     <ScrollView contentContainerStyle={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.content}>
@@ -53,6 +54,7 @@ export default function InSport({ navigation, route }) {
         </View>
       </View>
     </ScrollView>
+    </view>
   );
 }
 
