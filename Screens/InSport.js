@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   RPEcontainer: {
-    width:'90%',
+    width:'80%',
     padding: 20,
     margin: 25,
     backgroundColor: '#1B1727',
