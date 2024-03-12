@@ -25,6 +25,7 @@ export default function InSport({ navigation, route }) {
   };
 
   return (
+  <view style={{flex: 1}}>
   <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
@@ -55,19 +56,19 @@ export default function InSport({ navigation, route }) {
       
     </View>
     </ScrollView>
+    </view>
   );
 }
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    height: '101%',
-    flexGrow: 1,
+    //flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',   
     backgroundColor: '#1F283A',
   },
   container: {
-    flex: 1,
+    //flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 60,
