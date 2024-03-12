@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "695845550647",
+    "project_id": "rpe-app-cc0c7",
+    "storage_bucket": "rpe-app-cc0c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695845550647:android:035e59f1df9a71868e1db2",
+        "android_client_info": {
+          "package_name": "com.rpe_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeYrrkGAfjZhWLFgrlbr4aeL9jsnNa03M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
