@@ -25,9 +25,9 @@ export default function InSport({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <BackButton onPress={() => navigation.goBack()} />
+    <ScrollView contentContainerStyle={styles.container}>
+      <BackButton onPress={() => navigation.goBack()} />
+      <View style={styles.content}>
         <View style={styles.settingsContainer}>
           <Text style={{ fontSize: 20, color: 'white' }}>{selectedSport}</Text>
           <Ionicons name="settings-sharp" size={32} color="white" />
@@ -51,19 +51,21 @@ export default function InSport({ navigation, route }) {
         <View style={styles.inputContainer}>
           <Text style={styles.text}>Workout: {selectedSport}</Text>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#1F283A',
   },
-  scrollContent: {
-    flexGrow: 1,
-    paddingBottom: 20,
+  content: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 60,
+    marginTop: 10,
   },
   settingsContainer: {
     flexDirection: 'row',
