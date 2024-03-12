@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 60,
     marginTop: 10,
-    width:'85%',
   },
   settingsContainer: {
     flexDirection: 'row',
@@ -83,7 +82,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   RPEcontainer: {
-    //width:'85%',
+    width:'85%',
     padding: 20,
     margin: 25,
     backgroundColor: '#1B1727',
@@ -107,5 +106,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#1B1727',
     borderRadius: 15,
     textAlign: 'center',
+    
   },
 });
