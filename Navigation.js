@@ -13,7 +13,7 @@ import Welcome from "./Screens/Welcome"
 import InSport from "./Screens/InSport";
 import GenderPick from './Screens/GenderPick';
 import LoginInformation from './Screens/LoginInfo';
-import WeightPicker from './Screens/weightSelect';
+import WeightPicker from './Screens/WeightSelect';
 import AddPhoto from './Screens/AddPhoto';
 import CreateAccount from './Screens/CreateAccount';
 
@@ -48,7 +48,7 @@ export default function Navigation() {
         <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
           <Tab.Screen 
             name="Graphs" 
-            component={Graphs} 
+            component={GraphStack} 
             options={{
               tabBarIcon: ({focused}) => (
                 <View style={styles.container}> 
@@ -117,6 +117,14 @@ const WelcomeStack = ({ setSignedIn }) => {
       </Stack.Screen>
     </Stack.Navigator>
   );
+}
+
+const GraphStack = () => {
+  return(
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="GraphPage" component={Graphs} />
+    </Stack.Navigator>
+  ) 
 }
 
 
