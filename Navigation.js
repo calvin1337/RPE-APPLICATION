@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text } from 'react-native';
+import { View, Text, Settings } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from "react"
 import Home from "./Screens/Home";
@@ -11,6 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Graphs from './Screens/Graph';
 import Welcome from "./Screens/Welcome"
 import InSport from "./Screens/InSport";
+import UserSettings from "./Screens/Settings";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -87,6 +88,7 @@ const HomeStack = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="HomePage" component={Home} />
       <Stack.Screen name="InSportPage" component={InSport} />
+      <Stack.Screen name="SettingsPage" component={UserSettings} />
     </Stack.Navigator>
   );
 };

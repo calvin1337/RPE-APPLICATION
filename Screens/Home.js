@@ -19,7 +19,9 @@ export default function Home() {
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>Pick a Sport</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
         <Ionicons name="settings-sharp" size={32} color="white" />
+        </TouchableOpacity>
       </View>
       <ScrollView style={styles.scrollView}>
         <View style={styles.sportsContainer}>

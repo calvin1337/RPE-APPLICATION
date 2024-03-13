@@ -11,7 +11,7 @@ export default function Settings() {
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>Settingddds</Text>
+        <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>Setting</Text>
         <Ionicons name="settings-sharp" size={32} color="red" />
       </View>
       
@@ -55,7 +55,7 @@ export default function Settings() {
 
             <View style={styles.itemContainer}>
             <View style={[styles.column, { alignItems: "center" }]}>
-              <Image style={styles.image} source={require('../assets/avatar-female.png')} />
+              {/* <Image style={styles.image} source={require('../assets/avatar-female.png')} /> */}
               </View>
             </View>
 
