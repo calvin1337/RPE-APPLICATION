@@ -11,6 +11,11 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Graphs from './Screens/Graph';
 import Welcome from "./Screens/Welcome"
 import InSport from "./Screens/InSport";
+import GenderPick from './Screens/GenderPick';
+import LoginInformation from './Screens/LoginInfo';
+import WeightPicker from './Screens/WeightSelect';
+import AddPhoto from './Screens/AddPhoto';
+import CreateAccount from './Screens/CreateAccount';
 import UserSettings from "./Screens/Settings";
 
 const Tab = createBottomTabNavigator();
@@ -31,7 +36,7 @@ const screenOptions = {
 }
 
 
-
+// Main navigation component
 export default function Navigation() {
   
   const [signedIn, setSignedIn] = useState(false); 
@@ -40,10 +45,11 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       {signedIn ? (
+        // Analytics graphs etc
         <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
           <Tab.Screen 
             name="Graphs" 
-            component={Graphs} 
+            component={GraphStack} 
             options={{
               tabBarIcon: ({focused}) => (
                 <View style={styles.container}> 
@@ -52,6 +58,7 @@ export default function Navigation() {
               )
             }}
           />
+          {/* Home pages sports etc */}
           <Tab.Screen 
             name="Home" 
             component={HomeStack} 
@@ -63,6 +70,7 @@ export default function Navigation() {
               )
             }}
           />
+          {/* Settings pages */}
           <Tab.Screen 
             name="User" 
             component={User} 
@@ -82,7 +90,7 @@ export default function Navigation() {
   );
 }
 
-
+// Stack navigator for home screens
 const HomeStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
@@ -93,14 +101,32 @@ const HomeStack = () => {
   );
 };
 
+// Stack navigator for welcome screen
+// Loading pages etc
 const WelcomeStack = ({ setSignedIn }) => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="WelcomePage">
         {(props) => <Welcome {...props} setSignedIn={setSignedIn} />}
+        
+      </Stack.Screen>
+      <Stack.Screen name="GenderPick" component={GenderPick} />
+      <Stack.Screen name="WeightPicker" component={WeightPicker} />
+      <Stack.Screen name="LoginInfo" component={LoginInformation} />
+      <Stack.Screen name="AddProfilePhoto" component={AddPhoto} />
+      <Stack.Screen name="CreateUserAccount">
+      {(props) => <CreateAccount {...props} setSignedIn={setSignedIn} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
+}
+
+const GraphStack = () => {
+  return(
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="GraphPage" component={Graphs} />
+    </Stack.Navigator>
+  ) 
 }
 
 
