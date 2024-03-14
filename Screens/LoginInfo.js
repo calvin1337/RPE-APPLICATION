@@ -2,6 +2,7 @@ import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, 
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from "react";
 
+
 const { width } = Dimensions.get("window");
 const buttonWidth = width * 0.4;
 const inputWidth = width * 0.8;
@@ -9,9 +10,7 @@ const inputWidth = width * 0.8;
 export default function LoginInformation({ route }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const { Gender, Weight } = route.params;
-
   const navigation = useNavigation();
 
   // Function to save email and password
