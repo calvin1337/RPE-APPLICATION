@@ -7,12 +7,19 @@ import React,{ useState } from "react";
 export default function Users() {
   const navigation = useNavigation();
 
+  const navigateToSettings = () => {
+    // Navigate to the Settings screen
+    navigation.navigate('Settings');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>Setting</Text>
-        <Ionicons name="settings-sharp" size={32} color="red" />
+        <TouchableOpacity onPress={navigateToSettings}>
+          <Ionicons name="settings-sharp" size={32} color="white" />
+        </TouchableOpacity>
       </View>
       
       <ScrollView style={styles.scrollView}>
