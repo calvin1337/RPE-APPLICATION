@@ -18,8 +18,8 @@ export default function Settings() {
     navigation.navigate('WhoAccessMyData');
   };
 
-  const navigateToFAQ = () => {
-    navigation.navigate('FAQ');
+  const navigateToUserToCoach = () => {
+    navigation.navigate('UserToCoach');
   };
 
   return (
@@ -49,7 +49,7 @@ export default function Settings() {
             </View>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={navigateToFAQ}>
+          <TouchableOpacity onPress={navigateToUserToCoach}>
             <View style={styles.itemContainer}>
               <Text style={styles.text}>How do I change from user to coach?</Text>
             </View>

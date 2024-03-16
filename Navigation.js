@@ -9,10 +9,11 @@ import Graphs from './Screens/Graph';
 import Welcome from "./Screens/Welcome";
 import InSport from "./Screens/InSport";
 import Settings from "./Screens/Settings"; // Import the Settings screen component
-import FAQ from "./Screens/FAQ"; // Import the Settings screen component
+import FAQ from "./Screens/FAQ"; // Import the Settings screen component MAYBE DELETE
 import RPE from "./Screens/RPE";
 import WhoAccessMyData from "./Screens/WhoAccessMyData";
 import WhenTrackWorkout from "./Screens/WhenTrackWorkout";
+import UserToCoach from "./Screens/UserToCoach";
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -92,6 +93,7 @@ const HomeStack = () => {
       <Stack.Screen name="RPE" component={RPE} />
       <Stack.Screen name="WhenTrackWorkout" component={WhenTrackWorkout} />
       <Stack.Screen name="WhoAccessMyData" component={WhoAccessMyData} />
+      <Stack.Screen name="UserToCoach" component={UserToCoach} />
 
       <Stack.Screen name="FAQ" component={FAQ} />
     </Stack.Navigator>
