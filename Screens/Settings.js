@@ -14,8 +14,8 @@ export default function Settings() {
     navigation.navigate('WhenTrackWorkout');
   };
 
-  const navigateToNotifications = () => {
-    navigation.navigate('Notifications');
+  const navigateToWhoAccessMyData = () => {
+    navigation.navigate('WhoAccessMyData');
   };
 
   const navigateToFAQ = () => {
@@ -43,7 +43,7 @@ export default function Settings() {
             </View>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={navigateToNotifications}>
+          <TouchableOpacity onPress={navigateToWhoAccessMyData}>
             <View style={styles.itemContainer}>
               <Text style={styles.text}>Who can access my data ?</Text>
             </View>

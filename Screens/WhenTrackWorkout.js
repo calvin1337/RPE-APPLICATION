@@ -16,7 +16,7 @@ export default function WhenTrackWorkout() {
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>What is RPE?</Text>
+        <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>When should I use the app to track my workout?</Text>
         <TouchableOpacity onPress={navigateToSettings}>
           <Ionicons name="settings-sharp" size={32} color="white" />
         </TouchableOpacity>
@@ -27,11 +27,13 @@ export default function WhenTrackWorkout() {
           
             <View style={styles.itemContainer}>
             <View style={[styles.column, { alignItems: "center" }]}>
-            <Text style={[styles.text]}>RPE, also known as rate of perceived exertion, is a scale which measures the
-                    intensity levels of the person currently training. It is decided on by the key
-                    factors of heart rate, breathing and muscle fatigue of the athlete training.
-                    These factors then correspond to a scale in which the higher the number
-                    reported the more intense the exercise is.
+            <Text style={[styles.text]}>The app should be accessed during your workout by either yourself or a peer
+                    who is currently with you at the me. We have designed the app to ensure an
+                    ease of access for users to upload their data throughout their workout. For the
+                    most accurate findings and scale users should implement the necessary data
+                    during workout, if this is inapplicable then it should be uploaded asap after
+                    workout.
+
                     </Text>
                      </View>
             </View>
