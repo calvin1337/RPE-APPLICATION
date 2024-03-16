@@ -22,6 +22,10 @@ export default function Settings() {
     navigation.navigate('UserToCoach');
   };
 
+  const navigateToFAQ = () => {
+    navigation.navigate('FAQ');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
