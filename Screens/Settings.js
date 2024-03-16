@@ -22,8 +22,8 @@ export default function Settings() {
     navigation.navigate('UserToCoach');
   };
 
-  const navigateToFAQ = () => {
-    navigation.navigate('FAQ');
+  const navigateToSafelyStoreData = () => {
+    navigation.navigate('SafelyStoreData');
   };
 
   return (
@@ -59,17 +59,12 @@ export default function Settings() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={navigateToFAQ}>
+          <TouchableOpacity onPress={navigateToSafelyStoreData}>
             <View style={styles.itemContainer}>
               <Text style={styles.text}>How can I safely store my data?</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={navigateToFAQ}>
-            <View style={styles.itemContainer}>
-              <Text style={styles.text}>Can I delete my account?</Text>
-            </View>
-          </TouchableOpacity>
 
 
         </View>
