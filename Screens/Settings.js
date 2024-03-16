@@ -10,8 +10,8 @@ export default function Settings() {
     navigation.navigate('RPE');
   };
 
-  const navigateToPrivacy = () => {
-    navigation.navigate('Privacy');
+  const navigateToWhenTrackWorkout = () => {
+    navigation.navigate('WhenTrackWorkout');
   };
 
   const navigateToNotifications = () => {
@@ -37,7 +37,7 @@ export default function Settings() {
             </View>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={navigateToPrivacy}>
+          <TouchableOpacity onPress={navigateToWhenTrackWorkout}>
             <View style={styles.itemContainer}>
               <Text style={styles.text}>When should I use the app to track my workout?</Text>
             </View>

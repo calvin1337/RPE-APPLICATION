@@ -16,82 +16,24 @@ export default function RPE() {
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>RPE!</Text>
+        <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>What is RPE?</Text>
         <TouchableOpacity onPress={navigateToSettings}>
           <Ionicons name="settings-sharp" size={32} color="white" />
         </TouchableOpacity>
       </View>
       
       <ScrollView style={styles.scrollView}>
-        <Text style={{ fontSize: 20, color: "white", paddingLeft: 30, paddingBottom: 25 }}>Account Details</Text>
         <View style={styles.usersContainer}>
           
-        <View style={[styles.itemContainer, { backgroundColor: 'transparent' }]}>
-          <View style={[styles.column, { flex: 0.35 }]}>
-          <Text style={[styles.text]}>Email:</Text>
-
-          </View>
-          <View style={[styles.column, { flex: 0.65 }]}>
-            <Text style={styles.text}>email@testgmail.com</Text>
-          </View>
-        </View>
-
-
-            
-        <View style={[styles.itemContainer, { backgroundColor: 'transparent' }]}>
-          <View style={[styles.column, { flex: 0.35 }]}>
-          <Text style={[styles.text]}>Password: </Text>
-
-          </View>
-          <View style={[styles.column, { flex: 0.65 }]}>
-            <Text style={styles.text}>itriyhw80sd</Text>
-          </View>
-        </View>
-
-
-        <View style={[styles.itemContainer, { backgroundColor: 'transparent' }]}>
-          <View style={[styles.column, { flex: 0.35 }]}>
-          <Text style={[styles.text]}>Gender:</Text>
-
-          </View>
-          <View style={[styles.column, { flex: 0.65 }]}>
-            <Text style={styles.text}>Male</Text>
-          </View>
-        </View>
-
-        <View style={[styles.itemContainer, { backgroundColor: 'transparent' }]}>
-          <View style={[styles.column, { flex: 0.35 }]}>
-          <Text style={[styles.text]}>Weight: </Text>
-
-          </View>
-          <View style={[styles.column, { flex: 0.65 }]}>
-            <Text style={styles.text}>158lb / 72kg</Text>
-          </View>
-        </View>
-
-
-        <View style={styles.row}>
-          <View style={[styles.itemContainer, { width: 175, marginRight: 10 }]}>
-            <View style={[styles.column, { alignItems: "center" }]}>
-            <Text style={[styles.text, { paddingTop: 35 , paddingBottom: 35}]}>7 sessions this week!</Text>
-            </View>
-          </View>
-          <View style={[styles.itemContainer, { width: 175 }]}>
-            <View style={[styles.column, { alignItems: "center" }]}>
-            <Text style={styles.text}>Account created 291 days ago</Text>
-            </View>
-          </View>
-        </View>
-
-
-
-
-
-
             <View style={styles.itemContainer}>
             <View style={[styles.column, { alignItems: "center" }]}>
-              {/* <Image style={styles.image} source={require('../assets/avatar-female.png')} /> */}
-              </View>
+            <Text style={[styles.text]}>RPE, also known as rate of perceived exertion, is a scale which measures the
+                    intensity levels of the person currently training. It is decided on by the key
+                    factors of heart rate, breathing and muscle fatigue of the athlete training.
+                    These factors then correspond to a scale in which the higher the number
+                    reported the more intense the exercise is.
+                    </Text>
+                     </View>
             </View>
 
         </View>

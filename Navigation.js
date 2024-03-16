@@ -10,6 +10,8 @@ import Welcome from "./Screens/Welcome";
 import InSport from "./Screens/InSport";
 import Settings from "./Screens/Settings"; // Import the Settings screen component
 import FAQ from "./Screens/FAQ"; // Import the Settings screen component
+import RPE from "./Screens/RPE";
+import WhenTrackWorkout from "./Screens/WhenTrackWorkout";
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
@@ -86,7 +88,8 @@ const HomeStack = () => {
       <Stack.Screen name="Settings" component={Settings} />
 
       <Stack.Screen name="RPE" component={RPE} />
-      
+      <Stack.Screen name="WhenTrackWorkout" component={WhenTrackWorkout} />
+
       <Stack.Screen name="FAQ" component={FAQ} />
     </Stack.Navigator>
   );
