@@ -9,7 +9,7 @@ import Graphs from './Screens/Graph';
 import Welcome from "./Screens/Welcome";
 import InSport from "./Screens/InSport";
 import Settings from "./Screens/Settings"; // Import the Settings screen component
-import Settings from "./Screens/FAQ"; // Import the Settings screen component
+import FAQ from "./Screens/FAQ"; // Import the Settings screen component
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
@@ -84,7 +84,10 @@ const HomeStack = () => {
       <Stack.Screen name="HomePage" component={Home} />
       <Stack.Screen name="InSportPage" component={InSport} />
       <Stack.Screen name="Settings" component={Settings} />
-      <Stack.Screen name="FAQ" component={FAQ} /> {/* Include the FAQ screen */}
+
+      <Stack.Screen name="RPE" component={RPE} />
+      
+      <Stack.Screen name="FAQ" component={FAQ} />
     </Stack.Navigator>
   );
 };

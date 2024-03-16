@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 export default function Settings() {
   const navigation = useNavigation();
 
-  const navigateToProfile = () => {
-    navigation.navigate('Profile');
+  const navigateToRPE = () => {
+    navigation.navigate('RPE');
   };
 
   const navigateToPrivacy = () => {
@@ -31,29 +31,43 @@ export default function Settings() {
       
       <ScrollView style={styles.scrollView}>
         <View style={styles.usersContainer}>
-          <TouchableOpacity onPress={navigateToProfile}>
+          <TouchableOpacity onPress={navigateToRPE}>
             <View style={styles.itemContainer}>
-              <Text style={styles.text}>Profile</Text>
+              <Text style={styles.text}>What is RPE? </Text>
             </View>
           </TouchableOpacity>
           
           <TouchableOpacity onPress={navigateToPrivacy}>
             <View style={styles.itemContainer}>
-              <Text style={styles.text}>Privacy</Text>
+              <Text style={styles.text}>When should I use the app to track my workout?</Text>
             </View>
           </TouchableOpacity>
           
           <TouchableOpacity onPress={navigateToNotifications}>
             <View style={styles.itemContainer}>
-              <Text style={styles.text}>Notifications</Text>
+              <Text style={styles.text}>Who can access my data ?</Text>
             </View>
           </TouchableOpacity>
           
           <TouchableOpacity onPress={navigateToFAQ}>
             <View style={styles.itemContainer}>
-              <Text style={styles.text}>FAQ</Text>
+              <Text style={styles.text}>How do I change from user to coach?</Text>
             </View>
           </TouchableOpacity>
+
+          <TouchableOpacity onPress={navigateToFAQ}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.text}>How can I safely store my data?</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={navigateToFAQ}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.text}>Can I delete my account?</Text>
+            </View>
+          </TouchableOpacity>
+
+
         </View>
       </ScrollView>
     </View>
