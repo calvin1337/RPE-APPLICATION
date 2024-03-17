@@ -2,6 +2,8 @@ import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground }
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
+import { FIREBASE_AUTH } from '../firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
 const { width } = Dimensions.get('window');
@@ -10,10 +12,12 @@ const buttonWidth = width * 0.4;
 export default function CreateAccount({ route, setSignedIn }) {
 
   const [checked, setChecked] = useState(false);
-
   const { Gender, Weight, Email, Password } = route.params;
+  const auth = FIREBASE_AUTH
+
   
   const createUserAccount = () => {
+    createUserWithEmailAndPassword(auth,Email,Password)
     setSignedIn(true)
   }
   
