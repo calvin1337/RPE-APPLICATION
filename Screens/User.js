@@ -24,7 +24,7 @@ export default function User({ userData }) {
 
   return (
     <ImageBackground source={{ uri: firebaseImageUrl }} style={styles.backgroundImage}>
-    <View style={styles.container}>
+    
       <Text style={styles.text}>User Page</Text>
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#1F283A' }}>
       <Text style={{ color: 'white' }}>User Page</Text>
