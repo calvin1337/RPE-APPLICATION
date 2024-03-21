@@ -5,11 +5,11 @@ import React from 'react'
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.8; 
 
-export default function Home({ setSignedIn} ) {
+export default function Home( ) {
   const navigation = useNavigation();
 
   const guestLoginButton = () => {
-    setSignedIn(true);
+    console.log("Test")
   };
 
   const getStartedButton = () => {

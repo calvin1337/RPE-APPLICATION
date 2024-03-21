@@ -13,7 +13,7 @@ const { width } = Dimensions.get("window");
 const buttonWidth = width * 0.8;
 const inputWidth = width * 0.8;
 
-export default function LoginInformation({ route, setSignedIn  }) {
+export default function LoginInformation({ route  }) {
   const [email, setEmail] = useState("");
   const [usersName, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -47,12 +47,12 @@ export default function LoginInformation({ route, setSignedIn  }) {
       
         .then(() => {
           console.log("User data saved successfully!");
-          setSignedIn(true);
+          
         })
         .catch((error) => {
           console.error("Error saving user data: ", error);
         });
-      setSignedIn(true)
+      
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -122,7 +122,6 @@ const uploadProfilePicture = async (userId) => {
               value={usersName}
               onChangeText={setName}
               placeholder="Enter your name"
-              keyboardType="text"
               autoCapitalize="none"
               placeholderTextColor="#EDF2F4"
             />
