@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground, StyleSheet, Button, StyleSheet } from 'react-native';
+import { View, Text, ImageBackground, Button, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { FIREBASE_AUTH } from '../firebase';
 
@@ -25,8 +25,6 @@ export default function User({ userData }) {
   return (
     <ImageBackground source={{ uri: firebaseImageUrl }} style={styles.backgroundImage}>
     <View style={styles.container}>
-      <Text style={styles.text}>User Page</Text>
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#1F283A' }}>
       <Text style={{ color: 'white' }}>User Page</Text>
       {user && (
         <View>
@@ -41,3 +39,24 @@ export default function User({ userData }) {
     </ImageBackground>
   )
 }
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(43, 45, 66, 0.7)'
+  },
+  text: {
+    color: 'white',
+    fontSize: 24,
+  },
+});
