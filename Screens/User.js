@@ -1,8 +1,11 @@
-import { View, Text, Button, StyleSheet } from 'react-native'
+import { View, Text, ImageBackground, StyleSheet, Button, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { FIREBASE_AUTH } from '../firebase';
 
+
 export default function User({ userData }) {
+  const firebaseImageUrl = 'https://firebasestorage.googleapis.com/v0/b/rpe-app-cc0c7.appspot.com/o/image1.png?alt=media&token=b719b3ac-8fe1-42ff-9a44-03d735e8891f';
+
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -20,6 +23,9 @@ export default function User({ userData }) {
   };
 
   return (
+    <ImageBackground source={{ uri: firebaseImageUrl }} style={styles.backgroundImage}>
+    <View style={styles.container}>
+      <Text style={styles.text}>User Page</Text>
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#1F283A' }}>
       <Text style={{ color: 'white' }}>User Page</Text>
       {user && (
@@ -32,12 +38,6 @@ export default function User({ userData }) {
         </View>
       )}
     </View>
-  );
+    </ImageBackground>
+  )
 }
-
-const styles = StyleSheet.create({
-  label: {
-    color: 'white',
-    marginBottom: 10, 
-  },
-});
