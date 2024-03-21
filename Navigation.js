@@ -112,10 +112,9 @@ const WelcomeStack = ({ setSignedIn }) => {
       </Stack.Screen>
       <Stack.Screen name="GenderPick" component={GenderPick} />
       <Stack.Screen name="WeightPicker" component={WeightPicker} />
-      <Stack.Screen name="LoginInfo" component={LoginInformation} />
       <Stack.Screen name="AddProfilePhoto" component={AddPhoto} />
-      <Stack.Screen name="CreateUserAccount">
-      {(props) => <CreateAccount {...props} setSignedIn={setSignedIn} />}
+      <Stack.Screen name="LoginInfo">
+      {(props) => <LoginInformation {...props} setSignedIn={setSignedIn} />}
       </Stack.Screen>
     </Stack.Navigator>
   );

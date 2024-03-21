@@ -17,7 +17,7 @@ export default function AddPhoto( { route }) {
   const navigation = useNavigation();
 
   const savePhoto = () => {
-    navigation.navigate('CreateUserAccount', { Gender: Gender, Weight: Weight, Email: Email, Password: Password  });
+    navigation.navigate('LoginInfo', { Gender: Gender, Weight: Weight, Email: Email, Password: Password  });
     
   };
   

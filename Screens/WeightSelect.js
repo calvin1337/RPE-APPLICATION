@@ -24,7 +24,7 @@ export default function WeightPicker({ route }) {
   const scrollViewRef = useRef(null);
 
   const selectWeight = (weight) => {
-    navigation.navigate('LoginInfo', { Gender: Gender, Weight: weight });
+    navigation.navigate('AddProfilePhoto', { Gender: Gender, Weight: weight });
   };
 
   useEffect(() => {
