@@ -2,10 +2,12 @@ import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground }
 import React from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import BackButton from '../Components/BackButton';
+
 
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.4; 
+const buttonWidth = width * 0.8; 
 const plusButtonWidth = width * 0.5;
 
 
@@ -17,7 +19,7 @@ export default function AddPhoto( { route }) {
   const navigation = useNavigation();
 
   const savePhoto = () => {
-    navigation.navigate('CreateUserAccount', { Gender: Gender, Weight: Weight, Email: Email, Password: Password  });
+    navigation.navigate('LoginInfo', { Gender: Gender, Weight: Weight, Email: Email, Password: Password  });
     
   };
   
@@ -25,6 +27,7 @@ export default function AddPhoto( { route }) {
     return (
       <ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1579156618590-01d6ca62403d?q=80&w=1883&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }} style={styles.backgroundImage}> 
       <View style={styles.container}>
+      <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.topContainer}>
       <Text style={{textAlign:'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold'}}>Add Photo!</Text>
       <Text style={{textAlign:'center', margin: 10, color: '#EDF2F4', fontSize: 14, fontWeight:'300'}}>Adding a photo will help you customise your account and will help your coach identify you quicker.</Text>      
