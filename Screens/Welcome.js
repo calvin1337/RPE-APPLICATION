@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.4; 
+const buttonWidth = width * 0.8; 
 
 export default function Home({ setSignedIn} ) {
   const navigation = useNavigation();

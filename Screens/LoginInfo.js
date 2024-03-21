@@ -1,24 +1,28 @@
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, TextInput, HighlightedText } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { FIREBASE_AUTH } from '../firebase';
+import { FIREBASE_AUTH, FIREBASE_STORAGE, db } from '../firebase';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from "react";
+import BackButton from '../Components/BackButton';
 
 
 const { width } = Dimensions.get("window");
-const buttonWidth = width * 0.4;
+const buttonWidth = width * 0.8;
 const inputWidth = width * 0.8;
 
 export default function LoginInformation({ route, setSignedIn  }) {
   const [email, setEmail] = useState("");
+  const [usersName, setName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(""); 
   const [emailError, setEmailError] = useState("")
   const { Gender, Weight } = route.params;
   const [checked, setChecked] = useState(false);
+  
   const navigation = useNavigation();
-
   const auth = FIREBASE_AUTH
   
 
@@ -27,6 +31,27 @@ export default function LoginInformation({ route, setSignedIn  }) {
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       console.log('UserCredential:', userCredential);
+      const user = userCredential.user;
+      const userId = user.uid;
+      const userDocRef = doc(db, 'Users', userId);
+
+      
+      const userData = {
+        name: usersName,
+        weight: Weight,
+        gender: Gender
+      };
+
+      setDoc(userDocRef, userData)
+      uploadProfilePicture(userId)
+      
+        .then(() => {
+          console.log("User data saved successfully!");
+          setSignedIn(true);
+        })
+        .catch((error) => {
+          console.error("Error saving user data: ", error);
+        });
       setSignedIn(true)
     })
     .catch((error) => {
@@ -54,6 +79,21 @@ export default function LoginInformation({ route, setSignedIn  }) {
     });
   };
 
+const uploadProfilePicture = async (userId) => {
+
+  const storageRef = ref(FIREBASE_STORAGE, 'Users/' + userId + '/profile_picture.png'); 
+
+  try {
+    const response = await fetch("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png");
+    const blob = await response.blob();
+
+    await uploadBytes(storageRef, blob, { contentType: 'image/png' });
+    console.log('Profile picture uploaded successfully.');
+  } catch (error) {
+    console.error('Error uploading profile picture:', error);
+  }
+};
+
   return (
     <ImageBackground
       source={{
@@ -62,6 +102,7 @@ export default function LoginInformation({ route, setSignedIn  }) {
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
+      <BackButton onPress={() => navigation.goBack()} />
         <View style={styles.topContainer}>
           <Text
             style={{
@@ -74,9 +115,23 @@ export default function LoginInformation({ route, setSignedIn  }) {
           >
             Login Information
           </Text>
-
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email:</Text>
+           
+            <TextInput
+              style={[styles.input, { width: inputWidth }]}
+              value={usersName}
+              onChangeText={setName}
+              placeholder="Enter your name"
+              keyboardType="text"
+              autoCapitalize="none"
+              placeholderTextColor="#EDF2F4"
+            />
+            {emailError ? (
+            <Text style={styles.error}>{emailError}</Text> 
+          ) : <Text></Text>}
+          </View>
+          <View style={styles.inputContainer}>
+            
             <TextInput
               style={[styles.input, { width: inputWidth }]}
               value={email}
@@ -91,7 +146,7 @@ export default function LoginInformation({ route, setSignedIn  }) {
           ) : <Text></Text>}
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password:</Text>
+            
             
             <TextInput
               style={[styles.input, { width: inputWidth }]}
@@ -108,7 +163,7 @@ export default function LoginInformation({ route, setSignedIn  }) {
           
         
         <View style={styles.testStyle}>
-        <Text style={styles.label}>Check if this information is correct</Text>
+        <Text style={styles.label}>Can update this information later</Text>
         <View style={styles.infoContainer}>
             <Text style={styles.infoLabel}>Gender: {Gender}</Text>
             <Text style={styles.infoLabel}>Weight: {Weight}</Text>
@@ -117,16 +172,24 @@ export default function LoginInformation({ route, setSignedIn  }) {
         <View style={styles.checkboxContainer}>
         { <TouchableOpacity onPress={() => setChecked(!checked)}>
                 <Ionicons
-                  name={checked ? 'checkbox' : 'checkbox-outline'}
+                  name={checked ? 'checkbox' : 'square'}
                   size={24}
                   color={checked ? '#66AEC5' : '#EDF2F4'}
                 />
           </TouchableOpacity>
         }
-        <Text style={styles.infoLabel}>Checkbox text</Text>
+        <Text style={styles.checkboxLabel}>Tick this box if you would like to receive emails with news. updates amd upcoming events</Text>
         </View>
         </View>
-
+        <View style={styles.testStyle}>
+        <View style={styles.infoContainer}>
+        <Text style={styles.checkboxLabel}>
+      By creating an account, you are accepting our{' '} 
+      <Text style={{ color: '#FF9A62', fontWeight: 'bold', textDecorationLine: 'underline' }}>Terms</Text>
+      {' '} and your data may be used for studies by Napier.
+    </Text>
+          </View>
+        </View>
         <View style={styles.bottomContainer}>
           <TouchableOpacity
             style={[
@@ -175,7 +238,7 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
     width: "100%",
-    paddingTop: 100,
+    paddingTop: 70,
   },
   inputContainer: {
     marginTop: 20,
@@ -246,5 +309,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     width: inputWidth,
+  },
+  checkboxLabel: {
+    fontSize: 10,
+    color: "#EDF2F4",
   }
+  
 });

@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import BackButton from '../Components/BackButton';
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.4;
+const buttonWidth = width * 0.8;
 const startWeight = 30;
 const endWeight = 150;
 const increment = 0.5;
@@ -43,6 +44,7 @@ export default function WeightPicker({ route }) {
       }}
     >
       <View style={styles.container}>
+        <BackButton onPress={() => navigation.goBack()} />
         <View style={styles.topContainer}>
           <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold' }}>
             Select Your Weight
@@ -70,15 +72,15 @@ export default function WeightPicker({ route }) {
           </Text>
         </View>
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#AEAEAE' }]} onPress={() => selectWeight('Empty')}>
+          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#AEAEAE' }]} onPress={() => selectWeight('N/A')}>
             <Text style={styles.buttonText}>Skip</Text>
           </TouchableOpacity>
-          {/*<TouchableOpacity
+          <TouchableOpacity
             style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]}
-            onPress={() => selectWeight('158lb/72kg')}
+            onPress={() => selectWeight(item)}
           >
             <Text style={styles.buttonText}>Continue</Text>
-                </TouchableOpacity>*/}
+                </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
@@ -89,7 +91,7 @@ export default function WeightPicker({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     backgroundColor: 'rgba(43, 45, 66, 0.7)',
   },
   bottomContainer: {
