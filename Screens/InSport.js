@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import TimePicker from '../Components/TimePicker';
+import { db } from '../firebase';
+
+const { width } = Dimensions.get('window');
+const buttonWidth = width * 0.8; 
 
 export default function InSport({ navigation, route }) {
   const { selectedSport } = route.params;
   const [selectedRPE, setSelectedRPE] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
 
   const handleRPESelection = (value) => {
     setSelectedRPE(value === selectedRPE ? null : value);
   };
+
+
 
   const renderRPEButton = (value, label) => {
     return (
@@ -27,11 +33,13 @@ export default function InSport({ navigation, route }) {
   return (
     <View style={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
-      <ScrollView>
-        <View style={styles.settingsContainer}>
-          <Text style={{ fontSize: 20, color: 'white' }}>{selectedSport}</Text>
-          <Ionicons name="settings-sharp" size={32} color="white" />
-        </View>
+      <View style={styles.settingsContainer}>
+        <Text style={{ fontSize: 20, color: "white" }}>{selectedSport}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
+        <Ionicons name="settings-sharp" size={32} color="white" />
+        </TouchableOpacity>
+      </View>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
         <View style={styles.RPEcontainer}>
           {renderRPEButton(0, '0. Rest')}
           {renderRPEButton(1, '1. Very Very Easy')}
@@ -45,11 +53,23 @@ export default function InSport({ navigation, route }) {
           {renderRPEButton(9, '9. -')}
           {renderRPEButton(10, '10. Maximal')}
         </View>
+        <Text style={styles.label}>Enter your workout time in minutes</Text>
         <View style={styles.inputContainer}>
-          <TimePicker />
+          
+          <TextInput
+            style={[styles.input, { width: buttonWidth }]}
+            value={selectedTime}
+            onChangeText={setSelectedTime}
+            placeholder="Enter workout time"
+            keyboardType="numeric"
+            placeholderTextColor="#EDF2F4"
+          />
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.text}>Workout: {selectedSport}</Text>
+        <View style={styles.buttonContainer}>
+        <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} >
+        
+            <Text style={styles.buttonText}>Add workout</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -62,12 +82,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1F283A',
   },
   settingsContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    alignSelf: 'center',
-    width: '100%',
-    marginTop: 40,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    width: "100%",
+    marginTop: 100,
     padding: 20,
   },
   RPEcontainer: {
@@ -75,6 +95,7 @@ const styles = StyleSheet.create({
     margin: 25,
     backgroundColor: '#1B1727',
     borderRadius: 15,
+    flex:1
   },
   row: {
     flexDirection: 'row',
@@ -83,7 +104,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   selected: {
-    backgroundColor: '#FFA07A', // Pastel orange
+    backgroundColor: '#FFA07A', 
   },
   text: {
     color: '#FFFFFF',
@@ -95,4 +116,38 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     textAlign: 'center',
   },
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonText: {
+    color: '#030303', 
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 20,
+    color: "#EDF2F4",
+    textAlign: "center"
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#1B1727',
+    borderRadius: 15, 
+    padding: 10,
+    fontSize: 16,
+    height: 50,
+    color: '#EDF2F4',
+    backgroundColor: "#1B1727",
+  },
+  
 });
+

@@ -29,6 +29,8 @@ export default function AnalyticsPage() {
     ],
   };
 
+  
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>

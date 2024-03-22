@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
-const TimePicker = () => {
+const TimePicker = ({setSelectedTime}) => {
   const [selectedHour, setSelectedHour] = useState(null);
   const [selectedMinute, setSelectedMinute] = useState(null);
+
+  useEffect(() => {
+    if (selectedHour !== null && selectedMinute !== null) {
+      const time = `${selectedHour.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')}`;
+      setSelectedTime(time);
+
+    }
+  }, [selectedHour, selectedMinute]);
 
   const hours = Array.from({ length: 24 }, (_, i) => ({
     label: i.toString().padStart(2, '0'),
@@ -17,6 +25,7 @@ const TimePicker = () => {
   }));
 
   return (
+    
     <View style={styles.inputContainer}>
       <Text style={styles.text}>Time: </Text>
       <View style={styles.pickerContainer}>

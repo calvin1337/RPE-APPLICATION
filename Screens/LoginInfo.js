@@ -19,7 +19,7 @@ export default function LoginInformation({ route  }) {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(""); 
   const [emailError, setEmailError] = useState("")
-  const { Gender, Weight } = route.params;
+  const {Gender, Weight } = route.params;
   const [checked, setChecked] = useState(false);
   
   const navigation = useNavigation();
