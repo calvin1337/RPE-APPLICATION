@@ -82,13 +82,6 @@ export default function InSport({ navigation, route }) {
     <View style={{flex:1}}> 
     <ScrollView contentContainerStyle={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
-<<<<<<< HEAD
-      <View style={styles.content}>
-        <View style={styles.settingsContainer}>
-          <Text style={{ fontSize: 20, color: 'white' }}>{selectedSport}</Text>
-          <Ionicons name="settings-sharp" size={32} color="white" />
-        </View>
-=======
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>{selectedSport}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
@@ -96,7 +89,6 @@ export default function InSport({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
->>>>>>> auth
         <View style={styles.RPEcontainer}>
         <Text style={{ fontSize: 16, color: "white", textAlign: 'center',borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5  }}>Rating: Perceived Exertion Level</Text>
           {renderRPEButton(0, '0. Rest')}
@@ -129,7 +121,7 @@ export default function InSport({ navigation, route }) {
             <Text style={styles.buttonText}>Add workout</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </ScrollView>
     </View>
   );
