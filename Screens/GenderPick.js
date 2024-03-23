@@ -2,6 +2,7 @@ import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground }
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
+import BackButton from '../Components/BackButton';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.5;
@@ -17,6 +18,7 @@ export default function GenderPick() {
     <ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=1941&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }} style={styles.backgroundImage}> 
 
     <View style={styles.container}>
+      <BackButton onPress={() => navigation.goBack()} />
       <View>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => selectGender("Male")}>
           <View style={styles.button}>

@@ -1,6 +1,5 @@
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 
 
@@ -10,8 +9,9 @@ const buttonWidth = width * 0.4;
 export default function CreateAccount({ route, setSignedIn }) {
 
   const [checked, setChecked] = useState(false);
-
   const { Gender, Weight, Email, Password } = route.params;
+  
+
   
   const createUserAccount = () => {
     setSignedIn(true)
