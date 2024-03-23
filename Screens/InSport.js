@@ -175,9 +175,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     textAlign: 'center',
   },
-<<<<<<< HEAD
-});
-=======
   button: {
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -213,4 +210,3 @@ const styles = StyleSheet.create({
   
 });
 
->>>>>>> auth
