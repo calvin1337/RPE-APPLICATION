@@ -1,22 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { BarChart } from 'react-native-chart-kit';
+import { db, FIREBASE_AUTH } from '../firebase';
+import { doc, query, getDocs, collection, onSnapshot } from 'firebase/firestore';
+
+
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.5;
 
 export default function AnalyticsPage() {
+
+  const [workouts, setWorkouts] = useState([])
+  
+
   const navigation = useNavigation();
 
-  const selectDuration = (duration) => {
-    navigation.navigate('SomeScreen', { Duration: duration });
-  };
 
-  const selectAttribute = (attribute) => {
-    navigation.navigate('SomeScreen', { Attribute: attribute });
-  };
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      try {
+        const currentUser = FIREBASE_AUTH.currentUser;
+        if (!currentUser) {
+          console.log('User not authenticated');
+          return;
+        }
+        const userId = currentUser.uid;
+
+        const userDocRef = doc(db, 'Users', userId);
+        const workoutsRef = collection(userDocRef, 'Workouts');
+
+        // Listen for changes in the workouts collection
+        const unsubscribe = onSnapshot(workoutsRef, (snapshot) => {
+          const workoutsData = snapshot.docs.map((doc) => doc.data());
+          setWorkouts(workoutsData);
+          console.log(workoutsData); // Log the updated workouts data
+        });
+
+        // Clean up listener when the component unmounts
+        return () => unsubscribe();
+      } catch (error) {
+        console.error('Error fetching workouts: ', error);
+      }
+    };
+
+    fetchWorkouts();
+  }, []); // Empty dependency array to run the effect only once
 
   // Sample data
   const data = {
@@ -29,6 +60,8 @@ export default function AnalyticsPage() {
       },
     ],
   };
+
+  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>

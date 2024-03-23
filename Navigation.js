@@ -18,6 +18,7 @@ import WeightPicker from './Screens/WeightSelect';
 import AddPhoto from './Screens/AddPhoto';
 import CreateAccount from './Screens/CreateAccount';
 import UserSettings from "./Screens/Settings";
+import Login from './Screens/SignIn';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -112,7 +113,7 @@ const WelcomeStack = () => {
       <Stack.Screen name="WeightPicker" component={WeightPicker} />
       <Stack.Screen name="AddProfilePhoto" component={AddPhoto} />
       <Stack.Screen name="LoginInfo" component={LoginInformation}/>
-      
+      <Stack.Screen name="UserLogin" component={Login} />
     </Stack.Navigator>
   );
 }
