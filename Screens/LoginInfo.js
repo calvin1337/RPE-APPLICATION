@@ -2,7 +2,7 @@ import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, 
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FIREBASE_AUTH, FIREBASE_STORAGE, db } from '../firebase';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from "react";
@@ -19,7 +19,7 @@ export default function LoginInformation({ route  }) {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(""); 
   const [emailError, setEmailError] = useState("")
-  const { Gender, Weight } = route.params;
+  const {Gender, Weight } = route.params;
   const [checked, setChecked] = useState(false);
   
   const navigation = useNavigation();
