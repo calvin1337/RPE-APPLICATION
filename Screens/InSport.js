@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { db } from '../firebase';
+import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
+import { db,FIREBASE_AUTH  } from '../firebase';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.8; 
 
 export default function InSport({ navigation, route }) {
   const { selectedSport } = route.params;
-  const [selectedRPE, setSelectedRPE] = useState(null);
+  const [selectedRPE, setSelectedRPE] = useState(5);
   const [selectedTime, setSelectedTime] = useState("");
 
   const handleRPESelection = (value) => {
@@ -30,6 +31,53 @@ export default function InSport({ navigation, route }) {
     );
   };
 
+
+  const addWorkout = async () => {
+    try {
+        const currentUser = FIREBASE_AUTH.currentUser;
+        if (!currentUser) {
+            console.log('User not authenticated');
+            return;
+        }
+
+        const userId = currentUser.uid;
+
+        const workoutTime = parseInt(selectedTime);
+        if (isNaN(workoutTime) || workoutTime <= 0) {
+            console.log('Invalid workout time');
+            return;
+        }
+
+        const currentDate = new Date();
+        const date = currentDate.toLocaleDateString();
+        const time = currentDate.toLocaleTimeString();
+
+
+        const workoutData = {
+            sport: selectedSport,
+            RPE: selectedRPE,
+            time: workoutTime,
+            date: date,
+            time: time,
+            load: (selectedRPE * workoutTime)
+        };
+
+        const userDocRef = doc(db, 'Users', userId)
+        const workoutsCollectionRef = collection(userDocRef, 'Workouts');
+        await addDoc(workoutsCollectionRef, workoutData); // Use addDoc to add a new document
+
+        console.log('Workout added successfully');
+
+        setSelectedTime('');
+    } catch (error) {
+        console.error('Error adding workout: ', error);
+    }
+};
+
+  
+
+
+
   return (
     <View style={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
@@ -41,6 +89,7 @@ export default function InSport({ navigation, route }) {
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
         <View style={styles.RPEcontainer}>
+        <Text style={{ fontSize: 16, color: "white", textAlign: 'center',borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5  }}>Rating: Perceived Exertion Level</Text>
           {renderRPEButton(0, '0. Rest')}
           {renderRPEButton(1, '1. Very Very Easy')}
           {renderRPEButton(2, '2. Easy')}
@@ -66,7 +115,7 @@ export default function InSport({ navigation, route }) {
           />
         </View>
         <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} >
+        <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={addWorkout} >
         
             <Text style={styles.buttonText}>Add workout</Text>
           </TouchableOpacity>
