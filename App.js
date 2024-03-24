@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Navigation from './Navigation';
 import { FIREBASE_AUTH, db } from './firebase'; 
-import { doc, getDoc } from 'firebase/compat/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function App() {
   const [user, setUser] = useState(null);
