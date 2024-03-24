@@ -53,8 +53,8 @@ export default function AnalyticsPage() {
   }, []); // Empty dependency array to run the effect only once
 
   const prepareChartData = () => {
-    const labels = Workouts.map(workout => workout.date); 
-    const data = Workouts.map(workout => workout.load); 
+    const labels = workouts.map(workout => workout.date); 
+    const data = workouts.map(workout => workout.load); 
     return {
       labels,
       datasets: [{
