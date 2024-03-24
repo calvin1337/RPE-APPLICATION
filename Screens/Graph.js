@@ -13,8 +13,8 @@ const buttonWidth = width * 0.5;
 
 
 const prepareChartData = () => {
-  const labels = workouts.map(workout => workout.date); // Assuming you have a 'date' property in each workout
-  const data = workouts.map(workout => workout.load); // Assuming you have 'RPE' and 'duration' properties
+  const labels = Workouts.map(workout => workout.date); // Assuming you have a 'date' property in each workout
+  const data = Workouts.map(workout => workout.load); // Assuming you have 'RPE' and 'duration' properties
   return {
     labels,
     datasets: [{
@@ -62,16 +62,6 @@ export default function AnalyticsPage() {
     fetchWorkouts();
   }, []); // Empty dependency array to run the effect only once
 
-  // Sample data
-  const data = {
-    labels: ['04/09/2023', '05/09/2023', '06/09/2023', '07/09/2023', '08/09/2023', '11/09/2023', '12/09/2023'],
-    datasets: [
-      {
-        data: [350, 180, 432, 408, 440, 400, 320],
-        color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
-      },
-    ],
-  };
 
   
 
