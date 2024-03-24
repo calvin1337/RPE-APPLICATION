@@ -11,9 +11,22 @@ import { doc, query, getDocs, collection, onSnapshot } from 'firebase/firestore'
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.5;
 
+
+const prepareChartData = () => {
+  const labels = workouts.map(workout => workout.date); // Assuming you have a 'date' property in each workout
+  const data = workouts.map(workout => workout.load); // Assuming you have 'RPE' and 'duration' properties
+  return {
+    labels,
+    datasets: [{
+      data,
+      color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
+    }],
+  };
+};
+
 export default function AnalyticsPage() {
 
-  const [workouts, setWorkouts] = useState([])
+  const [workouts, setWorkouts] = useState([]);
   
 
   const navigation = useNavigation();
@@ -92,25 +105,24 @@ export default function AnalyticsPage() {
         </View>
 
         <View style={styles.graph}>
-          <BarChart
-            data={data}
-            width={width * 0.9}
-            height={200}
-            chartConfig={{
-              backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
-              backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
-              barPercentage: 0.7,
-             
-              fillShadowGradient: `rgba(1, 122, 205, 1)`,
-              fillShadowGradientOpacity: 1,
-              decimalPlaces: 0, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
-            }}
-            style={styles.chart}
-            verticalLabelRotation={30}
-            withInnerLines={false}
-          />
+        <BarChart
+  data={prepareChartData()}
+  width={width * 0.9}
+  height={200}
+  chartConfig={{
+    backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
+    backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
+    barPercentage: 0.7,
+    fillShadowGradient: `rgba(1, 122, 205, 1)`,
+    fillShadowGradientOpacity: 1,
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+    labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
+  }}
+  style={styles.chart}
+  verticalLabelRotation={30}
+  withInnerLines={false}
+/>
         </View>
 
         <View style={styles.box}>
