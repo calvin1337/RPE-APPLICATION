@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
     marginBottom: 10,
+    height: 200,
   },
   heading: {
     fontSize: 20,
