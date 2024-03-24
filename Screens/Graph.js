@@ -12,17 +12,7 @@ const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.5;
 
 
-const prepareChartData = () => {
-  const labels = Workouts.map(workout => workout.date); // Assuming you have a 'date' property in each workout
-  const data = Workouts.map(workout => workout.load); // Assuming you have 'RPE' and 'duration' properties
-  return {
-    labels,
-    datasets: [{
-      data,
-      color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
-    }],
-  };
-};
+
 
 export default function AnalyticsPage() {
 
@@ -62,7 +52,17 @@ export default function AnalyticsPage() {
     fetchWorkouts();
   }, []); // Empty dependency array to run the effect only once
 
-
+  const prepareChartData = () => {
+    const labels = Workouts.map(workout => workout.date); 
+    const data = Workouts.map(workout => workout.load); 
+    return {
+      labels,
+      datasets: [{
+        data,
+        color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
+      }],
+    };
+  };
   
 
   return (
