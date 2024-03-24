@@ -108,10 +108,12 @@ export default function AnalyticsPage() {
     decimalPlaces: 0, // optional, defaults to 2dp
     color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
     labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
+    fromZero: true, // Ensure bars start from zero
   }}
   style={styles.chart}
   verticalLabelRotation={30}
   withInnerLines={false}
+  showBarTops={true} // Display the load numbers above bars
 />
         </View>
 
