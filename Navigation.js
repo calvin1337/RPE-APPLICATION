@@ -1,16 +1,15 @@
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, Settings } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useState } from "react"
 import Home from "./Screens/Home";
-import { StyleSheet} from 'react-native';
 import User from './Screens/User';
 import { createStackNavigator } from '@react-navigation/stack'
 import { FIREBASE_AUTH } from './firebase';
 
 import Graphs from './Screens/Graph';
-import Welcome from "./Screens/Welcome"
+import Welcome from "./Screens/Welcome";
 import InSport from "./Screens/InSport";
 import GenderPick from './Screens/GenderPick';
 import LoginInformation from './Screens/LoginInfo';
@@ -19,14 +18,21 @@ import AddPhoto from './Screens/AddPhoto';
 import CreateAccount from './Screens/CreateAccount';
 import UserSettings from "./Screens/Settings";
 import Login from './Screens/SignIn';
+import Settings from "./Screens/Settings"; // Import the Settings screen component
+import SafelyStoreData from "./Screens/SafelyStoreData"; // Import the Settings screen component MAYBE DELETE
+import RPE from "./Screens/RPE";
+import WhoAccessMyData from "./Screens/WhoAccessMyData";
+import WhenTrackWorkout from "./Screens/WhenTrackWorkout";
+import UserToCoach from "./Screens/UserToCoach";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const screenOptions = {
-  tabBarShowLabel:false,
-  headerShown:false,
-  tabBarStyle:{
+  tabBarShowLabel: false,
+  headerShown: false,
+  tabBarStyle: {
     position: "absolute",
     bottom: 0,
     right: 0,
@@ -91,14 +97,18 @@ export default function Navigation({user, userData}) {
     </NavigationContainer>
   );
 }
-
 // Stack navigator for home screens
 const HomeStack = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomePage" component={Home} />
       <Stack.Screen name="InSportPage" component={InSport} />
       <Stack.Screen name="SettingsPage" component={UserSettings} />
+      <Stack.Screen name="RPE" component={RPE} />
+      <Stack.Screen name="WhenTrackWorkout" component={WhenTrackWorkout} />
+      <Stack.Screen name="WhoAccessMyData" component={WhoAccessMyData} />
+      <Stack.Screen name="UserToCoach" component={UserToCoach} />
+      <Stack.Screen name="SafelyStoreData" component={SafelyStoreData} />
     </Stack.Navigator>
   );
 };
@@ -143,6 +153,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#2B2D42',
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
 });

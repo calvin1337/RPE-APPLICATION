@@ -1,63 +1,71 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import BackButton from "../Components/BackButton";
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from "@expo/vector-icons/Ionicons";
-import React,{ useState } from "react";
 
 export default function Settings() {
   const navigation = useNavigation();
+
+  const navigateToRPE = () => {
+    navigation.navigate('RPE');
+  };
+
+  const navigateToWhenTrackWorkout = () => {
+    navigation.navigate('WhenTrackWorkout');
+  };
+
+  const navigateToWhoAccessMyData = () => {
+    navigation.navigate('WhoAccessMyData');
+  };
+
+  const navigateToUserToCoach = () => {
+    navigation.navigate('UserToCoach');
+  };
+
+  const navigateToSafelyStoreData = () => {
+    navigation.navigate('SafelyStoreData');
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>Setting</Text>
-        <Ionicons name="settings-sharp" size={32} color="red" />
       </View>
       
       <ScrollView style={styles.scrollView}>
-        <Text style={{ fontSize: 20, color: "white", paddingLeft: 30, paddingBottom: 25 }}>Account Details</Text>
         <View style={styles.usersContainer}>
-          
-          
-        <View style={styles.row}>
-          <View style={[styles.itemContainer, { width: 175, marginRight: 10 }]}>
-            <View style={[styles.column, { alignItems: "center" }]}>
-            <Text style={[styles.text, { paddingTop: 35 , paddingBottom: 35}]}>7 sessions this week!</Text>
-            </View>
-          </View>
-          <View style={[styles.itemContainer, { width: 175 }]}>
-            <View style={[styles.column, { alignItems: "center" }]}>
-            <Text style={styles.text}>Account created 291 days ago</Text>
-            </View>
-          </View>
-        </View>
-
-
-
-        <View style={styles.row}>
-          <View style={[styles.itemContainer, { width: 175, marginRight: 10 }]}>
-            <View style={[styles.column, { alignItems: "center" }]}>
-            <Text style={[styles.text, { paddingTop: 35 , paddingBottom: 35}]}>7 sessions this week!</Text>
-            </View>
-          </View>
-          <View style={[styles.itemContainer, { width: 175 }]}>
-            <View style={[styles.column, { alignItems: "center" }]}>
-            <Text style={styles.text}>Account created 291 days ago</Text>
-            </View>
-          </View>
-        </View>
-
-
-
-
-
-
+          <TouchableOpacity onPress={navigateToRPE}>
             <View style={styles.itemContainer}>
-            <View style={[styles.column, { alignItems: "center" }]}>
-              {/* <Image style={styles.image} source={require('../assets/avatar-female.png')} /> */}
-              </View>
+              <Text style={styles.text}>What is RPE? </Text>
             </View>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={navigateToWhenTrackWorkout}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.text}>When should I use the app to track my workout?</Text>
+            </View>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={navigateToWhoAccessMyData}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.text}>Who can access my data ?</Text>
+            </View>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={navigateToUserToCoach}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.text}>How do I change from user to coach?</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={navigateToSafelyStoreData}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.text}>How can I safely store my data?</Text>
+            </View>
+          </TouchableOpacity>
+
+
 
         </View>
       </ScrollView>
@@ -94,26 +102,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#2B2D42",
     borderRadius: 15,
     marginBottom: 25,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between', // This will add space between the items horizontally
-    maxWidth: 400,
-  },  
-  column: {
-    flex: 1,
-    justifyContent: "center",
-    //alignItems: "center",
+    height: 70,
+    alignItems: "center",
+    paddingHorizontal: 20,
   },
   text: {
     color: "white",
     fontSize: 16,
     padding: 4,
   },
-  image: {
-    width: 100,
-    height: 100,
-    resizeMode: 'cover',
-    borderRadius: 15,
+  title: {
+    fontSize: 20,
+    color: "white",
   },
 });
