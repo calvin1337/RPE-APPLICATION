@@ -19,7 +19,7 @@ export default function LoginInformation({ route  }) {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(""); 
   const [emailError, setEmailError] = useState("")
-  const {Gender, Weight } = route.params;
+  const { Gender, Weight, ProfilePicture } = route.params;
   const [checked, setChecked] = useState(false);
   
   const navigation = useNavigation();
@@ -43,7 +43,7 @@ export default function LoginInformation({ route  }) {
       };
 
       setDoc(userDocRef, userData)
-      uploadProfilePicture(userId)
+      uploadProfilePicture(userId, ProfilePicture)
       
         .then(() => {
           console.log("User data saved successfully!");
@@ -79,20 +79,20 @@ export default function LoginInformation({ route  }) {
     });
   };
 
-const uploadProfilePicture = async (userId) => {
+  const uploadProfilePicture = async (userId, profilePictureUri) => {
+    
+    const storageRef = ref(FIREBASE_STORAGE, `Users/${userId}/profile_picture.png`);
 
-  const storageRef = ref(FIREBASE_STORAGE, 'Users/' + userId + '/profile_picture.png'); 
+    try {
+      const response = await fetch(profilePictureUri);
+      const blob = await response.blob();
 
-  try {
-    const response = await fetch("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png");
-    const blob = await response.blob();
-
-    await uploadBytes(storageRef, blob, { contentType: 'image/png' });
-    console.log('Profile picture uploaded successfully.');
-  } catch (error) {
-    console.error('Error uploading profile picture:', error);
-  }
-};
+      await uploadBytes(storageRef, blob, { contentType: 'image/png' });
+      console.log('Profile picture uploaded successfully.');
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+    }
+  };
 
   return (
     <ImageBackground

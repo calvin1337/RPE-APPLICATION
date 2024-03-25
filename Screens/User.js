@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { FIREBASE_AUTH } from '../firebase';
-import { useNavigation } from '@react-navigation/native';
-import BackButton from '../Components/BackButton';
+import { View, Text, ImageBackground, Button, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebase';
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {Spinner} from "../Components/Spinner"
 
 export default function Users({ userData }) {
-  const firebaseImageUrl = 'https://firebasestorage.googleapis.com/v0/b/rpe-app-cc0c7.appspot.com/o/image1.png?alt=media&token=b719b3ac-8fe1-42ff-9a44-03d735e8891f';
 
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [userProfilePicture, setUserProfilePicture] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const currentUser = FIREBASE_AUTH.currentUser;
         setUser(currentUser);
+
+        const profilePictureRef = ref(FIREBASE_STORAGE, `Users/${currentUser.uid}/profile_picture.png`);
+        const url = await getDownloadURL(profilePictureRef);
+        setUserProfilePicture(url);
+        console.log(url)
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
-        if (userData !== null) {
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -38,12 +40,6 @@ export default function Users({ userData }) {
     }
   };
 
-  const navigation = useNavigation();
-
-  const navigateToSettings = () => {
-    // Navigate to the Settings screen
-    navigation.navigate('Settings');
-  };
 
   return (
     <View style={styles.container}>
@@ -61,6 +57,14 @@ export default function Users({ userData }) {
           <ScrollView style={styles.scrollView}>
             <Text style={{ fontSize: 20, color: "white", paddingLeft: 30, paddingBottom: 25 }}>Account Details</Text>
             <View style={styles.usersContainer}>
+            <View style={styles.profilePictureContainer}>
+              <View style={styles.profilePictureBorder}>
+                {/* Profile picture */}
+                {userProfilePicture && (
+                  <Image source={{ uri: userProfilePicture}} style={styles.profilePicture} />
+                )}
+              </View>
+            </View>
               <View style={[styles.itemContainer, { backgroundColor: 'transparent' }]}>
                 <View style={[styles.column, { flex: 0.35 }]}>
                   <Text style={[styles.text]}>Name: </Text>
@@ -167,5 +171,27 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'cover',
-    borderRadius: 15
-  }})
+    borderRadius: 15,
+  },
+  profilePictureContainer: {
+    width: 120,
+    height: 120, 
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profilePictureBorder: {
+    width: 110, 
+    height: 110, 
+    borderRadius: 50, 
+    backgroundColor: '#66AEC5', 
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profilePicture: {
+    width: 100,
+    height: 100,
+    resizeMode: 'cover',
+    borderRadius: 50, 
+  },
+  
+})
