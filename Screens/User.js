@@ -21,7 +21,7 @@ export default function Users({ userData }) {
         const today = new Date();
         const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
         const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6);
-        const sessionsRef = FIREBASE_DB.ref('sessions'); // Replace 'sessions' with your Firebase database reference
+        const sessionsRef = FIREBASE_DB.ref('*********'); // Replace '********' with firebase database reference
         sessionsRef.orderByChild('userId').equalTo(currentUser.uid).once('value', (snapshot) => {
           let count = 0;
           snapshot.forEach((childSnapshot) => {
