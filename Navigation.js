@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Home from "./Screens/Home";
 import User from './Screens/User';
+import { createStackNavigator } from '@react-navigation/stack'
+import { FIREBASE_AUTH } from './firebase';
+
 import Graphs from './Screens/Graph';
 import Welcome from "./Screens/Welcome";
 import InSport from "./Screens/InSport";
+import GenderPick from './Screens/GenderPick';
+import LoginInformation from './Screens/LoginInfo';
+import WeightPicker from './Screens/WeightSelect';
+import AddPhoto from './Screens/AddPhoto';
+import CreateAccount from './Screens/CreateAccount';
+import UserSettings from "./Screens/Settings";
+import Login from './Screens/SignIn';
 import Settings from "./Screens/Settings"; // Import the Settings screen component
 import SafelyStoreData from "./Screens/SafelyStoreData"; // Import the Settings screen component MAYBE DELETE
 import RPE from "./Screens/RPE";
@@ -31,19 +41,23 @@ const screenOptions = {
     elevation: 0,
     height: 60,
     backgroundColor: "#2B2D42",
-  }
-};
+  }  
+}
 
-export default function Navigation() {
-  const [signedIn, setSignedIn] = useState(false);
 
+// Main navigation component
+export default function Navigation({user, userData}) {
+  
+ 
+  
   return (
     <NavigationContainer>
-      {signedIn ? (
+      {user ? (
+        // Analytics graphs etc
         <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
           <Tab.Screen 
             name="Graphs" 
-            component={Graphs} 
+            component={GraphStack} 
             options={{
               tabBarIcon: ({focused}) => (
                 <View style={styles.container}> 
@@ -52,6 +66,7 @@ export default function Navigation() {
               )
             }}
           />
+          {/* Home pages sports etc */}
           <Tab.Screen 
             name="Home" 
             component={HomeStack} 
@@ -63,33 +78,33 @@ export default function Navigation() {
               )
             }}
           />
+          {/* Settings pages */}
           <Tab.Screen 
-            name="User" 
-            component={User} 
-            options={{
-              tabBarIcon: ({focused}) => (
-                <View style={styles.container}> 
-                  <Ionicons name="person" size={32} color="white" />
-                </View>
-              )
-            }}
-          />
-       
+          name="User" 
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View style={styles.container}> 
+                <Ionicons name="person" size={32} color="white" />
+              </View>
+            )
+          }}
+          >
+          {() => <UserStack userData={userData} />}
+        </Tab.Screen>
         </Tab.Navigator>
       ) : (
-        <WelcomeStack setSignedIn={setSignedIn} />
+        <WelcomeStack />
       )}
     </NavigationContainer>
   );
 }
-
+// Stack navigator for home screens
 const HomeStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomePage" component={Home} />
       <Stack.Screen name="InSportPage" component={InSport} />
-      <Stack.Screen name="Settings" component={Settings} />
-
+      <Stack.Screen name="SettingsPage" component={UserSettings} />
       <Stack.Screen name="RPE" component={RPE} />
       <Stack.Screen name="WhenTrackWorkout" component={WhenTrackWorkout} />
       <Stack.Screen name="WhoAccessMyData" component={WhoAccessMyData} />
@@ -99,15 +114,39 @@ const HomeStack = () => {
   );
 };
 
-const WelcomeStack = ({ setSignedIn }) => {
+// Stack navigator for welcome screen
+// Loading pages etc
+const WelcomeStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="WelcomePage">
-        {(props) => <Welcome {...props} setSignedIn={setSignedIn} />}
-      </Stack.Screen>
+      <Stack.Screen name="WelcomePage" component={Welcome}/>
+      <Stack.Screen name="GenderPick" component={GenderPick} />
+      <Stack.Screen name="WeightPicker" component={WeightPicker} />
+      <Stack.Screen name="AddProfilePhoto" component={AddPhoto} />
+      <Stack.Screen name="LoginInfo" component={LoginInformation}/>
+      <Stack.Screen name="UserLogin" component={Login} />
     </Stack.Navigator>
   );
 }
+
+const GraphStack = () => {
+  return(
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="GraphPage" component={Graphs} />
+    </Stack.Navigator>
+  ) 
+}
+
+const UserStack = ({userData}) => {
+  return(
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="UserPage">
+        {(props) => <User {...props} userData={userData} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  )
+}
+
 
 const styles = StyleSheet.create({
   container: {

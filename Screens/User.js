@@ -1,10 +1,27 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
-import BackButton from "../Components/BackButton";
-import { useNavigation } from '@react-navigation/native';
-import Ionicons from "@expo/vector-icons/Ionicons";
-import React,{ useState } from "react";
+import { View, Text, ImageBackground, Button, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FIREBASE_AUTH } from '../firebase';
 
-export default function Users() {
+
+export default function Users({ userData }) {
+  const firebaseImageUrl = 'https://firebasestorage.googleapis.com/v0/b/rpe-app-cc0c7.appspot.com/o/image1.png?alt=media&token=b719b3ac-8fe1-42ff-9a44-03d735e8891f';
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const currentUser = FIREBASE_AUTH.currentUser;
+    setUser(currentUser);
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await FIREBASE_AUTH.signOut();
+      // Redirect or perform any additional actions after sign out
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
   const navigation = useNavigation();
 
   const navigateToSettings = () => {
@@ -97,10 +114,29 @@ export default function Users() {
         </View>
       </ScrollView>
     </View>
-  );
+
+  )
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(43, 45, 66, 0.7)'
+  },
+  text: {
+    color: 'white',
+    fontSize: 24,
+  },
   container: {
     flex: 1,
     backgroundColor: "#1F283A",

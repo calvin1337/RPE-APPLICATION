@@ -1,56 +1,134 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import BackButton from "../Components/BackButton";
-import React from 'react'
-import Ionicons from "@expo/vector-icons/Ionicons";
-import TimePicker from "../Components/TimePicker";
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import BackButton from '../Components/BackButton';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
+import { db,FIREBASE_AUTH  } from '../firebase';
 
-export default function InSport({navigation, route}) {
+const { width } = Dimensions.get('window');
+const buttonWidth = width * 0.8; 
+
+export default function InSport({ navigation, route }) {
   const { selectedSport } = route.params;
+  const [selectedRPE, setSelectedRPE] = useState(5);
+  const [selectedTime, setSelectedTime] = useState("");
+
+  const handleRPESelection = (value) => {
+    setSelectedRPE(value === selectedRPE ? null : value);
+  };
+
+
+
+  const renderRPEButton = (value, label) => {
+    return (
+      <TouchableOpacity
+        key={value}
+        style={[styles.row, selectedRPE === value && styles.selected]}
+        onPress={() => handleRPESelection(value)}
+      >
+        <Text style={styles.text}>{label}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+
+  const addWorkout = async () => {
+    try {
+        const currentUser = FIREBASE_AUTH.currentUser;
+        if (!currentUser) {
+            console.log('User not authenticated');
+            return;
+        }
+
+        const userId = currentUser.uid;
+
+        const workoutTime = parseInt(selectedTime);
+        if (isNaN(workoutTime) || workoutTime <= 0) {
+            console.log('Invalid workout time');
+            return;
+        }
+
+        const currentDate = new Date();
+        const date = currentDate.toLocaleDateString();
+        const time = currentDate.toLocaleTimeString();
+
+
+        const workoutData = {
+            sport: selectedSport,
+            RPE: selectedRPE,
+            time: workoutTime,
+            date: date,
+            time: time,
+            load: (selectedRPE * workoutTime)
+        };
+
+        const userDocRef = doc(db, 'Users', userId)
+        const workoutsCollectionRef = collection(userDocRef, 'Workouts');
+        await addDoc(workoutsCollectionRef, workoutData); // Use addDoc to add a new document
+
+        console.log('Workout added successfully');
+
+        setSelectedTime('');
+    } catch (error) {
+        console.error('Error adding workout: ', error);
+    }
+};
+
+  
+
+
+
   return (
     <View style={styles.container}>
-      
       <BackButton onPress={() => navigation.goBack()} />
-      <ScrollView style={styles.scrollView}>
-       <View style={styles.settingsContainer}>
+      <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>{selectedSport}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
         <Ionicons name="settings-sharp" size={32} color="white" />
+        </TouchableOpacity>
       </View>
-      <View style={styles.RPEcontainer}>
-      <View style={styles.row}>
-        <Text style={styles.text}>0. Rest</Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.text}>1. Very Very Easy</Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.text}>2. Easy</Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.text}>3. Moderate</Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.text}>4. Somewhat Hard</Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.text}>5. Hard</Text>
-      </View>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
+        <View style={styles.RPEcontainer}>
+        <Text style={{ fontSize: 16, color: "white", textAlign: 'center',borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5  }}>Rating: Perceived Exertion Level</Text>
+          {renderRPEButton(0, '0. Rest')}
+          {renderRPEButton(1, '1. Very Very Easy')}
+          {renderRPEButton(2, '2. Easy')}
+          {renderRPEButton(3, '3. Moderate')}
+          {renderRPEButton(4, '4. Somewhat Hard')}
+          {renderRPEButton(5, '5. Hard')}
+          {renderRPEButton(6, '6. -')}
+          {renderRPEButton(7, '7. Very Hard')}
+          {renderRPEButton(8, '8. -')}
+          {renderRPEButton(9, '9. -')}
+          {renderRPEButton(10, '10. Maximal')}
+        </View>
+        <Text style={styles.label}>Enter your workout time in minutes</Text>
+        <View style={styles.inputContainer}>
+          
+          <TextInput
+            style={[styles.input, { width: buttonWidth }]}
+            value={selectedTime}
+            onChangeText={setSelectedTime}
+            placeholder="Enter workout time"
+            keyboardType="numeric"
+            placeholderTextColor="#EDF2F4"
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+        <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={addWorkout} >
+        
+            <Text style={styles.buttonText}>Add workout</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
-    <View style={styles.inputContainer}>
-      <TimePicker />
-    </View>
-    <View style={styles.inputContainer}>
-    <Text style={styles.text}>Workout: {selectedSport}</Text>
-    </View>
-    </ScrollView>
-    </View>
-  )
+  );
 }
-
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    backgroundColor: "#1F283A",
+    flex: 1,
+    backgroundColor: '#1F283A',
   },
   settingsContainer: {
     flexDirection: "row",
@@ -63,27 +141,62 @@ const styles = StyleSheet.create({
   },
   RPEcontainer: {
     padding: 20,
-    margin:25,
+    margin: 25,
     backgroundColor: '#1B1727',
     borderRadius: 15,
+    flex:1
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 50,
+    height: 30,
+    paddingHorizontal: 10,
   },
-  text:{
-    color: '#FFFFFF'
-  }, 
+  selected: {
+    backgroundColor: '#FFA07A', 
+  },
+  text: {
+    color: '#FFFFFF',
+  },
   inputContainer: {
     padding: 20,
-    margin:25,
+    margin: 25,
     backgroundColor: '#1B1727',
     borderRadius: 15,
+    textAlign: 'center',
+  },
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonText: {
+    color: '#030303', 
+    fontWeight: 'bold',
     textAlign: 'center'
   },
-  scrollView: {
-    height: "100%",
-    marginBottom: 50,
-  }
-})
+  label: {
+    fontSize: 16,
+    marginBottom: 20,
+    color: "#EDF2F4",
+    textAlign: "center"
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#1B1727',
+    borderRadius: 15, 
+    padding: 10,
+    fontSize: 16,
+    height: 50,
+    color: '#EDF2F4',
+    backgroundColor: "#1B1727",
+  },
+  
+});
+

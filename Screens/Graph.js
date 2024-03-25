@@ -1,105 +1,191 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import BackButton from "../Components/BackButton";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { BarChart } from 'react-native-chart-kit';
+import { db, FIREBASE_AUTH } from '../firebase';
+import { doc, query, getDocs, collection, onSnapshot } from 'firebase/firestore';
 
-export default function Settings() {
+
+
+const { width } = Dimensions.get('window');
+const buttonWidth = width * 0.5;
+
+export default function AnalyticsPage() {
+
+  const [workouts, setWorkouts] = useState([])
+  
+
   const navigation = useNavigation();
 
-  const navigateToProfile = () => {
-    navigation.navigate('Profile');
+
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      try {
+        const currentUser = FIREBASE_AUTH.currentUser;
+        if (!currentUser) {
+          console.log('User not authenticated');
+          return;
+        }
+        const userId = currentUser.uid;
+
+        const userDocRef = doc(db, 'Users', userId);
+        const workoutsRef = collection(userDocRef, 'Workouts');
+
+        // Listen for changes in the workouts collection
+        const unsubscribe = onSnapshot(workoutsRef, (snapshot) => {
+          const workoutsData = snapshot.docs.map((doc) => doc.data());
+          setWorkouts(workoutsData);
+          console.log(workoutsData); // Log the updated workouts data
+        });
+
+        // Clean up listener when the component unmounts
+        return () => unsubscribe();
+      } catch (error) {
+        console.error('Error fetching workouts: ', error);
+      }
+    };
+
+    fetchWorkouts();
+  }, []); // Empty dependency array to run the effect only once
+
+  // Sample data
+  const data = {
+    labels: ['04/09/2023', '05/09/2023', '06/09/2023', '07/09/2023', '08/09/2023', '11/09/2023', '12/09/2023'],
+    datasets: [
+      {
+        data: [350, 180, 432, 408, 440, 400, 320],
+        color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
+      },
+    ],
   };
 
-  const navigateToPrivacy = () => {
-    navigation.navigate('Privacy');
-  };
-
-  const navigateToNotifications = () => {
-    navigation.navigate('Notifications');
-  };
-
-  const navigateToFAQ = () => {
-    navigation.navigate('FAQ');
-  };
+  
 
   return (
-    <View style={styles.container}>
-      <View style={styles.settingsContainer}>
-        <BackButton onPress={() => navigation.goBack()} />
-        <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>Setting</Text>
-      </View>
-      
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.usersContainer}>
-          <TouchableOpacity onPress={navigateToProfile}>
-            <View style={styles.itemContainer}>
-              <Text style={styles.text}>Profile</Text>
-            </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={navigateToPrivacy}>
-            <View style={styles.itemContainer}>
-              <Text style={styles.text}>Privacy</Text>
-            </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={navigateToNotifications}>
-            <View style={styles.itemContainer}>
-              <Text style={styles.text}>Notifications</Text>
-            </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={navigateToFAQ}>
-            <View style={styles.itemContainer}>
-              <Text style={styles.text}>FAQ</Text>
-            </View>
-          </TouchableOpacity>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <View style={styles.box}>
+          <Text style={styles.heading}>Stats:</Text>
+          <Text style={styles.text}>Weekly</Text>
+          <Text style={styles.text}>Total Sum: 1370</Text>
+          <Text style={styles.text}>Average: 190</Text>
+          <Text style={styles.text}>Sessions: 11</Text>
         </View>
-      </ScrollView>
-    </View>
+
+        <View style={styles.box}>
+          <Text style={styles.heading}>Graph Timescale:</Text>
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Daily')}>
+              <Text style={styles.buttonText}>Daily</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Weekly')}>
+              <Text style={styles.buttonText}>Weekly</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Bi-Weekly')}>
+              <Text style={styles.buttonText}>Bi-Weekly</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Monthly')}>
+              <Text style={styles.buttonText}>Monthly</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.graph}>
+          <BarChart
+            data={data}
+            width={width * 0.9}
+            height={200}
+            chartConfig={{
+              backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
+              backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
+              barPercentage: 0.7,
+             
+              fillShadowGradient: `rgba(1, 122, 205, 1)`,
+              fillShadowGradientOpacity: 1,
+              decimalPlaces: 0, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
+            }}
+            style={styles.chart}
+            verticalLabelRotation={30}
+            withInnerLines={false}
+          />
+        </View>
+
+        <View style={styles.box}>
+          <Text style={styles.heading}>Attribute Boxes:</Text>
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Duration Only')}>
+              <Text style={styles.buttonText}>Duration Only</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Average Ratings')}>
+              <Text style={styles.buttonText}>Average Ratings</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(43, 45, 66, 0.7)',
+  },
   container: {
     flex: 1,
-    backgroundColor: "#1F283A",
-    paddingTop: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 60,
+    marginTop: 10,
   },
-  settingsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+  box: {
+    width: '90%',
+    backgroundColor: 'rgba(27, 23, 39, 0.8)',
+    borderRadius: 5,
     padding: 20,
+    marginBottom: 5,
   },
-  scrollView: {
-    flex: 1,
-  },
-  usersContainer: {
-    flex: 1,
-    alignItems: "center",
-    paddingHorizontal: 30,
-    paddingBottom: 100,
-    paddingTop: 10,
-  },
-  itemContainer: {
-    width: "100%",
-    flexDirection: "row",
+  graph: {
+    width: '90%',
+    //backgroundColor: 'rgba(27, 23, 39, 0.8)',
+    borderRadius: 5,
     marginBottom: 10,
-    backgroundColor: "#2B2D42",
-    borderRadius: 15,
-    marginBottom: 25,
-    height: 70,
-    alignItems: "center",
-    paddingHorizontal: 20,
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 10,
   },
   text: {
-    color: "white",
-    fontSize: 16,
-    padding: 4,
+    color: 'white',
+    marginBottom: 5,
   },
-  title: {
-    fontSize: 20,
-    color: "white",
+  buttonGroup: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  button: {
+    backgroundColor: 'rgba(43, 45, 66, 0.8)',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginBottom: 10,
+    alignItems: 'center',
+    width: '100%', // Adjust width to fit buttons evenly in a row
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
   },
 });
