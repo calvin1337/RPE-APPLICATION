@@ -17,6 +17,23 @@ export default function Users({ userData }) {
       try {
         const currentUser = FIREBASE_AUTH.currentUser;
         setUser(currentUser);
+        // Fetch sessions data from Firebase and calculate sessions for this week
+        const today = new Date();
+        const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+        const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6);
+        const sessionsRef = FIREBASE_DB.ref('sessions'); // Replace 'sessions' with your Firebase database reference
+        sessionsRef.orderByChild('userId').equalTo(currentUser.uid).once('value', (snapshot) => {
+          let count = 0;
+          snapshot.forEach((childSnapshot) => {
+            const sessionDate = new Date(childSnapshot.val().date);
+            if (sessionDate >= startOfWeek && sessionDate <= endOfWeek) {
+              count++;
+            }
+        });
+        setSessionsThisWeek(count);
+      });
+
+
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
