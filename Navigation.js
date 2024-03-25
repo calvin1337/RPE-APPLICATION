@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Home from "./Screens/Home";
 import User from './Screens/User';
@@ -25,7 +25,6 @@ import WhoAccessMyData from "./Screens/WhoAccessMyData";
 import WhenTrackWorkout from "./Screens/WhenTrackWorkout";
 import UserToCoach from "./Screens/UserToCoach";
 
-import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
