@@ -98,22 +98,25 @@ export default function AnalyticsPage() {
         <BarChart
   data={prepareChartData()}
   width={width * 0.9}
-  height={200}
+  height={400}
   chartConfig={{
     backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
     backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
-    barPercentage: 0.7,
+    barPercentage: 0.8,
     fillShadowGradient: `rgba(1, 122, 205, 1)`,
     fillShadowGradientOpacity: 1,
     decimalPlaces: 0, // optional, defaults to 2dp
     color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
     labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
-    fromZero: true, // Ensure bars start from zero
+    //fromZero: true, // Ensure bars start from zero
+    
   }}
   style={styles.chart}
-  verticalLabelRotation={30}
-  withInnerLines={false}
-  showBarTops={true} // Display the load numbers above bars
+  verticalLabelRotation={60}
+  withInnerLines={true}
+  showBarTops={true}
+  showValuesOnTopOfBars={true} // Display the load numbers above bars
+  
 />
         </View>
 
@@ -146,11 +149,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 60,
     marginTop: 10,
+    padding:20
   },
   box: {
-    width: '90%',
+    width: width*.9,
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
-    borderRadius: 5,
+    borderRadius: 16,
     padding: 20,
     marginBottom: 5,
   },
@@ -159,7 +163,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
     marginBottom: 10,
-    height: 200,
+    
   },
   heading: {
     fontSize: 20,
