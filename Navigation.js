@@ -18,7 +18,6 @@ import AddPhoto from './Screens/AddPhoto';
 import CreateAccount from './Screens/CreateAccount';
 import UserSettings from "./Screens/Settings";
 import Login from './Screens/SignIn';
-import Settings from "./Screens/Settings"; // Import the Settings screen component
 import SafelyStoreData from "./Screens/SafelyStoreData"; // Import the Settings screen component MAYBE DELETE
 import RPE from "./Screens/RPE";
 import WhoAccessMyData from "./Screens/WhoAccessMyData";
@@ -40,8 +39,11 @@ const screenOptions = {
     elevation: 0,
     height: 60,
     backgroundColor: "#2B2D42",
-  }  
-}
+  },
+  tabBarActiveTintColor: '#66AEC5',
+  tabBarInactiveTintColor: 'white', 
+};
+
 
 
 // Main navigation component
@@ -58,11 +60,10 @@ export default function Navigation({user, userData}) {
             name="Graphs" 
             component={GraphStack} 
             options={{
-              tabBarIcon: ({focused}) => (
-                <View style={styles.container}> 
-                  <Ionicons name="bar-chart" size={32} color="white" />
-                </View>
-              )
+              tabBarLabel: 'Graphs',
+              tabBarIcon: ({ focused, color, size }) => (
+                <Ionicons name={"bar-chart"} size={32} color={color} />
+              ),
             }}
           />
           {/* Home pages sports etc */}
@@ -70,23 +71,21 @@ export default function Navigation({user, userData}) {
             name="Home" 
             component={HomeStack} 
             options={{
-              tabBarIcon: ({focused}) => (
-                <View style={styles.container}> 
-                  <Ionicons name="add-circle" size={32} color="#66AEC5" />
-                </View>
-              )
+              tabBarLabel: 'Home',
+              tabBarIcon: ({ focused, color, size }) => (
+                <Ionicons name={"add-circle"} size={32} color={color} />
+              ),
             }}
           />
           {/* Settings pages */}
           <Tab.Screen 
           name="User" 
           options={{
-            tabBarIcon: ({focused}) => (
-              <View style={styles.container}> 
-                <Ionicons name="person" size={32} color="white" />
-              </View>
-            )
-          }}
+            tabBarLabel: 'User',
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons name={"person"} size={32} color={color} />
+            ),
+          }} 
           >
           {() => <UserStack userData={userData} />}
         </Tab.Screen>
