@@ -6,7 +6,7 @@ export const Spinner = ({ isLoading }) => {
 
   return (
     <View style={styles.overlay}>
-      <ActivityIndicator size="large" color="#FFFFFF" />
+      <ActivityIndicator size="large" color="#66AEC5" />
     </View>
   );
 };
@@ -14,7 +14,7 @@ export const Spinner = ({ isLoading }) => {
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: '#1F283A',
     justifyContent: 'center',
     alignItems: 'center',
   },
