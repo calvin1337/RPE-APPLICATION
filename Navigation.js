@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, StyleSheet } from 'react-native';
@@ -48,11 +48,13 @@ const screenOptions = {
 
 // Main navigation component
 export default function Navigation({user, userData}) {
+
+
   
- 
   
   return (
     <NavigationContainer>
+      
       {user ? (
         // Analytics graphs etc
         <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">

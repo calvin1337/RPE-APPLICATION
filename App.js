@@ -3,10 +3,13 @@ import { View, StyleSheet } from 'react-native';
 import Navigation from './Navigation';
 import { FIREBASE_AUTH, db } from './firebase'; 
 import { doc, getDoc } from 'firebase/firestore';
+import { Spinner } from './Components/Spinner';
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     const unsubscribe = FIREBASE_AUTH.onAuthStateChanged(async (user) => {
@@ -29,6 +32,7 @@ export default function App() {
       } else {
         setUserData(null); 
       }
+      setIsLoading(false);
     });
     
     return () => unsubscribe();
@@ -36,8 +40,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Navigation user={user} userData={userData} /> 
-    </View>
+    <Spinner isLoading={isLoading} />
+      {!isLoading && (
+        <Navigation user={user} userData={userData} /> 
+      )}    
+      </View>
   );
 }
 
