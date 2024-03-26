@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, Button, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
-import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebase';
+import { FIREBASE_AUTH, FIREBASE_STORAGE, db } from '../firebase';
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { doc, collection, getDocs, query} from 'firebase/firestore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {Spinner} from "../Components/Spinner"
+import ExportButton from '../Components/ExportData';
 
 export default function Users({ userData }) {
 
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userProfilePicture, setUserProfilePicture] = useState(null)
+  const [workouts, setWorkouts] = useState([])
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +24,7 @@ export default function Users({ userData }) {
         const profilePictureRef = ref(FIREBASE_STORAGE, `Users/${currentUser.uid}/profile_picture.png`);
         const url = await getDownloadURL(profilePictureRef);
         setUserProfilePicture(url);
+        
         console.log(url)
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -110,6 +115,7 @@ export default function Users({ userData }) {
                 </View>
               </View>
               <Button title="Sign Out" onPress={handleSignOut} />
+              <ExportButton data={workouts}/>
               <View style={styles.itemContainer}>
                 <View style={[styles.column, { alignItems: "center" }]}>
                   {/* <Image style={styles.image} source={require('../assets/avatar-female.png')} /> */}
