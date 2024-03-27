@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, Button, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, ImageBackground, Button, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native';
 import { FIREBASE_AUTH, FIREBASE_STORAGE, db } from '../firebase';
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import { doc, collection, getDocs, query} from 'firebase/firestore';
@@ -14,6 +14,8 @@ export default function Users({ userData }) {
   const [userProfilePicture, setUserProfilePicture] = useState(null)
   const [workouts, setWorkouts] = useState([])
 
+  const { width } = Dimensions.get('window');
+  const buttonWidth = width * 0.8; 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,14 +55,15 @@ export default function Users({ userData }) {
       {!isLoading && ( // Conditionally render content if not loading
         <>
           <View style={styles.settingsContainer}>
+          <Text style={{ fontSize: 20, color: "white" }}>Account Details</Text>
+
             <Text style={{ fontSize: 20, color: "white" }}></Text>
             <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
               <Ionicons name="settings-sharp" size={32} color="white" />
             </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.scrollView}>
-            <Text style={{ fontSize: 20, color: "white", paddingLeft: 30, paddingBottom: 25 }}>Account Details</Text>
+          
             <View style={styles.usersContainer}>
             <View style={styles.profilePictureContainer}>
               <View style={styles.profilePictureBorder}>
@@ -102,7 +105,15 @@ export default function Users({ userData }) {
                   <Text style={styles.text}>{userData.weight}</Text>
                 </View>
               </View>
-              <View style={styles.row}>
+              <View style={[styles.itemContainer, { backgroundColor: 'transparent' }]}>
+                <View style={[styles.column, { flex: 0.35 }]}>
+                  <Text style={[styles.text]}>Coach Code </Text>
+                </View>
+                <View style={[styles.column, { flex: 0.65 }]}>
+                  <Text style={styles.text}>{userData.coachCode}</Text>
+                </View>
+              </View>
+              {/* <View style={styles.row}>
                 <View style={[styles.itemContainer, { width: 175, marginRight: 10 }]}>
                   <View style={[styles.column, { alignItems: "center" }]}>
                     <Text style={[styles.text, { paddingTop: 35 , paddingBottom: 35}]}>7 sessions this week!</Text>
@@ -113,16 +124,20 @@ export default function Users({ userData }) {
                     <Text style={styles.text}>Account created 291 days ago</Text>
                   </View>
                 </View>
+              </View> */}
+              <View style={styles.buttonContainer}>
+              <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={handleSignOut} >
+              <Text style={styles.buttonText}>Sign Out</Text>
+              </TouchableOpacity>
+              
+              <ExportButton width={buttonWidth} data={workouts}/>
               </View>
-              <Button title="Sign Out" onPress={handleSignOut} />
-              <ExportButton data={workouts}/>
               <View style={styles.itemContainer}>
                 <View style={[styles.column, { alignItems: "center" }]}>
                   {/* <Image style={styles.image} source={require('../assets/avatar-female.png')} /> */}
                 </View>
               </View>
             </View>
-          </ScrollView>
         </>
       )}
     </View>
@@ -184,6 +199,7 @@ const styles = StyleSheet.create({
     height: 120, 
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 10
   },
   profilePictureBorder: {
     width: 110, 
@@ -198,6 +214,22 @@ const styles = StyleSheet.create({
     height: 100,
     resizeMode: 'cover',
     borderRadius: 50, 
+  },
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonText: {
+    color: '#030303', 
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   
 })
