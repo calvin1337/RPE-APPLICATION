@@ -5,12 +5,12 @@ import { useNavigation } from '@react-navigation/native';
 import { BarChart } from 'react-native-chart-kit';
 import { db, FIREBASE_AUTH } from '../firebase';
 import { doc, collection, onSnapshot } from 'firebase/firestore';
-import { parseISO,  format, subWeeks } from 'date-fns';
-
+import BackButton from "../Components/BackButton";
 
 const { width } = Dimensions.get('window');
 
 export default function AnalyticsPage() {
+  const navigation = useNavigation();
   const [workouts, setWorkouts] = useState([]);
   const [selectedDuration, setSelectedDuration] = useState('Weekly'); // Initialize with Daily
 
@@ -41,30 +41,9 @@ export default function AnalyticsPage() {
     fetchWorkouts();
   }, []);
 
-  
-
-  // Function to filter workouts from the past week
-  const filterWorkoutsPastWeek = (workouts) => {
-    const pastWeekDate = subWeeks(new Date(), 1); // Calculate the date of one week ago
-    console.log('Past Week Date:', format(pastWeekDate, 'MM-dd-yyyy '));
-  
-    const filteredWorkouts = workouts.filter(workout => {
-      const workoutDate = parseISO(workout.date); // Convert workout date to Date object
-      console.log('Workout Date:', workoutDate);
-      console.log('Workout Date Type:', typeof workoutDate);
-      console.log('Past Week Date Type:', typeof pastWeekDate);
-      return workoutDate >= pastWeekDate;
-    });
-  
-    return filteredWorkouts;
-  };
-  
-  // Function to prepare chart data
   const prepareChartData = () => {
-    const filteredWorkouts = filterWorkoutsPastWeek(workouts);
-    const labels = filteredWorkouts.map(workout => workout.date); 
-    const data = filteredWorkouts.map(workout => workout.load); 
-  
+    const labels = workouts.map(workout => workout.date); 
+    const data = workouts.map(workout => workout.load); 
     return {
       labels,
       datasets: [{
@@ -73,8 +52,6 @@ export default function AnalyticsPage() {
       }],
     };
   };
-  
-
 
   // Function to handle duration selection
   const selectDuration = (duration) => {
@@ -94,59 +71,66 @@ export default function AnalyticsPage() {
   };
 
   return (
+    <><View style={styles.backContainer}>
+      <BackButton onPress={() => navigation.goBack()} />
+      <Text style={{ fontSize: 20, color: "white", paddingLeft: 140, paddingTop: 20 }}>Analytics</Text>
+
+    </View>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <View style={styles.box}>
-          <Text style={styles.heading}>Stats:</Text>
-          <Text style={styles.text}>{selectedDuration}</Text>
-          <Text style={styles.text}>Total Sum: {calculateTotalSum()}</Text>
-          <Text style={styles.text}>Average: {calculateAverage()}</Text>
-          <Text style={styles.text}>Sessions: {workouts.length}</Text>
-        </View>
 
-        <View style={styles.box}>
-          <Text style={styles.heading}>Graph Timescale:</Text>
-          <View style={styles.buttonGroup}>
-            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Weekly')}>
-              <Text style={styles.buttonText}>Past Week</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Bi-Weekly')}>
-              <Text style={styles.buttonText}>Past 2-Weeks</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => selectDuration('Monthly')}>
-              <Text style={styles.buttonText}>Past Month</Text>
-            </TouchableOpacity>
+        <View style={styles.container}>
+
+          <View style={styles.box}>
+            <Text style={styles.heading}>Stats:</Text>
+            <Text style={styles.text}>{selectedDuration}</Text>
+            <Text style={styles.text}>Total Sum: {calculateTotalSum()}</Text>
+            <Text style={styles.text}>Average: {calculateAverage()}</Text>
+            <Text style={styles.text}>Sessions: {workouts.length}</Text>
           </View>
-        </View>
 
-        <ScrollView horizontal>
-          <View style={styles.graph}>
-            <BarChart
-              data={prepareChartData()}
-              width={width * 1.4}
-              height={400}
-              chartConfig={{
-                backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
-                backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
-                barPercentage: 0.8,
-                fillShadowGradient: `rgba(1, 122, 205, 1)`,
-                fillShadowGradientOpacity: 1,
-                decimalPlaces: 0, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
-                //fromZero: true, // Ensure bars start from zero
-              }}
-              style={styles.chart}
-              verticalLabelRotation={60}
-              withInnerLines={false}
-              showBarTops={true}
-              showValuesOnTopOfBars={true} // Display the load numbers above bars
-            />
+          <View style={styles.box}>
+            <Text style={styles.heading}>Graph Timescale:</Text>
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity style={styles.button} onPress={() => selectDuration('Weekly')}>
+                <Text style={styles.buttonText}>Weekly</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => selectDuration('Bi-Weekly')}>
+                <Text style={styles.buttonText}>Bi-Weekly</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => selectDuration('Monthly')}>
+                <Text style={styles.buttonText}>Monthly</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </ScrollView>
 
-      </View>
-    </ScrollView>
+          <ScrollView horizontal>
+            <View style={styles.graph}>
+              <BarChart
+                data={prepareChartData()}
+                width={width * 1.4}
+                height={400}
+                chartConfig={{
+                  backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
+                  backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
+                  barPercentage: 0.8,
+                  fillShadowGradient: `rgba(1, 122, 205, 1)`,
+                  fillShadowGradientOpacity: 1,
+                  decimalPlaces: 0, // optional, defaults to 2dp
+                  color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+                  labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
+                  //fromZero: true, // Ensure bars start from zero
+                }}
+                style={styles.chart}
+                verticalLabelRotation={60}
+                withInnerLines={false}
+                showBarTops={true}
+                showValuesOnTopOfBars={true} // Display the load numbers above bars
+              />
+            </View>
+          </ScrollView>
+
+        </View>
+      </ScrollView></>
   );
 }
 
@@ -155,15 +139,23 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(43, 45, 66, 0.7)',
+    backgroundColor: "#1F283A",
+  },
+  backContainer: {
+    flexDirection: "row",
+    //alignItems: "center",
+    justifyContent: "space-between",
+    padding: 20,
+    width: width * 1,
+    backgroundColor: "#1F283A",
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 60,
-    marginTop: 10,
-    padding:20
+    padding:20,
+    
   },
   box: {
     width: width*.9,
@@ -172,7 +164,8 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 5,
   },
-  graph: {borderRadius: 5,
+  graph: {
+borderRadius: 5,
     marginBottom: 10,
     
   },
