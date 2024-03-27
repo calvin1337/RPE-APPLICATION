@@ -15,12 +15,10 @@ const buttonWidth = width * 0.5;
 
 
 export default function AnalyticsPage() {
-
   const [workouts, setWorkouts] = useState([]);
-  
-
+  const [selectedDuration, setSelectedDuration] = useState('Daily'); // Initialize with Daily
+ // Initialize with Weekly
   const navigation = useNavigation();
-
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -31,18 +29,15 @@ export default function AnalyticsPage() {
           return;
         }
         const userId = currentUser.uid;
-
         const userDocRef = doc(db, 'Users', userId);
         const workoutsRef = collection(userDocRef, 'Workouts');
 
-        // Listen for changes in the workouts collection
         const unsubscribe = onSnapshot(workoutsRef, (snapshot) => {
           const workoutsData = snapshot.docs.map((doc) => doc.data());
           setWorkouts(workoutsData);
           console.log(workoutsData); // Log the updated workouts data
         });
 
-        // Clean up listener when the component unmounts
         return () => unsubscribe();
       } catch (error) {
         console.error('Error fetching workouts: ', error);
@@ -50,20 +45,71 @@ export default function AnalyticsPage() {
     };
 
     fetchWorkouts();
-  }, []); // Empty dependency array to run the effect only once
+  }, []);
 
   const prepareChartData = () => {
-    const labels = workouts.map(workout => workout.date); 
-    const data = workouts.map(workout => workout.load); 
+    let filteredWorkouts = [...workouts];
+    switch (selectedDuration) {
+      case 'Weekly':
+        filteredWorkouts = filterWorkoutsByWeeks(1);
+        break;
+      case 'Bi-Weekly':
+        filteredWorkouts = filterWorkoutsByWeeks(2);
+        break;
+      case 'Monthly':
+        filteredWorkouts = filterWorkoutsByWeeks(4);
+        break;
+      default:
+        filteredWorkouts = [...workouts];
+    }
+  
+    // Aggregate workouts by day
+    const aggregatedWorkouts = {};
+    filteredWorkouts.forEach(workout => {
+      const date = workout.date;
+      if (aggregatedWorkouts[date]) {
+        aggregatedWorkouts[date] += workout.load;
+      } else {
+        aggregatedWorkouts[date] = workout.load;
+      }
+    });
+  
+    // Extract aggregated data for chart
+    const labels = Object.keys(aggregatedWorkouts); 
+    const data = Object.values(aggregatedWorkouts); 
+    const colors = data.map(value => value > 1 ? `rgba(255, 0, 0, 0.8)` : `rgba(0, 122, 255, 0.5)`); // Different color for multiple workouts on the same day
+    
     return {
       labels,
       datasets: [{
         data,
-        color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
+        backgroundColor: colors,
       }],
     };
   };
   
+
+  const filterWorkoutsByWeeks = (weeks) => {
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getTime() - weeks * 7 * 24 * 60 * 60 * 1000);
+    return workouts.filter((workout) => new Date(workout.date) >= startDate);
+  };
+
+  // Function to handle duration selection
+  const selectDuration = (duration) => {
+    setSelectedDuration(duration);
+  };
+  // Function to calculate total sum of loads
+  const calculateTotalSum = () => {
+    return workouts.reduce((total, workout) => total + workout.load, 0);
+  };
+
+  // Function to calculate average load
+  const calculateAverage = () => {
+    const totalSum = calculateTotalSum();
+    const average = totalSum / workouts.length;
+    return average.toFixed(2); // Round to 2 decimal points
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -71,9 +117,9 @@ export default function AnalyticsPage() {
         <View style={styles.box}>
           <Text style={styles.heading}>Stats:</Text>
           <Text style={styles.text}>Weekly</Text>
-          <Text style={styles.text}>Total Sum: 1370</Text>
-          <Text style={styles.text}>Average: 190</Text>
-          <Text style={styles.text}>Sessions: 11</Text>
+          <Text style={styles.text}>Total Sum: {calculateTotalSum()}</Text>
+          <Text style={styles.text}>Average: {calculateAverage()}</Text>
+          <Text style={styles.text}>Sessions: {workouts.length}</Text>
         </View>
 
         <View style={styles.box}>
@@ -94,43 +140,33 @@ export default function AnalyticsPage() {
           </View>
         </View>
 
-        <View style={styles.graph}>
-        <BarChart
-  data={prepareChartData()}
-  width={width * 0.9}
-  height={400}
-  chartConfig={{
-    backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
-    backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
-    barPercentage: 0.8,
-    fillShadowGradient: `rgba(1, 122, 205, 1)`,
-    fillShadowGradientOpacity: 1,
-    decimalPlaces: 0, // optional, defaults to 2dp
-    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-    labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
-    //fromZero: true, // Ensure bars start from zero
-    
-  }}
-  style={styles.chart}
-  verticalLabelRotation={60}
-  withInnerLines={true}
-  showBarTops={true}
-  showValuesOnTopOfBars={true} // Display the load numbers above bars
-  
-/>
-        </View>
-
-        <View style={styles.box}>
-          <Text style={styles.heading}>Attribute Boxes:</Text>
-          <View style={styles.buttonGroup}>
-            <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Duration Only')}>
-              <Text style={styles.buttonText}>Duration Only</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => selectAttribute('Average Ratings')}>
-              <Text style={styles.buttonText}>Average Ratings</Text>
-            </TouchableOpacity>
+        <ScrollView horizontal>
+          <View style={styles.graph}>
+            <BarChart
+              data={prepareChartData()}
+              width={width*1.2}
+              marginVertical={40}
+              height={400}
+              chartConfig={{
+                backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
+                backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
+                barPercentage: 0.8,
+                fillShadowGradient: `rgba(1, 122, 205, 1)`,
+                fillShadowGradientOpacity: 1,
+                decimalPlaces: 0, // optional, defaults to 2dp
+                color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
+                
+              }}
+              style={styles.chart}
+              verticalLabelRotation={60}
+              withInnerLines={false}
+              showBarTops={true}
+              showValuesOnTopOfBars={true}
+            />
           </View>
-        </View>
+        </ScrollView>
+
       </View>
     </ScrollView>
   );
@@ -142,8 +178,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(43, 45, 66, 0.7)',
+    
   },
   container: {
+    
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -159,7 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   graph: {
-    width: '90%',
+    
     //backgroundColor: 'rgba(27, 23, 39, 0.8)',
     borderRadius: 5,
     marginBottom: 10,
