@@ -74,6 +74,7 @@ export default function InSport({ navigation, route }) {
     }
 };
 
+
   
 
 
@@ -90,17 +91,16 @@ export default function InSport({ navigation, route }) {
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
         <View style={styles.RPEcontainer}>
         <Text style={{ fontSize: 16, color: "white", textAlign: 'center',borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5  }}>Rating: Perceived Exertion Level</Text>
-          {renderRPEButton(0, '0. Rest')}
-          {renderRPEButton(1, '1. Very Very Easy')}
-          {renderRPEButton(2, '2. Easy')}
-          {renderRPEButton(3, '3. Moderate')}
-          {renderRPEButton(4, '4. Somewhat Hard')}
-          {renderRPEButton(5, '5. Hard')}
-          {renderRPEButton(6, '6. -')}
-          {renderRPEButton(7, '7. Very Hard')}
-          {renderRPEButton(8, '8. -')}
-          {renderRPEButton(9, '9. -')}
-          {renderRPEButton(10, '10. Maximal')}
+          {renderRPEButton(1, '1. Rest')}
+          {renderRPEButton(2, '2. Minimal Exertion')}
+          {renderRPEButton(3, '3. Very Light Exertion')}
+          {renderRPEButton(4, '4. Light Exertion')}
+          {renderRPEButton(5, '5. Moderate Exertion')}
+          {renderRPEButton(6, '6. Moderate to Hard Exertion')}
+          {renderRPEButton(7, '7. Hard Exertion')}
+          {renderRPEButton(8, '8. Very Hard Exertion')}
+          {renderRPEButton(9, '9. Very, Very Hard Exertion')}
+          {renderRPEButton(10, '10. Maximal Exertion')}
         </View>
         <Text style={styles.label}>Enter your workout time in minutes</Text>
         <View style={styles.inputContainer}>
@@ -118,6 +118,10 @@ export default function InSport({ navigation, route }) {
         <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={addWorkout} >
         
             <Text style={styles.buttonText}>Add workout</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={() => navigation.navigate("AllWorkouts")}>
+        
+            <Text style={styles.buttonText}>Edit workouts</Text> 
           </TouchableOpacity>
         </View>
       </ScrollView>

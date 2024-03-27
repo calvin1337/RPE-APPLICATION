@@ -23,6 +23,7 @@ import RPE from "./Screens/RPE";
 import WhoAccessMyData from "./Screens/WhoAccessMyData";
 import WhenTrackWorkout from "./Screens/WhenTrackWorkout";
 import UserToCoach from "./Screens/UserToCoach";
+import MyWorkouts from './Screens/AllWorkouts';
 
 
 const Tab = createBottomTabNavigator();
@@ -110,6 +111,7 @@ const HomeStack = () => {
       <Stack.Screen name="WhoAccessMyData" component={WhoAccessMyData} />
       <Stack.Screen name="UserToCoach" component={UserToCoach} />
       <Stack.Screen name="SafelyStoreData" component={SafelyStoreData} />
+      <Stack.Screen name="AllWorkouts" component={MyWorkouts} />
     </Stack.Navigator>
   );
 };

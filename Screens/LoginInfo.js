@@ -36,10 +36,13 @@ export default function LoginInformation({ route  }) {
       const userDocRef = doc(db, 'Users', userId);
 
       
+      const code = generateCoachCode()
+      
       const userData = {
         name: usersName,
         weight: Weight,
-        gender: Gender
+        gender: Gender,
+        coachCode: code
       };
 
       setDoc(userDocRef, userData)
@@ -93,6 +96,19 @@ export default function LoginInformation({ route  }) {
       console.error('Error uploading profile picture:', error);
     }
   };
+
+  const generateCoachCode = () => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const randomCode = Array.from({ length: 4 }, () => 
+    characters.charAt(Math.floor(Math.random() * characters.length))).join('');
+
+    const currentDate = new Date()
+    const day = currentDate.getDate()
+    const year = currentDate.getYear()
+
+    code = randomCode + day + year
+    return code
+  }
 
   return (
     <ImageBackground

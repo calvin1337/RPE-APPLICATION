@@ -19,7 +19,6 @@ export default function AddPhoto( { route }) {
   const [selectedImage, setSelectedImage] = useState(null)
   const navigation = useNavigation();
 
-  const defaultImageUrl = 'https://images.unsplash.com/photo-1579156618590-01d6ca62403d?q=80&w=1883&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
 
   const pickImage = async () => {
@@ -48,6 +47,7 @@ export default function AddPhoto( { route }) {
   };
 
   const savePhoto = () => {
+    const defaultImageUrl = 'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg';
     const profilePicture = selectedImage || defaultImageUrl;
     navigation.navigate('LoginInfo', { Gender: Gender, Weight: Weight, Email: Email, Password: Password, ProfilePicture: profilePicture  });
     

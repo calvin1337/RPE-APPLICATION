@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet} from 'react-native';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
@@ -55,7 +55,7 @@ const shareCSVFile = async (fileUri) => {
   }
 };
 
-const ExportButton = () => {
+const ExportButton = ({width}) => {
   const handleExport = async () => {
     // Fetch workouts data
     const fetchedData = await fetchWorkoutsData();
@@ -69,7 +69,24 @@ const ExportButton = () => {
     }
   };
 
-  return <Button title="Export Data" onPress={handleExport} />;
+  return (<TouchableOpacity style={[styles.button,{ width: width },{backgroundColor:'#66AEC5'} ]} onPress={handleExport}>
+    <Text style={styles.buttonText}>Export Data</Text>
+  </TouchableOpacity>)
 };
+
+
+const styles = StyleSheet.create({ 
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginVertical: 10,  
+  },
+  buttonText: {
+    color: '#030303', 
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
 
 export default ExportButton;
