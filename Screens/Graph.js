@@ -6,6 +6,7 @@ import { BarChart } from 'react-native-chart-kit';
 import { db, FIREBASE_AUTH } from '../firebase';
 import { doc, collection, onSnapshot } from 'firebase/firestore';
 import BackButton from "../Components/BackButton";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const { width } = Dimensions.get('window');
 
@@ -13,6 +14,10 @@ export default function AnalyticsPage() {
   const navigation = useNavigation();
   const [workouts, setWorkouts] = useState([]);
   const [selectedDuration, setSelectedDuration] = useState('Weekly'); // Initialize with Daily
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -41,9 +46,43 @@ export default function AnalyticsPage() {
     fetchWorkouts();
   }, []);
 
+  // Function to handle start date selection
+  const handleStartDateChange = (event, selectedDate) => {
+    setShowStartDatePicker(false);
+    if (selectedDate) {
+      setStartDate(selectedDate);
+    }
+  };
+  
+  // Function to handle end date selection
+  const handleEndDateChange = (event, selectedDate) => {
+    setShowEndDatePicker(false);
+    if (selectedDate) {
+      setEndDate(selectedDate);
+    }
+  };
+  
+  // Function to filter workouts based on selected date range
+  const filterWorkoutsByDateRange = () => {
+    if (!startDate || !endDate) return workouts;
+    return workouts.filter((workout) => {
+      const workoutDate = new Date(workout.date);
+      return workoutDate >= startDate && workoutDate <= endDate;
+    });
+  };
+  
+  // Function to limit the number of sessions displayed on the graph to a maximum of 7
+  const limitSessions = (data) => {
+    const sessionsToShow = Math.min(data.length, 7);
+    return data.slice(0, sessionsToShow);
+  };
+  
+  // Update prepareChartData function to use filtered workouts
   const prepareChartData = () => {
-    const labels = workouts.map(workout => workout.date); 
-    const data = workouts.map(workout => workout.load); 
+    const filteredWorkouts = filterWorkoutsByDateRange();
+    const limitedWorkouts = limitSessions(filteredWorkouts);
+    const labels = limitedWorkouts.map(workout => workout.date); 
+    const data = limitedWorkouts.map(workout => workout.load); 
     return {
       labels,
       datasets: [{
@@ -57,18 +96,20 @@ export default function AnalyticsPage() {
   const selectDuration = (duration) => {
     setSelectedDuration(duration);
   };
+ 
 
-  // Function to calculate total sum of loads
-  const calculateTotalSum = () => {
-    return workouts.reduce((total, workout) => total + workout.load, 0);
-  };
+  // Function to calculate total sum of loads based on selected duration
+const calculateTotalSum = (duration) => {
+  const filteredWorkouts = filterWorkoutsByDateRange(duration);
+  return filteredWorkouts.reduce((total, workout) => total + workout.load, 0);
+};
 
-  // Function to calculate average load
-  const calculateAverage = () => {
-    const totalSum = calculateTotalSum();
-    const average = totalSum / workouts.length;
-    return average.toFixed(2); // Round to 2 decimal points
-  };
+// Function to calculate average load based on selected duration
+const calculateAverage = (duration) => {
+  const filteredWorkouts = filterWorkoutsByDateRange (duration);
+  const totalSum = filteredWorkouts.reduce((total, workout) => total + workout.load, 0);
+  return (totalSum / filteredWorkouts.length).toFixed(2);
+};
 
   return (
     <><View style={styles.backContainer}>
@@ -83,9 +124,10 @@ export default function AnalyticsPage() {
           <View style={styles.box}>
             <Text style={styles.heading}>Stats:</Text>
             <Text style={styles.text}>{selectedDuration}</Text>
-            <Text style={styles.text}>Total Sum: {calculateTotalSum()}</Text>
-            <Text style={styles.text}>Average: {calculateAverage()}</Text>
-            <Text style={styles.text}>Sessions: {workouts.length}</Text>
+<Text style={styles.text}>Total Sum: {calculateTotalSum(selectedDuration)}</Text>
+<Text style={styles.text}>Average: {calculateAverage(selectedDuration)}</Text>
+<Text style={styles.text}>Sessions: {workouts.length}</Text>
+
           </View>
 
           <View style={styles.box}>
@@ -127,7 +169,32 @@ export default function AnalyticsPage() {
                 showValuesOnTopOfBars={true} // Display the load numbers above bars
               />
             </View>
-          </ScrollView>
+            </ScrollView>
+            <View style={styles.datePickerContainer}>
+            <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowStartDatePicker(true)}>
+              <Text style={styles.datePickerButtonText}>{startDate ? startDate.toDateString() : 'Select start date'}</Text>
+            </TouchableOpacity>
+            {showStartDatePicker && (
+              <DateTimePicker
+                value={startDate ? startDate : new Date()}
+                mode="date"
+                display="default"
+                onChange={handleStartDateChange}
+              />
+            )}
+            <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowEndDatePicker(true)}>
+              <Text style={styles.datePickerButtonText}>{endDate ? endDate.toDateString() : 'Select end date'}</Text>
+            </TouchableOpacity>
+            {showEndDatePicker && (
+              <DateTimePicker
+                value={endDate ? endDate : new Date()}
+                mode="date"
+                display="default"
+                onChange={handleEndDateChange}
+              />
+            )}
+          </View>
+          
 
         </View>
       </ScrollView></>
@@ -200,6 +267,9 @@ borderRadius: 5,
   chart: {
     marginVertical: 8,
     borderRadius: 16,
+  },
+  datePickerButtonText:{
+    color: 'white',
   },
 });
 
