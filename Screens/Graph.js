@@ -62,27 +62,46 @@ export default function AnalyticsPage() {
     }
   };
   
-  // Function to filter workouts based on selected date range
-  const filterWorkoutsByDateRange = () => {
-    if (!startDate || !endDate) return workouts;
-    return workouts.filter((workout) => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= startDate && workoutDate <= endDate;
-    });
-  };
+// Function to filter workouts based on selected date range
+const filterWorkoutsByDateRange = () => {
+  if (!startDate || !endDate) {
+
+    return workouts;
+  }
+
+
+  const formattedWorkouts = workouts.map(workout => {
+    const workoutDateParts = workout.date.split('/');
+    const workoutDate = new Date(`${workoutDateParts[2]}-${workoutDateParts[0]}-${workoutDateParts[1]}`);
+
+
+    const formattedDate = workoutDate.toLocaleDateString(); // Format date without timestamp
+    return { ...workout, formattedDate };
+  });
+
+  const startDateParts = startDate.toLocaleDateString().split('/');
+  const endDateParts = endDate.toLocaleDateString().split('/');
+  const formattedStartDate = `${startDateParts[0]}/${startDateParts[1]}/${startDateParts[2]}`;
+  const formattedEndDate = `${endDateParts[0]}/${endDateParts[1]}/${endDateParts[2]}`;
+  const filteredWorkouts = formattedWorkouts.filter((workout) => {
+    return workout.formattedDate >= formattedStartDate && workout.formattedDate < formattedEndDate;
+  });
+
   
-  // Function to limit the number of sessions displayed on the graph to a maximum of 7
-  const limitSessions = (data) => {
-    const sessionsToShow = Math.min(data.length, 7);
-    return data.slice(0, sessionsToShow);
-  };
+
+  return filteredWorkouts;
+  
+};
+
+
+  
   
   // Update prepareChartData function to use filtered workouts
   const prepareChartData = () => {
     const filteredWorkouts = filterWorkoutsByDateRange();
-    const limitedWorkouts = limitSessions(filteredWorkouts);
-    const labels = limitedWorkouts.map(workout => workout.date); 
-    const data = limitedWorkouts.map(workout => workout.load); 
+    if (!filteredWorkouts) return { labels: [], datasets: [{ data: [] }] }; // Return empty data if filteredWorkouts is null or undefined
+    const labels = filteredWorkouts.map(workout => workout.date); // Use filteredWorkouts here
+    const data = filteredWorkouts.map(workout => workout.load); // Use filteredWorkouts here
     return {
       labels,
       datasets: [{
@@ -92,9 +111,24 @@ export default function AnalyticsPage() {
     };
   };
 
-  // Function to handle duration selection
   const selectDuration = (duration) => {
     setSelectedDuration(duration);
+  
+    // Calculate start and end dates based on the selected duration
+    const today = new Date();
+    let newStartDate = new Date();
+    let newEndDate = new Date();
+  
+    if (duration === 'Weekly') {
+      newStartDate.setDate(today.getDate() - 7); // Start date is 7 days before today
+    } else if (duration === 'Bi-Weekly') {
+      newStartDate.setDate(today.getDate() - 14); // Start date is 14 days before today
+    } else if (duration === 'Monthly') {
+      newStartDate.setMonth(today.getMonth() - 1); // Start date is 1 month before today
+    }
+  
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
   };
  
 
@@ -124,23 +158,24 @@ const calculateAverage = (duration) => {
           <View style={styles.box}>
             <Text style={styles.heading}>Stats:</Text>
             <Text style={styles.text}>{selectedDuration}</Text>
-<Text style={styles.text}>Total Sum: {calculateTotalSum(selectedDuration)}</Text>
-<Text style={styles.text}>Average: {calculateAverage(selectedDuration)}</Text>
-<Text style={styles.text}>Sessions: {workouts.length}</Text>
+            <Text style={styles.text}>Total Sum: {calculateTotalSum(selectedDuration)}</Text>
+            <Text style={styles.text}>Average: {calculateAverage(selectedDuration)}</Text>
+            <Text style={styles.text}>Sessions: {filterWorkoutsByDateRange().length}</Text>
 
           </View>
+
 
           <View style={styles.box}>
             <Text style={styles.heading}>Graph Timescale:</Text>
             <View style={styles.buttonGroup}>
               <TouchableOpacity style={styles.button} onPress={() => selectDuration('Weekly')}>
-                <Text style={styles.buttonText}>Weekly</Text>
+                <Text style={styles.buttonText}>Past Week</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={() => selectDuration('Bi-Weekly')}>
-                <Text style={styles.buttonText}>Bi-Weekly</Text>
+                <Text style={styles.buttonText}>Past 2-Weeks</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={() => selectDuration('Monthly')}>
-                <Text style={styles.buttonText}>Monthly</Text>
+                <Text style={styles.buttonText}>Past Month</Text>
               </TouchableOpacity>
             </View>
           </View>
