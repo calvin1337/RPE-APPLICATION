@@ -96,20 +96,42 @@ const filterWorkoutsByDateRange = () => {
 
   
   
-  // Update prepareChartData function to use filtered workouts
-  const prepareChartData = () => {
-    const filteredWorkouts = filterWorkoutsByDateRange();
-    if (!filteredWorkouts) return { labels: [], datasets: [{ data: [] }] }; // Return empty data if filteredWorkouts is null or undefined
-    const labels = filteredWorkouts.map(workout => workout.date); // Use filteredWorkouts here
-    const data = filteredWorkouts.map(workout => workout.load); // Use filteredWorkouts here
-    return {
-      labels,
-      datasets: [{
-        data,
-        color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
-      }],
-    };
+// Update prepareChartData function to use aggregated data
+const prepareChartData = () => {
+  const filteredWorkouts = filterWorkoutsByDateRange();
+  if (!filteredWorkouts) return { labels: [], datasets: [{ data: [] }] }; // Return empty data if filteredWorkouts is null or undefined
+
+  // Aggregate data based on selected duration
+  const aggregatedData = filteredWorkouts.reduce((acc, workout) => {
+    const date = workout.date;
+    const load = workout.load;
+
+    if (!acc[date]) {
+      acc[date] = load; // If date does not exist in accumulator, add it
+    } else {
+      acc[date] += load; // If date exists in accumulator, add load to existing value
+    }
+
+    return acc;
+  }, {});
+
+  // Sort aggregated data by date and select the last 7 entries
+  const sortedData = Object.entries(aggregatedData)
+    .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB))
+    .slice(-7);
+
+  const labels = sortedData.map(([date]) => date);
+  const data = sortedData.map(([_, load]) => load);
+
+  return {
+    labels,
+    datasets: [{
+      data,
+      color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
+    }],
   };
+};
+
 
   const selectDuration = (duration) => {
     setSelectedDuration(duration);
@@ -181,33 +203,40 @@ const calculateAverage = (duration) => {
           </View>
 
           <ScrollView horizontal>
-            <View style={styles.graph}>
-              <BarChart
-                data={prepareChartData()}
-                width={width * 1.4}
-                height={400}
-                chartConfig={{
-                  backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
-                  backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
-                  barPercentage: 0.8,
-                  fillShadowGradient: `rgba(1, 122, 205, 1)`,
-                  fillShadowGradientOpacity: 1,
-                  decimalPlaces: 0, // optional, defaults to 2dp
-                  color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-                  labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
-                  //fromZero: true, // Ensure bars start from zero
-                }}
-                style={styles.chart}
-                verticalLabelRotation={60}
-                withInnerLines={false}
-                showBarTops={true}
-                showValuesOnTopOfBars={true} // Display the load numbers above bars
-              />
-            </View>
+  <View style={styles.graph}>
+  {prepareChartData().labels.length > 0 ? (
+    <BarChart
+      data={prepareChartData()}
+      width={width * 1.4}
+      height={400}
+      chartConfig={{
+        backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
+        backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
+        barPercentage: 0.8,
+        fillShadowGradient: `rgba(1, 122, 205, 1)`,
+        fillShadowGradientOpacity: 1,
+        decimalPlaces: 0, // optional, defaults to 2dp
+        color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+        labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
+        //fromZero: true, // Ensure bars start from zero
+      }}
+      style={styles.chart}
+      verticalLabelRotation={60}
+      withInnerLines={false}
+      showBarTops={true}
+      showValuesOnTopOfBars={true} // Display the load numbers above bars
+    />
+  ) : (
+    <View style={styles.noDataContainer}>
+      <Text style={styles.noDataText}>No data available.</Text>
+      <Text style={styles.noDataText}>Please add workouts or change date selection</Text>
+    </View>  )}
+</View>
+
             </ScrollView>
             <View style={styles.datePickerContainer}>
             <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowStartDatePicker(true)}>
-              <Text style={styles.datePickerButtonText}>{startDate ? startDate.toDateString() : 'Select start date'}</Text>
+              <Text style={styles.datePickerButtonText}>{startDate ? startDate.toDateString() : 'Select start date'} - </Text>
             </TouchableOpacity>
             {showStartDatePicker && (
               <DateTimePicker
@@ -303,6 +332,16 @@ borderRadius: 5,
     marginVertical: 8,
     borderRadius: 16,
   },
+  noDataContainer: {
+    alignItems: 'center',
+  },
+  noDataText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  
   datePickerButtonText:{
     color: 'white',
   },
