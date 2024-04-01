@@ -2,7 +2,7 @@ import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, 
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FIREBASE_AUTH, FIREBASE_STORAGE, db } from '../firebase';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from "react";
@@ -19,7 +19,7 @@ export default function LoginInformation({ route  }) {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(""); 
   const [emailError, setEmailError] = useState("")
-  const { Gender, Weight } = route.params;
+  const { Gender, Weight, ProfilePicture } = route.params;
   const [checked, setChecked] = useState(false);
   
   const navigation = useNavigation();
@@ -36,14 +36,17 @@ export default function LoginInformation({ route  }) {
       const userDocRef = doc(db, 'Users', userId);
 
       
+      const code = generateCoachCode()
+      
       const userData = {
         name: usersName,
         weight: Weight,
-        gender: Gender
+        gender: Gender,
+        coachCode: code
       };
 
       setDoc(userDocRef, userData)
-      uploadProfilePicture(userId)
+      uploadProfilePicture(userId, ProfilePicture)
       
         .then(() => {
           console.log("User data saved successfully!");
@@ -79,20 +82,33 @@ export default function LoginInformation({ route  }) {
     });
   };
 
-const uploadProfilePicture = async (userId) => {
+  const uploadProfilePicture = async (userId, profilePictureUri) => {
+    
+    const storageRef = ref(FIREBASE_STORAGE, `Users/${userId}/profile_picture.png`);
 
-  const storageRef = ref(FIREBASE_STORAGE, 'Users/' + userId + '/profile_picture.png'); 
+    try {
+      const response = await fetch(profilePictureUri);
+      const blob = await response.blob();
 
-  try {
-    const response = await fetch("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png");
-    const blob = await response.blob();
+      await uploadBytes(storageRef, blob, { contentType: 'image/png' });
+      console.log('Profile picture uploaded successfully.');
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+    }
+  };
 
-    await uploadBytes(storageRef, blob, { contentType: 'image/png' });
-    console.log('Profile picture uploaded successfully.');
-  } catch (error) {
-    console.error('Error uploading profile picture:', error);
+  const generateCoachCode = () => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const randomCode = Array.from({ length: 4 }, () => 
+    characters.charAt(Math.floor(Math.random() * characters.length))).join('');
+
+    const currentDate = new Date()
+    const day = currentDate.getDate()
+    const year = currentDate.getYear()
+
+    code = randomCode + day + year
+    return code
   }
-};
 
   return (
     <ImageBackground

@@ -8,8 +8,8 @@ const buttonWidth = width * 0.8;
 export default function Home( ) {
   const navigation = useNavigation();
 
-  const guestLoginButton = () => {
-    console.log("Test")
+  const LoginButton = () => {
+    navigation.navigate("UserLogin")
   };
 
   const getStartedButton = () => {
@@ -20,11 +20,11 @@ export default function Home( ) {
       <ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1553969546-6f7388a7e07c?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }} style={styles.backgroundImage}> 
       <View style={styles.container}>
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor: '#AEAEAE'}]} onPress={guestLoginButton}>
-            <Text style={styles.buttonText}>Guest Login</Text>
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={LoginButton}>
+            <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button,{ width: buttonWidth }, {backgroundColor:'#66AEC5'}]} onPress={getStartedButton}>
-            <Text style={styles.buttonText}>Get Started</Text>
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor: '#AEAEAE'} ]} onPress={getStartedButton}>
+            <Text style={styles.buttonText}>Create Account</Text>
           </TouchableOpacity>
         </View>
       </View>
