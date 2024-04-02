@@ -69,14 +69,14 @@ const filterWorkoutsByDateRange = () => {
     return workouts;
   }
 
-  console.log('Workouts:', workouts);
+
   const formattedWorkouts = workouts.map(workout => {
     const workoutDateParts = workout.date.split('/');
     const workoutDate = new Date(`${workoutDateParts[2]}-${workoutDateParts[0]}-${workoutDateParts[1]}`);
 
     
     const formattedDate = workoutDate.toLocaleDateString(); // Format date without timestamp
-    console.log('workoutDate:', formattedDate);
+    
     return { ...workout, formattedDate };
   });
 
@@ -89,7 +89,7 @@ const filterWorkoutsByDateRange = () => {
   });
   
 
-  console.log('Formatted end date: ', formattedEndDate);
+
   console.log('Filtered Workouts:', filteredWorkouts);
   return filteredWorkouts;
   
