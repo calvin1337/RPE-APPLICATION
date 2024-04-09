@@ -51,7 +51,7 @@ export default function WeightPicker({ route }) {
           </Text>
           {/* Weight Selector */}
           <View style={styles.weightContainer}>
-            <Text style={{ textAlign: 'center', color: 'white', marginBottom: 10 }}>Please select your weight or skip this step below</Text>
+            <Text style={{ textAlign: 'center', color: 'white', marginBottom: 10 }}>Please click on your weight or skip this step below</Text>
             <View style={styles.scrollContainer}>
               <ScrollView
                 horizontal
@@ -75,12 +75,7 @@ export default function WeightPicker({ route }) {
           <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#AEAEAE' }]} onPress={() => selectWeight('N/A')}>
             <Text style={styles.buttonText}>Skip</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]}
-            onPress={() => selectWeight(item)}
-          >
-            <Text style={styles.buttonText}>Continue</Text>
-                </TouchableOpacity>
+
         </View>
       </View>
     </ImageBackground>

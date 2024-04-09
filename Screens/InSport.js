@@ -89,7 +89,8 @@ export default function InSport({ navigation, route }) {
 
 
   return (
-    <View style={styles.container}>
+    <View style={{flex:1}}> 
+    <ScrollView contentContainerStyle={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>Add RPE</Text>
@@ -155,8 +156,15 @@ export default function InSport({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#1F283A',
+    paddingBottom:100,
+  },
+  content: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 60,
+    marginTop: 10,
   },
   settingsContainer: {
     flexDirection: "row",
@@ -168,6 +176,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   RPEcontainer: {
+    width: '85%',
     padding: 20,
     margin: 25,
     backgroundColor: '#1B1727',

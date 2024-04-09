@@ -74,8 +74,9 @@ const filterWorkoutsByDateRange = () => {
     const workoutDateParts = workout.date.split('/');
     const workoutDate = new Date(`${workoutDateParts[2]}-${workoutDateParts[0]}-${workoutDateParts[1]}`);
 
-
+    
     const formattedDate = workoutDate.toLocaleDateString(); // Format date without timestamp
+    
     return { ...workout, formattedDate };
   });
 
@@ -84,11 +85,12 @@ const filterWorkoutsByDateRange = () => {
   const formattedStartDate = `${startDateParts[0]}/${startDateParts[1]}/${startDateParts[2]}`;
   const formattedEndDate = `${endDateParts[0]}/${endDateParts[1]}/${endDateParts[2]}`;
   const filteredWorkouts = formattedWorkouts.filter((workout) => {
-    return workout.formattedDate >= formattedStartDate && workout.formattedDate < formattedEndDate;
+    return workout.formattedDate >= formattedStartDate && workout.formattedDate <= formattedEndDate;
   });
-
   
 
+
+  console.log('Filtered Workouts:', filteredWorkouts);
   return filteredWorkouts;
   
 };
