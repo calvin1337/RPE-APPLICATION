@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity }
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React,{ useState } from "react";
-
+import BackButton from "../Components/BackButton";
 
 export default function Home() {
 
@@ -17,6 +17,7 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
+      <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>Pick a Sport</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>

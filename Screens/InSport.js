@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput, Modal } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
@@ -12,6 +12,15 @@ export default function InSport({ navigation, route }) {
   const { selectedSport } = route.params;
   const [selectedRPE, setSelectedRPE] = useState(5);
   const [selectedTime, setSelectedTime] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleInfoClick = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const handleRPESelection = (value) => {
     setSelectedRPE(value === selectedRPE ? null : value);
@@ -83,9 +92,9 @@ export default function InSport({ navigation, route }) {
     <View style={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.settingsContainer}>
-        <Text style={{ fontSize: 20, color: "white" }}>{selectedSport}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
-        <Ionicons name="settings-sharp" size={32} color="white" />
+        <Text style={{ fontSize: 20, color: "white" }}>Add RPE</Text>
+        <TouchableOpacity onPress={handleInfoClick}>
+        <Ionicons name="information-circle" size={32} color="white" />
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
@@ -125,6 +134,21 @@ export default function InSport({ navigation, route }) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>RPE Information</Text>
+            <TouchableOpacity onPress={closeModal}>
+              <Text style={styles.closeButton}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -157,7 +181,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   selected: {
-    backgroundColor: '#FFA07A', 
+    backgroundColor: '#66AEC5', 
   },
   text: {
     color: '#FFFFFF',
@@ -200,6 +224,28 @@ const styles = StyleSheet.create({
     height: 50,
     color: '#EDF2F4',
     backgroundColor: "#1B1727",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  closeButton: {
+    fontSize: 16,
+    color: 'blue',
   },
   
 });

@@ -24,7 +24,8 @@ import WhoAccessMyData from "./Screens/WhoAccessMyData";
 import WhenTrackWorkout from "./Screens/WhenTrackWorkout";
 import UserToCoach from "./Screens/UserToCoach";
 import MyWorkouts from './Screens/AllWorkouts';
-
+import HomeSelect from "./Screens/HomeSelect";
+import MomentaryRPE from "./Screens/MomentaryRPE";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -50,9 +51,6 @@ const screenOptions = {
 // Main navigation component
 export default function Navigation({user, userData}) {
 
-
-  
-  
   return (
     <NavigationContainer>
       
@@ -103,6 +101,7 @@ export default function Navigation({user, userData}) {
 const HomeStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="NewHome" component={HomeSelect} /> 
       <Stack.Screen name="HomePage" component={Home} />
       <Stack.Screen name="InSportPage" component={InSport} />
       <Stack.Screen name="SettingsPage" component={UserSettings} />
@@ -112,6 +111,7 @@ const HomeStack = () => {
       <Stack.Screen name="UserToCoach" component={UserToCoach} />
       <Stack.Screen name="SafelyStoreData" component={SafelyStoreData} />
       <Stack.Screen name="AllWorkouts" component={MyWorkouts} />
+      <Stack.Screen name="MRPE" component={MomentaryRPE} />
     </Stack.Navigator>
   );
 };

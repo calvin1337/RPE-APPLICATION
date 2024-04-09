@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BarChart } from 'react-native-chart-kit';
 import { db, FIREBASE_AUTH } from '../firebase';
 import { doc, collection, onSnapshot } from 'firebase/firestore';
-import BackButton from "../Components/BackButton";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const { width } = Dimensions.get('window');
@@ -169,9 +169,12 @@ const calculateAverage = (duration) => {
 
   return (
     <><View style={styles.backContainer}>
-      <BackButton onPress={() => navigation.goBack()} />
-      <Text style={{ fontSize: 20, color: "white", paddingLeft: 140, paddingTop: 20 }}>Analytics</Text>
-
+      <View style={styles.settingsContainer}>
+        <Text style={{ fontSize: 20, color: "white" }}>Analytics</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
+        <Ionicons name="settings-sharp" size={32} color="white" />
+        </TouchableOpacity>
+      </View>
     </View>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
 
@@ -344,6 +347,15 @@ borderRadius: 5,
   
   datePickerButtonText:{
     color: 'white',
+  },
+  settingsContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    width: "100%",
+    marginTop: 100,
+    padding: 20,
   },
 });
 

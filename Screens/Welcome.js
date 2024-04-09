@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 
@@ -18,7 +18,15 @@ export default function Home( ) {
   
     return (
       <ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1553969546-6f7388a7e07c?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }} style={styles.backgroundImage}> 
+      <View style={styles.logoContainer}>
+        <Image
+        source={{uri: "https://firebasestorage.googleapis.com/v0/b/rpe-app-cc0c7.appspot.com/o/logo2.png?alt=media&token=089691ad-9c1a-4f48-8d7d-04d67979c552"}}
+        style={styles.logo}
+        resizeMode="contain" 
+      />
+        </View>
       <View style={styles.container}>
+      
         <View style={styles.bottomContainer}>
           <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={LoginButton}>
             <Text style={styles.buttonText}>Login</Text>
@@ -59,7 +67,16 @@ export default function Home( ) {
       flex: 1,
       resizeMode: 'cover', 
     },
-  
+    logoContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'rgba(43, 45, 66, 0.7)'
+    },
+    logo: {
+      width: 200, 
+      height: 200, 
+    },
    
   });
   
