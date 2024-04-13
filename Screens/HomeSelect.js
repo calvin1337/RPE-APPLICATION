@@ -43,7 +43,7 @@ export default function Home() {
             <View style={styles.item}>
               <TouchableOpacity onPress={() => navigation.navigate('MRPE')} >   
               <ImageBackground
-                  source={{ uri: "" }} 
+                  source={{ uri: "https://blog.nasm.org/hubfs/rpe-scale.jpg" }} 
                   style={styles.item}
                   imageStyle={styles.itemImage}
                 >   
