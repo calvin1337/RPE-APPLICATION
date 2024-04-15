@@ -3,19 +3,20 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
-import { db,FIREBASE_AUTH  } from '../firebase';
+import { db, FIREBASE_AUTH } from '../firebase';
 import { RPELogo } from '../Components/Logo';
 
 const { width } = Dimensions.get('window');
-const buttonWidth = width * 0.8; 
+const buttonWidth = width * 0.8;
 
 export default function MomentaryRPE({ navigation }) {
   const [selectedRPE, setSelectedRPE] = useState(5);
   const [modalVisible, setModalVisible] = useState(false);
-  const [time, setTime] = useState(0); 
-  const [running, setRunning] = useState(false); 
-  const intervalRef = useRef(null); 
-  const startTimeRef = useRef(0); 
+  const [time, setTime] = useState(0);
+  const [running, setRunning] = useState(false);
+  const [timeEntries, setTimeEntries] = useState([]);
+  const intervalRef = useRef(null);
+  const startTimeRef = useRef(0);
 
   const handleInfoClick = () => {
     setModalVisible(true);
@@ -29,36 +30,32 @@ export default function MomentaryRPE({ navigation }) {
     setSelectedRPE(value === selectedRPE ? null : value);
   };
 
-  const startStopwatch = () => { 
-    startTimeRef.current = Date.now() - time * 1000; 
-    intervalRef.current = setInterval(() => { 
-        setTime(Math.floor((Date.now() -  
-        startTimeRef.current) / 1000)); 
-    }, 1000); 
-    setRunning(true); 
-}; 
-// Function to pause the stopwatch 
-const pauseStopwatch = () => { 
-    clearInterval(intervalRef.current); 
-    setRunning(false); 
-}; 
-// Function to reset the stopwatch 
-const resetStopwatch = () => { 
-    clearInterval(intervalRef.current); 
-    setTime(0); 
-    setRunning(false); 
-}; 
-// Function to resume the stopwatch 
-const resumeStopwatch = () => { 
-    startTimeRef.current = Date.now() - time * 1000; 
-    intervalRef.current = setInterval(() => { 
-        setTime(Math.floor( 
-            (Date.now() - startTimeRef.current) / 1000)); 
-    }, 1000); 
-    setRunning(true); 
-}; 
+  const startStopwatch = () => {
+    startTimeRef.current = Date.now() - time * 1000;
+    intervalRef.current = setInterval(() => {
+      setTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 1000);
+    setRunning(true);
+  };
 
+  const pauseStopwatch = () => {
+    clearInterval(intervalRef.current);
+    setRunning(false);
+  };
 
+  const resetStopwatch = () => {
+    clearInterval(intervalRef.current);
+    setTime(0);
+    setRunning(false);
+  };
+
+  const resumeStopwatch = () => {
+    startTimeRef.current = Date.now() - time * 1000;
+    intervalRef.current = setInterval(() => {
+      setTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 1000);
+    setRunning(true);
+  };
 
   const renderRPEButton = (value, label) => {
     return (
@@ -72,6 +69,13 @@ const resumeStopwatch = () => {
     );
   };
 
+  const addTimeEntry = () => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = time % 60;
+    const formattedTime = `${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
+    setTimeEntries([...timeEntries, formattedTime]);
+  };
 
   return (
     <View style={styles.container}>
@@ -80,70 +84,61 @@ const resumeStopwatch = () => {
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>Track Momentary RPE</Text>
         <TouchableOpacity onPress={handleInfoClick}>
-        <Ionicons name="information-circle" size={32} color="white" />
+          <Ionicons name="information-circle" size={32} color="white" />
         </TouchableOpacity>
       </View>
       <View style={styles.timerContainer}>
-      <Text style={styles.header}> 
-                Begin Workout
-            </Text> 
-            <Text style={styles.timeText}>{time}s</Text> 
-            <View style={styles.timerButtonContainer}> 
-                {running ? ( 
-                    <TouchableOpacity 
-                        style={[styles.timerButton, styles.pauseButton]} 
-                        onPress={pauseStopwatch} 
-                    > 
-                        <Text style={styles.timerButtonText}>Pause</Text> 
-                    </TouchableOpacity> 
-                ) : ( 
-                    <> 
-                        <TouchableOpacity 
-                            style={[styles.timerButton, styles.startButton]} 
-                            onPress={startStopwatch} 
-                        > 
-                            <Text style={styles.timerButtonText}>Start</Text> 
-                        </TouchableOpacity> 
-                        <TouchableOpacity 
-                            style={[styles.timerButton, styles.resetButton]} 
-                            onPress={resetStopwatch} 
-                        > 
-                            <Text style={styles.timerButtonText}> 
-                                Reset 
-                            </Text> 
-                        </TouchableOpacity> 
-                    </> 
-                )} 
-                {/* {!running && ( 
-                    <TouchableOpacity 
-                        style={[styles.timerButton, styles.resumeButton]} 
-                        onPress={resumeStopwatch} 
-                    > 
-                        <Text style={styles.timerButtonText}> 
-                            Resume 
-                        </Text> 
-                    </TouchableOpacity> 
-                )}  */}
-            </View> 
-            
+        <Text style={styles.header}>Begin Workout</Text>
+        <Text style={styles.timeText}>{time}s</Text>
+        <View style={styles.timerButtonContainer}>
+          {running ? (
+            <TouchableOpacity
+              style={[styles.timerButton, styles.pauseButton]}
+              onPress={pauseStopwatch}
+            >
+              <Text style={styles.timerButtonText}>Pause</Text>
+            </TouchableOpacity>
+          ) : (
+            <>
+              <TouchableOpacity
+                style={[styles.timerButton, styles.startButton]}
+                onPress={startStopwatch}
+              >
+                <Text style={styles.timerButtonText}>Start</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.timerButton, styles.resetButton]}
+                onPress={resetStopwatch}
+              >
+                <Text style={styles.timerButtonText}>Reset</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
-      <View style={styles.workoutContainer}>
-      <View style={styles.row}>
-        <View style={styles.column}>
-        <Text style={styles.text}>Time</Text>
+        <View style={styles.workoutContainer}>
+          <View style={styles.row}>
+            <View style={styles.column}>
+              <Text style={styles.text}>Time</Text>
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.text}>RPE</Text>
+            </View>
+          </View>
+          {timeEntries.map((entry, index) => (
+            <View style={styles.row} key={index}>
+              <View style={styles.column}>
+                <Text style={styles.text}>{entry}</Text>
+              </View>
+              <View style={styles.column}>
+                <Text style={styles.text}>{selectedRPE}</Text>
+              </View>
+            </View>
+          ))}
         </View>
-        <View style={styles.column}>
-        <Text style={styles.text}>RPE</Text>
-        </View>
-      </View>
-      
-    </View>
-      
-      
-      
         <View style={styles.RPEcontainer}>
-        <Text style={{ fontSize: 16, color: "white", textAlign: 'center',borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5  }}>Rating: Perceived Exertion Level</Text>
+          <Text style={{ fontSize: 16, color: "white", textAlign: 'center', borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5 }}>Rating: Perceived Exertion Level</Text>
           {renderRPEButton(6, ' 6. No Exertion At All')}
           {renderRPEButton(7, ' 7. Minimal Exertion')}
           {renderRPEButton(8, ' 8. ')}
@@ -161,17 +156,18 @@ const resumeStopwatch = () => {
           {renderRPEButton(20, '20. Maximal Exertion')}
         </View>
         <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]}  >
-        
-            <Text style={styles.buttonText}>Add Momentary RPE</Text>
+          <TouchableOpacity
+            style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]}
+            onPress={addTimeEntry}
+          >
+            <Text style={styles.buttonText}>Add Time Entry</Text>
           </TouchableOpacity>
-          </View>
-          <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#50C878'} ]}  >
-        
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#50C878' }]}>
             <Text style={styles.buttonText}>Finish Workout</Text>
           </TouchableOpacity>
-          </View>
+        </View>
       </ScrollView>
       <Modal
         animationType="slide"
