@@ -33,11 +33,11 @@ export default function MomentaryRPE({ navigation }) {
   const startStopwatch = () => {
     startTimeRef.current = Date.now() - time * 1000;
     intervalRef.current = setInterval(() => {
-      setTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
+      const elapsedTimeInSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
+      setTime(elapsedTimeInSeconds);
     }, 1000);
     setRunning(true);
   };
-
   const pauseStopwatch = () => {
     clearInterval(intervalRef.current);
     setRunning(false);
@@ -47,15 +47,9 @@ export default function MomentaryRPE({ navigation }) {
     clearInterval(intervalRef.current);
     setTime(0);
     setRunning(false);
+    setTimeEntries([])
   };
 
-  const resumeStopwatch = () => {
-    startTimeRef.current = Date.now() - time * 1000;
-    intervalRef.current = setInterval(() => {
-      setTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
-    }, 1000);
-    setRunning(true);
-  };
 
   const renderRPEButton = (value, label) => {
     return (
@@ -68,14 +62,26 @@ export default function MomentaryRPE({ navigation }) {
       </TouchableOpacity>
     );
   };
+    
 
   const addTimeEntry = () => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time % 3600) / 60);
-    const seconds = time % 60;
-    const formattedTime = `${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
-    setTimeEntries([...timeEntries, formattedTime]);
+      const currentDate = new Date();
+      const actualTime = currentDate.toLocaleTimeString();
+      let startTime
+      let workoutTime;
+  
+      if (timeEntries.length === 0) {
+          workoutTime = time;
+          startTime = time
+      } else {
+          const previousEntry = timeEntries[timeEntries.length - 1]
+          startTime = time
+          workoutTime = time - previousEntry.startTime 
+      }
+      setTimeEntries([...timeEntries, { workoutTime: workoutTime, rpe: selectedRPE, actualTime: actualTime, startTime: startTime }]);
   };
+  
+
 
   return (
     <View style={styles.container}>
@@ -89,7 +95,11 @@ export default function MomentaryRPE({ navigation }) {
       </View>
       <View style={styles.timerContainer}>
         <Text style={styles.header}>Begin Workout</Text>
-        <Text style={styles.timeText}>{time}s</Text>
+        <Text style={styles.timeText}>
+          {time >= 3600 ? `${Math.floor(time / 3600)}h ` : ''}
+          {time >= 60 ? `${Math.floor((time % 3600) / 60)}m ` : ''}
+          {`${time % 60}s`}
+        </Text>
         <View style={styles.timerButtonContainer}>
           {running ? (
             <TouchableOpacity
@@ -120,7 +130,10 @@ export default function MomentaryRPE({ navigation }) {
         <View style={styles.workoutContainer}>
           <View style={styles.row}>
             <View style={styles.column}>
-              <Text style={styles.text}>Time</Text>
+              <Text style={styles.text}>Time of Entry</Text>
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.text}>Workout Length</Text>
             </View>
             <View style={styles.column}>
               <Text style={styles.text}>RPE</Text>
@@ -129,10 +142,19 @@ export default function MomentaryRPE({ navigation }) {
           {timeEntries.map((entry, index) => (
             <View style={styles.row} key={index}>
               <View style={styles.column}>
-                <Text style={styles.text}>{entry}</Text>
+                <Text style={styles.text}>{entry.actualTime}</Text>
               </View>
               <View style={styles.column}>
-                <Text style={styles.text}>{selectedRPE}</Text>
+                <Text style={styles.text}>
+                <Text style={styles.text}>
+                  {entry.workoutTime >= 3600 ? `${Math.floor(entry.workoutTime / 3600)}h ` : ''}
+                  {entry.workoutTime >= 60 ? `${Math.floor((entry.workoutTime % 3600) / 60)}m ` : ''}
+                  {`${entry.workoutTime % 60}s`}
+                </Text>
+                </Text>
+              </View>
+              <View style={styles.column}>
+                <Text style={styles.text}>{entry.rpe}</Text>
               </View>
             </View>
           ))}
