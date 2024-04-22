@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React,{ useState } from "react";
 import BackButton from "../Components/BackButton";
+import { RPELogo } from "../Components/Logo";
 
 export default function Home() {
 
@@ -17,6 +18,7 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
+      <RPELogo />
       <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>Pick a Sport</Text>

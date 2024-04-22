@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, Alert } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
@@ -68,19 +68,91 @@ export default function MomentaryRPE({ navigation }) {
       const currentDate = new Date();
       const actualTime = currentDate.toLocaleTimeString();
       let startTime
-      let workoutTime;
-  
+      let workoutTime
+      let interval
       if (timeEntries.length === 0) {
           workoutTime = time;
           startTime = time
+          interval = 1
       } else {
           const previousEntry = timeEntries[timeEntries.length - 1]
           startTime = time
           workoutTime = time - previousEntry.startTime 
+          interval = previousEntry.interval + 1
       }
-      setTimeEntries([...timeEntries, { workoutTime: workoutTime, rpe: selectedRPE, actualTime: actualTime, startTime: startTime }]);
+      const hours = Math.floor(workoutTime / 3600);
+      const minutes = Math.floor((workoutTime % 3600) / 60);
+      const seconds = workoutTime % 60;
+      const formattedTime = `${hours}h ${minutes}m ${seconds}s`;
+      
+      setTimeEntries([...timeEntries, { workoutTime: workoutTime, rpe: selectedRPE, actualTime: actualTime, startTime: startTime, interval: interval, formattedWorkoutTime: formattedTime  }]);
   };
   
+  const handleFinishWorkout = () => {
+    Alert.alert(
+        'Finish Workout',
+        'Are you sure you want to finish your workout?',
+        [
+            {
+                text: 'Cancel',
+                style: 'cancel'
+            },
+            {
+                text: 'Finish',
+                onPress: () => {
+                    addWorkout()
+                }
+            }
+        ]
+    );
+};
+
+  const addWorkout = async () => {
+    try {
+      const currentUser = FIREBASE_AUTH.currentUser;
+      if (!currentUser) {
+          console.log('User not authenticated');
+          return;
+      }
+
+      const userId = currentUser.uid;
+      console.log(userId)
+
+      const currentDate = new Date();
+      const date = currentDate.toLocaleDateString();
+      const hours = Math.floor(time / 3600);
+      const minutes = Math.floor((time % 3600) / 60);
+      const seconds = time % 60;
+      const totalLength = `${hours}h ${minutes}m ${seconds}s`;
+
+
+      const workoutData = {
+        date: date,
+        workout: timeEntries,
+        totalLength: totalLength
+      }
+
+      const userDocRef = doc(db, 'Users', userId)
+      const workoutsCollectionRef = collection(userDocRef, 'MomentaryWorkouts');
+      await addDoc(workoutsCollectionRef, workoutData); 
+      
+      Alert.alert(
+        'Workout Added',
+        'Your workout entry has been successfully added!',
+        [
+            { 
+              text: 'OK',
+              onPress: () => {
+                resetStopwatch()
+              }
+            }
+        ]
+      );
+      
+  } catch (error) {
+      console.error('Error adding workout: ', error);
+  }
+  }
 
 
   return (
@@ -129,6 +201,9 @@ export default function MomentaryRPE({ navigation }) {
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
         <View style={styles.workoutContainer}>
           <View style={styles.row}>
+          <View style={styles.column}>
+              <Text style={styles.text}>Interval</Text>
+            </View>
             <View style={styles.column}>
               <Text style={styles.text}>Time of Entry</Text>
             </View>
@@ -141,6 +216,9 @@ export default function MomentaryRPE({ navigation }) {
           </View>
           {timeEntries.map((entry, index) => (
             <View style={styles.row} key={index}>
+              <View style={styles.column}>
+                <Text style={styles.text}>{entry.interval}</Text>
+              </View>
               <View style={styles.column}>
                 <Text style={styles.text}>{entry.actualTime}</Text>
               </View>
@@ -159,6 +237,22 @@ export default function MomentaryRPE({ navigation }) {
             </View>
           ))}
         </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]}
+            onPress={addTimeEntry}
+          >
+            <Text style={styles.buttonText}>Add Time Entry</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainer}>
+        <TouchableOpacity 
+          style={[styles.button, { width: buttonWidth }, { backgroundColor: '#50C878' }, timeEntries.length === 0 && styles.disabledButton]} 
+          onPress={handleFinishWorkout} 
+          disabled={timeEntries.length === 0}>
+          <Text style={styles.buttonText}>{timeEntries.length === 0 ? "No Workout" : "Finish Workout"}</Text>
+        </TouchableOpacity>
+        </View>
         <View style={styles.RPEcontainer}>
           <Text style={{ fontSize: 16, color: "white", textAlign: 'center', borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5 }}>Rating: Perceived Exertion Level</Text>
           {renderRPEButton(6, ' 6. No Exertion At All')}
@@ -176,19 +270,6 @@ export default function MomentaryRPE({ navigation }) {
           {renderRPEButton(18, '18. ')}
           {renderRPEButton(19, '19. Almost Maximal Exertion')}
           {renderRPEButton(20, '20. Maximal Exertion')}
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, { width: buttonWidth }, { backgroundColor: '#66AEC5' }]}
-            onPress={addTimeEntry}
-          >
-            <Text style={styles.buttonText}>Add Time Entry</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#50C878' }]}>
-            <Text style={styles.buttonText}>Finish Workout</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
       <Modal
@@ -369,6 +450,10 @@ column: {
   justifyContent: 'center',
   alignItems: 'center',
 },
+
+disabledButton: {
+  opacity: 0.5,
+}
 
 
 });

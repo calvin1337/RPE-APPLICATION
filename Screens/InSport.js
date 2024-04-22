@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput, Modal, Alert } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
 import { db,FIREBASE_AUTH  } from '../firebase';
+import { RPELogo } from '../Components/Logo';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.8; 
@@ -73,11 +74,20 @@ export default function InSport({ navigation, route }) {
 
         const userDocRef = doc(db, 'Users', userId)
         const workoutsCollectionRef = collection(userDocRef, 'Workouts');
-        await addDoc(workoutsCollectionRef, workoutData); // Use addDoc to add a new document
+        await addDoc(workoutsCollectionRef, workoutData); 
 
-        console.log('Workout added successfully');
-
-        setSelectedTime('');
+        Alert.alert(
+          'Workout Added',
+          'Your workout entry has been successfully added!',
+          [
+              { 
+                text: 'OK',
+                onPress: () => {
+                  setSelectedTime('');
+                }
+              }
+          ]
+        ); 
     } catch (error) {
         console.error('Error adding workout: ', error);
     }
@@ -90,6 +100,7 @@ export default function InSport({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      <RPELogo />
       <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>Add RPE</Text>
@@ -128,7 +139,7 @@ export default function InSport({ navigation, route }) {
         
             <Text style={styles.buttonText}>Add workout</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={() => navigation.navigate("AllWorkouts")}>
+          <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={() => navigation.navigate("RPEWorkouts")}>
         
             <Text style={styles.buttonText}>Edit workouts</Text> 
           </TouchableOpacity>

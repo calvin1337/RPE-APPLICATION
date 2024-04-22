@@ -10,10 +10,6 @@ export default function Home() {
   const navigation = useNavigation();
 
 
-  const handleSportPress = (sport) => {
-    setSelectedSport(sport);
-    navigation.navigate('InSportPage', { selectedSport: sport });
-  };
 
   return (
     <View style={styles.container}>
@@ -56,14 +52,14 @@ export default function Home() {
           </View>
           <View style={styles.row}>
           <View style={styles.item}>
-              <TouchableOpacity  >
+              <TouchableOpacity onPress={() => navigation.navigate('WorkoutHome')} >
               <ImageBackground
                   source={{ uri: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }} 
                   style={styles.item}
                   imageStyle={styles.itemImage}
                 >
                   <View style={styles.overlay}>
-                    <Text style={styles.overlayText}>My Workouts</Text>
+                    <Text style={styles.overlayText}>Workout History</Text>
                   </View>
                   </ImageBackground>
               </TouchableOpacity>
