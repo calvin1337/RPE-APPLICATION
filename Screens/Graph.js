@@ -7,17 +7,23 @@ import { db, FIREBASE_AUTH } from '../firebase';
 import { doc, collection, onSnapshot } from 'firebase/firestore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { RPELogo } from '../Components/Logo';
+import { Spinner } from '../Components/Spinner';
 
 const { width } = Dimensions.get('window');
 
 export default function AnalyticsPage() {
   const navigation = useNavigation();
   const [workouts, setWorkouts] = useState([]);
-  const [selectedDuration, setSelectedDuration] = useState('Weekly'); // Initialize with Daily
+  const [selectedDuration, setSelectedDuration] = useState('Weekly'); 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [filteredWorkouts, setFilteredWorkouts] = useState([])
+  const [isLoading, setIsLoading] = useState(true);
+  const [barWidth, setBarWidth] = useState(0)
+
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -34,7 +40,8 @@ export default function AnalyticsPage() {
         const unsubscribe = onSnapshot(workoutsRef, (snapshot) => {
           const workoutsData = snapshot.docs.map((doc) => doc.data());
           setWorkouts(workoutsData);
-          console.log(workoutsData); // Log the updated workouts data
+          
+          
         });
 
         return () => unsubscribe();
@@ -46,225 +53,171 @@ export default function AnalyticsPage() {
     fetchWorkouts();
   }, []);
 
-  // Function to handle start date selection
-  const handleStartDateChange = (event, selectedDate) => {
-    setShowStartDatePicker(false);
-    if (selectedDate) {
-      setStartDate(selectedDate);
+  useEffect(() => {
+    graphData();
+  }, [workouts])
+
+    const graphData = () => {
+    let startDate, endDate;
+    const currentDate = new Date();
+    startDate = new Date(currentDate);
+    startDate.setDate(startDate.getDate() - 7); 
+    endDate = new Date(currentDate);
+    console.log(startDate, endDate)
+    filterWorkoutsByDate(startDate, endDate);
     }
+    
+  
+
+    const filterWorkoutsByDate = (startDate, endDate) => {
+      
+      const filteredDates = workouts
+          .filter(workout => {
+              // Split the date string into day, month, and year
+              const [day, month, year] = workout.date.split('/');
+              // Construct a Date object with the year, month, and day in the correct order
+              const workoutDate = new Date(`${year}-${month}-${day}`);
+              console.log(workoutDate)
+              return workoutDate >= startDate && workoutDate <= endDate;
+          }).sort((a, b) => {
+            const [dayA, monthA, yearA] = a.date.split('/');
+            const [dayB, monthB, yearB] = b.date.split('/');
+            const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
+            const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+            return dateA - dateB;
+        })
+          .map(workout => ({ date: workout.date, load: workout.load }));
+      
+          
+
+      const data = {
+        labels: filteredDates.map(workout => workout.date),
+        datasets: [
+            {
+                data: filteredDates.map(workout => workout.load),
+                color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`
+            },
+        ],
+    };
+      console.log(data)
+      setFilteredWorkouts(data)
+      setIsLoading(false);
+      
   };
   
-  // Function to handle end date selection
-  const handleEndDateChange = (event, selectedDate) => {
-    setShowEndDatePicker(false);
-    if (selectedDate) {
-      setEndDate(selectedDate);
+  const handleDateChange = (timescale) => {
+    let startDate, endDate;
+
+    // Get current date
+    const currentDate = new Date();
+
+    // Calculate start and end dates based on the selected timescale
+    switch (timescale) {
+        case "week":
+            startDate = new Date(currentDate);
+            startDate.setDate(startDate.getDate() - 7); // Subtract 7 days from current date
+            endDate = new Date(currentDate);
+            break;
+        case "2-weeks":
+            startDate = new Date(currentDate);
+            startDate.setDate(startDate.getDate() - 14); // Subtract 14 days from current date
+            endDate = new Date(currentDate);
+            break;
+        case "month":
+            startDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate()); // Subtract 1 month from current date
+            endDate = new Date(currentDate);
+            break;
+        default:
+            // Handle default case
+            break;
     }
-  };
-  
-// Function to filter workouts based on selected date range
-const filterWorkoutsByDateRange = () => {
-  if (!startDate || !endDate) {
 
-    return workouts;
-  }
-
-
-  const formattedWorkouts = workouts.map(workout => {
-    const workoutDateParts = workout.date.split('/');
-    const workoutDate = new Date(`${workoutDateParts[2]}-${workoutDateParts[0]}-${workoutDateParts[1]}`);
-
-
-    const formattedDate = workoutDate.toLocaleDateString(); // Format date without timestamp
-    return { ...workout, formattedDate };
-  });
-
-  const startDateParts = startDate.toLocaleDateString().split('/');
-  const endDateParts = endDate.toLocaleDateString().split('/');
-  const formattedStartDate = `${startDateParts[0]}/${startDateParts[1]}/${startDateParts[2]}`;
-  const formattedEndDate = `${endDateParts[0]}/${endDateParts[1]}/${endDateParts[2]}`;
-  const filteredWorkouts = formattedWorkouts.filter((workout) => {
-    return workout.formattedDate >= formattedStartDate && workout.formattedDate < formattedEndDate;
-  });
-
-  
-
-  return filteredWorkouts;
-  
+    // Call your function to filter workouts by date with startDate and endDate
+    filterWorkoutsByDate(startDate, endDate);
 };
-
-
   
-  
-// Update prepareChartData function to use aggregated data
-const prepareChartData = () => {
-  const filteredWorkouts = filterWorkoutsByDateRange();
-  if (!filteredWorkouts) return { labels: [], datasets: [{ data: [] }] }; // Return empty data if filteredWorkouts is null or undefined
-
-  // Aggregate data based on selected duration
-  const aggregatedData = filteredWorkouts.reduce((acc, workout) => {
-    const date = workout.date;
-    const load = workout.load;
-
-    if (!acc[date]) {
-      acc[date] = load; // If date does not exist in accumulator, add it
-    } else {
-      acc[date] += load; // If date exists in accumulator, add load to existing value
-    }
-
-    return acc;
-  }, {});
-
-  // Sort aggregated data by date and select the last 7 entries
-  const sortedData = Object.entries(aggregatedData)
-    .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB))
-    .slice(-7);
-
-  const labels = sortedData.map(([date]) => date);
-  const data = sortedData.map(([_, load]) => load);
-
-  return {
-    labels,
-    datasets: [{
-      data,
-      color: (opacity = 0.5) => `rgba(0, 122, 255, ${opacity})`, // Lighter blue color
-    }],
-  };
-};
-
-
-  const selectDuration = (duration) => {
-    setSelectedDuration(duration);
-  
-    // Calculate start and end dates based on the selected duration
-    const today = new Date();
-    let newStartDate = new Date();
-    let newEndDate = new Date();
-  
-    if (duration === 'Weekly') {
-      newStartDate.setDate(today.getDate() - 7); // Start date is 7 days before today
-    } else if (duration === 'Bi-Weekly') {
-      newStartDate.setDate(today.getDate() - 14); // Start date is 14 days before today
-    } else if (duration === 'Monthly') {
-      newStartDate.setMonth(today.getMonth() - 1); // Start date is 1 month before today
-    }
-  
-    setStartDate(newStartDate);
-    setEndDate(newEndDate);
-  };
+ 
  
 
-  // Function to calculate total sum of loads based on selected duration
-const calculateTotalSum = (duration) => {
-  const filteredWorkouts = filterWorkoutsByDateRange(duration);
-  return filteredWorkouts.reduce((total, workout) => total + workout.load, 0);
-};
-
-// Function to calculate average load based on selected duration
-const calculateAverage = (duration) => {
-  const filteredWorkouts = filterWorkoutsByDateRange (duration);
-  const totalSum = filteredWorkouts.reduce((total, workout) => total + workout.load, 0);
-  return (totalSum / filteredWorkouts.length).toFixed(2);
-};
-
   return (
-    <><View style={styles.backContainer}>
+    <View style={styles.container}>
+      <RPELogo />
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>Analytics</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
         <Ionicons name="settings-sharp" size={32} color="white" />
         </TouchableOpacity>
       </View>
-    </View>
+    
     <ScrollView contentContainerStyle={styles.scrollContainer}>
 
-        <View style={styles.container}>
+        <View style={styles.graphContainer}>
 
-          <View style={styles.box}>
-            <Text style={styles.heading}>Stats:</Text>
-            <Text style={styles.text}>{selectedDuration}</Text>
-            <Text style={styles.text}>Total Sum: {calculateTotalSum(selectedDuration)}</Text>
-            <Text style={styles.text}>Average: {calculateAverage(selectedDuration)}</Text>
-            <Text style={styles.text}>Sessions: {filterWorkoutsByDateRange().length}</Text>
-
-          </View>
+        
 
 
           <View style={styles.box}>
-            <Text style={styles.heading}>Graph Timescale:</Text>
+            <Text style={styles.heading}>Graph Timescale</Text>
             <View style={styles.buttonGroup}>
-              <TouchableOpacity style={styles.button} onPress={() => selectDuration('Weekly')}>
+              <TouchableOpacity style={styles.button} onPress={() => handleDateChange("week")}>
                 <Text style={styles.buttonText}>Past Week</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => selectDuration('Bi-Weekly')}>
+              <TouchableOpacity style={styles.button} onPress={() => handleDateChange("2-weeks")}>
                 <Text style={styles.buttonText}>Past 2-Weeks</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => selectDuration('Monthly')}>
+              <TouchableOpacity style={styles.button} onPress={() => handleDateChange("month")}>
                 <Text style={styles.buttonText}>Past Month</Text>
               </TouchableOpacity>
             </View>
           </View>
 
+          {isLoading ? (
+      <Spinner /> // Render the spinner if isLoading is true
+    ) : (
+      // Your component content when data is not loading
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.graphContainer}>
           <ScrollView horizontal>
-  <View style={styles.graph}>
-  {prepareChartData().labels.length > 0 ? (
-    <BarChart
-      data={prepareChartData()}
-      width={width * 1.4}
-      height={400}
-      chartConfig={{
-        backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
-        backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
-        barPercentage: 0.8,
-        fillShadowGradient: `rgba(1, 122, 205, 1)`,
-        fillShadowGradientOpacity: 1,
-        decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
-        //fromZero: true, // Ensure bars start from zero
-      }}
-      style={styles.chart}
-      verticalLabelRotation={60}
-      withInnerLines={false}
-      showBarTops={true}
-      showValuesOnTopOfBars={true} // Display the load numbers above bars
-    />
-  ) : (
-    <View style={styles.noDataContainer}>
-      <Text style={styles.noDataText}>No data available.</Text>
-      <Text style={styles.noDataText}>Please add workouts or change date selection</Text>
-    </View>  )}
-</View>
-
-            </ScrollView>
-            <View style={styles.datePickerContainer}>
-            <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowStartDatePicker(true)}>
-              <Text style={styles.datePickerButtonText}>{startDate ? startDate.toDateString() : 'Select start date'} - </Text>
-            </TouchableOpacity>
-            {showStartDatePicker && (
-              <DateTimePicker
-                value={startDate ? startDate : new Date()}
-                mode="date"
-                display="default"
-                onChange={handleStartDateChange}
-              />
-            )}
-            <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowEndDatePicker(true)}>
-              <Text style={styles.datePickerButtonText}>{endDate ? endDate.toDateString() : 'Select end date'}</Text>
-            </TouchableOpacity>
-            {showEndDatePicker && (
-              <DateTimePicker
-                value={endDate ? endDate : new Date()}
-                mode="date"
-                display="default"
-                onChange={handleEndDateChange}
-              />
-            )}
-          </View>
+            <View style={styles.graph}>
+              {filteredWorkouts.labels.length > 0 ? (
+                <BarChart
+                  data={filteredWorkouts}
+                  width={width * 1.4}
+                  height={400}
+                  chartConfig={{
+                    backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
+                    backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
+                    barPercentage: 0.8,
+                    fillShadowGradient: `rgba(1, 122, 205, 1)`,
+                    fillShadowGradientOpacity: 1,
+                    decimalPlaces: 0, // optional, defaults to 2dp
+                    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+                    labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
+                    //fromZero: true, // Ensure bars start from zero
+                  }}
+                  style={styles.chart}
+                  verticalLabelRotation={60}
+                  withInnerLines={false}
+                  showBarTops={true}
+                  showValuesOnTopOfBars={true} // Display the load numbers above bars
+                />
+              ) : (
+                <View style={styles.noDataContainer}>
+                  <Text style={styles.noDataText}>No data available.</Text>
+                  <Text style={styles.noDataText}>Please add workouts or change date selection</Text>
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        </View>
+      </ScrollView>
+    )}
+       
           
 
         </View>
-      </ScrollView></>
+      </ScrollView>
+      </View>
   );
 }
 
@@ -274,6 +227,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: "#1F283A",
+    flexGrow: 1, 
+    paddingBottom: 100
   },
   backContainer: {
     flexDirection: "row",
@@ -281,15 +236,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 20,
     width: width * 1,
-    backgroundColor: "#1F283A",
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 60,
-    padding:20,
-    
+    backgroundColor: "#1F283A",
   },
   box: {
     width: width*.9,
@@ -297,11 +247,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginBottom: 5,
+    
   },
   graph: {
-borderRadius: 5,
+    padding: 20,
     marginBottom: 10,
-    
   },
   heading: {
     fontSize: 20,
@@ -320,16 +270,15 @@ borderRadius: 5,
   },
   button: {
     backgroundColor: 'rgba(43, 45, 66, 0.8)',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
     borderRadius: 5,
     marginBottom: 10,
     alignItems: 'center',
-    width: '100%', // Adjust width to fit buttons evenly in a row
+    padding: 10
+    
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 12,
   },
   chart: {
     marginVertical: 8,
@@ -356,6 +305,11 @@ borderRadius: 5,
     width: "100%",
     marginTop: 100,
     padding: 20,
+    
   },
+  graphContainer: {
+    flex: 1,
+    alignItems: "center",
+  }
 });
 

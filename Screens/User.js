@@ -6,6 +6,9 @@ import { doc, collection, getDocs, query} from 'firebase/firestore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {Spinner} from "../Components/Spinner"
 import ExportButton from '../Components/ExportData';
+import { RPELogo } from '../Components/Logo';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function Users({ userData }) {
 
@@ -13,7 +16,7 @@ export default function Users({ userData }) {
   const [isLoading, setIsLoading] = useState(true);
   const [userProfilePicture, setUserProfilePicture] = useState(null)
   const [workouts, setWorkouts] = useState([])
-
+  const navigation = useNavigation();
   const { width } = Dimensions.get('window');
   const buttonWidth = width * 0.8; 
 
@@ -50,7 +53,7 @@ export default function Users({ userData }) {
 
   return (
     <View style={styles.container}>
-      
+      <RPELogo />
       <Spinner isLoading={isLoading} /> 
       {!isLoading && ( // Conditionally render content if not loading
         <>
@@ -148,13 +151,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1F283A",
-    paddingTop: 80,
+    
   },
   settingsContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "space-between",
-    padding: 20,
+    alignSelf: "center",
+    width: "100%",
+    marginTop: 100,
+    padding: 20
   },
   scrollView: {
     flex: 1,
@@ -172,7 +178,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#2B2D42",
     borderRadius: 15,
-    marginBottom: 25,
+    marginBottom: 20,
   },
   row: {
     flexDirection: 'row',

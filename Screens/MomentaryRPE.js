@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, Alert } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
@@ -10,7 +10,7 @@ const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.8;
 
 export default function MomentaryRPE({ navigation }) {
-  const [selectedRPE, setSelectedRPE] = useState(5);
+  const [selectedRPE, setSelectedRPE] = useState(6);
   const [modalVisible, setModalVisible] = useState(false);
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
@@ -33,11 +33,11 @@ export default function MomentaryRPE({ navigation }) {
   const startStopwatch = () => {
     startTimeRef.current = Date.now() - time * 1000;
     intervalRef.current = setInterval(() => {
-      setTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
+      const elapsedTimeInSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
+      setTime(elapsedTimeInSeconds);
     }, 1000);
     setRunning(true);
   };
-
   const pauseStopwatch = () => {
     clearInterval(intervalRef.current);
     setRunning(false);
@@ -47,18 +47,13 @@ export default function MomentaryRPE({ navigation }) {
     clearInterval(intervalRef.current);
     setTime(0);
     setRunning(false);
+    setTimeEntries([])
   };
 
-  const resumeStopwatch = () => {
-    startTimeRef.current = Date.now() - time * 1000;
-    intervalRef.current = setInterval(() => {
-      setTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
-    }, 1000);
-    setRunning(true);
-  };
 
   const renderRPEButton = (value, label) => {
     return (
+      <View>
       <TouchableOpacity
         key={value}
         style={[styles.row, selectedRPE === value && styles.selected]}
@@ -66,16 +61,101 @@ export default function MomentaryRPE({ navigation }) {
       >
         <Text style={styles.text}>{label}</Text>
       </TouchableOpacity>
+      </View>
     );
   };
+    
 
   const addTimeEntry = () => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time % 3600) / 60);
-    const seconds = time % 60;
-    const formattedTime = `${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
-    setTimeEntries([...timeEntries, formattedTime]);
+      const currentDate = new Date();
+      const actualTime = currentDate.toLocaleTimeString();
+      let startTime
+      let workoutTime
+      let interval
+      if (timeEntries.length === 0) {
+          workoutTime = time;
+          startTime = time
+          interval = 1
+      } else {
+          const previousEntry = timeEntries[timeEntries.length - 1]
+          startTime = time
+          workoutTime = time - previousEntry.startTime 
+          interval = previousEntry.interval + 1
+      }
+      const hours = Math.floor(workoutTime / 3600);
+      const minutes = Math.floor((workoutTime % 3600) / 60);
+      const seconds = workoutTime % 60;
+      const formattedTime = `${hours}h ${minutes}m ${seconds}s`;
+      
+      setTimeEntries([...timeEntries, { workoutTime: workoutTime, rpe: selectedRPE, actualTime: actualTime, startTime: startTime, interval: interval, formattedWorkoutTime: formattedTime  }]);
   };
+  
+  const handleFinishWorkout = () => {
+    Alert.alert(
+        'Finish Workout',
+        'Are you sure you want to finish your workout?',
+        [
+            {
+                text: 'Cancel',
+                style: 'cancel'
+            },
+            {
+                text: 'Finish',
+                onPress: () => {
+                    addWorkout()
+                }
+            }
+        ]
+    );
+};
+
+  const addWorkout = async () => {
+    try {
+      const currentUser = FIREBASE_AUTH.currentUser;
+      if (!currentUser) {
+          console.log('User not authenticated');
+          return;
+      }
+
+      const userId = currentUser.uid;
+      console.log(userId)
+
+      const currentDate = new Date();
+      const date = currentDate.toLocaleDateString();
+      const hours = Math.floor(time / 3600);
+      const minutes = Math.floor((time % 3600) / 60);
+      const seconds = time % 60;
+      const totalLength = `${hours}h ${minutes}m ${seconds}s`;
+
+
+      const workoutData = {
+        date: date,
+        workout: timeEntries,
+        totalLength: totalLength
+      }
+
+      const userDocRef = doc(db, 'Users', userId)
+      const workoutsCollectionRef = collection(userDocRef, 'MomentaryWorkouts');
+      await addDoc(workoutsCollectionRef, workoutData); 
+      
+      Alert.alert(
+        'Workout Added',
+        'Your workout entry has been successfully added!',
+        [
+            { 
+              text: 'OK',
+              onPress: () => {
+                resetStopwatch()
+              }
+            }
+        ]
+      );
+      
+  } catch (error) {
+      console.error('Error adding workout: ', error);
+  }
+  }
+
 
   return (
     <View style={styles.container}>
@@ -89,7 +169,11 @@ export default function MomentaryRPE({ navigation }) {
       </View>
       <View style={styles.timerContainer}>
         <Text style={styles.header}>Begin Workout</Text>
-        <Text style={styles.timeText}>{time}s</Text>
+        <Text style={styles.timeText}>
+          {time >= 3600 ? `${Math.floor(time / 3600)}h ` : ''}
+          {time >= 60 ? `${Math.floor((time % 3600) / 60)}m ` : ''}
+          {`${time % 60}s`}
+        </Text>
         <View style={styles.timerButtonContainer}>
           {running ? (
             <TouchableOpacity
@@ -119,41 +203,41 @@ export default function MomentaryRPE({ navigation }) {
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
         <View style={styles.workoutContainer}>
           <View style={styles.row}>
-            <View style={styles.column}>
-              <Text style={styles.text}>Time</Text>
+          <View style={styles.column}>
+              <Text style={styles.entryText}>Interval</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.text}>RPE</Text>
+              <Text style={styles.entryText}>Time of Entry</Text>
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.entryText}>Workout Length</Text>
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.entryText}>RPE</Text>
             </View>
           </View>
           {timeEntries.map((entry, index) => (
             <View style={styles.row} key={index}>
               <View style={styles.column}>
-                <Text style={styles.text}>{entry}</Text>
+                <Text style={styles.entryText}>{entry.interval}</Text>
               </View>
               <View style={styles.column}>
-                <Text style={styles.text}>{selectedRPE}</Text>
+                <Text style={styles.entryText}>{entry.actualTime}</Text>
+              </View>
+              <View style={styles.column}>
+                <Text style={styles.entryText}>
+                <Text style={styles.entryText}>
+                  {entry.workoutTime >= 3600 ? `${Math.floor(entry.workoutTime / 3600)}h ` : ''}
+                  {entry.workoutTime >= 60 ? `${Math.floor((entry.workoutTime % 3600) / 60)}m ` : ''}
+                  {`${entry.workoutTime % 60}s`}
+                </Text>
+                </Text>
+              </View>
+              <View style={styles.column}>
+                <Text style={styles.entryText}>{entry.rpe}</Text>
               </View>
             </View>
           ))}
-        </View>
-        <View style={styles.RPEcontainer}>
-          <Text style={{ fontSize: 16, color: "white", textAlign: 'center', borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5 }}>Rating: Perceived Exertion Level</Text>
-          {renderRPEButton(6, ' 6. No Exertion At All')}
-          {renderRPEButton(7, ' 7. Minimal Exertion')}
-          {renderRPEButton(8, ' 8. ')}
-          {renderRPEButton(9, ' 9. ')}
-          {renderRPEButton(10, '10. ')}
-          {renderRPEButton(11, '11. ')}
-          {renderRPEButton(12, '12. ')}
-          {renderRPEButton(13, '13. ')}
-          {renderRPEButton(14, '14. ')}
-          {renderRPEButton(15, '15. ')}
-          {renderRPEButton(16, '16. ')}
-          {renderRPEButton(17, '17. ')}
-          {renderRPEButton(18, '18. ')}
-          {renderRPEButton(19, '19. Almost Maximal Exertion')}
-          {renderRPEButton(20, '20. Maximal Exertion')}
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -164,9 +248,30 @@ export default function MomentaryRPE({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, { width: buttonWidth }, { backgroundColor: '#50C878' }]}>
-            <Text style={styles.buttonText}>Finish Workout</Text>
-          </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.button, { width: buttonWidth }, { backgroundColor: '#50C878' }, timeEntries.length === 0 && styles.disabledButton]} 
+          onPress={handleFinishWorkout} 
+          disabled={timeEntries.length === 0}>
+          <Text style={styles.buttonText}>{timeEntries.length === 0 ? "No Workout" : "Finish Workout"}</Text>
+        </TouchableOpacity>
+        </View>
+        <View style={styles.RPEcontainer}>
+          <Text style={{ fontSize: 16, color: "white", textAlign: 'center', borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5 }}>Rating: Perceived Exertion Level</Text>
+          {renderRPEButton(6, '6. No Exertion At All')}
+          {renderRPEButton(7, '7. Minimal Exertion')}
+          {renderRPEButton(8, '8. Minimal Effort')}
+          {renderRPEButton(9, '9. Very Light')}
+          {renderRPEButton(10, '10. Light')}
+          {renderRPEButton(11, '11. Fairly Light')}
+          {renderRPEButton(12, '12. Moderate')}
+          {renderRPEButton(13, '13. Somewhat Hard')}
+          {renderRPEButton(14, '14. Hard')}
+          {renderRPEButton(15, '15. Hard (Heavy)')}
+          {renderRPEButton(16, '16. Very Hard')}
+          {renderRPEButton(17, '17. Very Hard (Very Heavy)')}
+          {renderRPEButton(18, '18. Extremely Hard')}
+          {renderRPEButton(19, '19. Almost Maximal Exertion')}
+          {renderRPEButton(20, '20. Maximal Exertion')}
         </View>
       </ScrollView>
       <Modal
@@ -177,10 +282,22 @@ export default function MomentaryRPE({ navigation }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Momentary RPE Information</Text>
-            <Text>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fuga consequatur incidunt mollitia ut accusantium necessitatibus corrupti voluptates reiciendis veniam blanditiis, nulla velit labore similique quas inventore. Ipsam ullam modi culpa officia, ducimus quos, error esse numquam amet est nulla id.
-            </Text>
+          <Text style={styles.modalHeader}>
+              Borg RPE Scale Timer
+          </Text>
+          <Text style={styles.modalText}>
+              The Borg RPE scale measures exercise intensity based on perceived exertion. 
+              Start the timer and periodically assess your exertion level using the scale.
+          </Text>
+          <Text style={styles.modalText}>
+              Adjust your workout intensity based on your perceived exertion to optimize your workout.
+          </Text>
+          <Text style={styles.modalText}>
+    Maintain a level of exertion that challenges you but is sustainable throughout your workout.
+          </Text>
+          <Text style={styles.modalText}>
+              Use the timer and Borg RPE scale together to track and adjust your exercise intensity effectively.
+          </Text>
             <TouchableOpacity onPress={closeModal}>
               <Text style={styles.closeButton}>Close</Text>
             </TouchableOpacity>
@@ -215,7 +332,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 30,
+    height:"100%",
     paddingHorizontal: 10,
   },
   selected: {
@@ -223,6 +340,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#FFFFFF',
+    width: "100%",
+    fontSize: 20,
+    margin:5
   },
   inputContainer: {
     padding: 20,
@@ -346,6 +466,23 @@ column: {
   height: 50,
   justifyContent: 'center',
   alignItems: 'center',
+},
+
+disabledButton: {
+  opacity: 0.5,
+},
+entryText:{
+  color: "white",
+  textAlign: "center"
+},
+modalHeader: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  marginBottom: 10,
+},
+modalText: {
+  fontSize: 16,
+  marginBottom: 5,
 },
 
 

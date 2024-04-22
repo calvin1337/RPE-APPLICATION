@@ -26,6 +26,7 @@ import UserToCoach from "./Screens/UserToCoach";
 import MyWorkouts from './Screens/AllWorkouts';
 import HomeSelect from "./Screens/HomeSelect";
 import MomentaryRPE from "./Screens/MomentaryRPE";
+import WorkoutHome from './Screens/WorkoutScreens';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -41,6 +42,7 @@ const screenOptions = {
     elevation: 0,
     height: 60,
     backgroundColor: "#2B2D42",
+    borderTopWidth: 0
   },
   tabBarActiveTintColor: '#66AEC5',
   tabBarInactiveTintColor: 'white', 
@@ -110,8 +112,9 @@ const HomeStack = () => {
       <Stack.Screen name="WhoAccessMyData" component={WhoAccessMyData} />
       <Stack.Screen name="UserToCoach" component={UserToCoach} />
       <Stack.Screen name="SafelyStoreData" component={SafelyStoreData} />
-      <Stack.Screen name="AllWorkouts" component={MyWorkouts} />
+      <Stack.Screen name="RPEWorkouts" component={MyWorkouts} />
       <Stack.Screen name="MRPE" component={MomentaryRPE} />
+      <Stack.Screen name="WorkoutHome" component={WorkoutHome} />
     </Stack.Navigator>
   );
 };
@@ -145,6 +148,8 @@ const UserStack = ({userData}) => {
       <Stack.Screen name="UserPage">
         {(props) => <User {...props} userData={userData} />}
       </Stack.Screen>
+      <Stack.Screen name="SettingsPage" component={UserSettings} />
+
     </Stack.Navigator>
   )
 }

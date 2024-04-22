@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { db, FIREBASE_AUTH } from '../firebase';
 import { doc, onSnapshot} from 'firebase/firestore';
+import { RPELogo } from '../Components/Logo';
 
 
 
@@ -45,9 +46,10 @@ export default function MyWorkouts(){
 
   return(
     <View style={styles.container}>
+      <RPELogo />
     <BackButton onPress={() => navigation.goBack()} />
     <View style={styles.settingsContainer}>
-    <Text style={{ fontSize: 20, color: "white" }}>My Workouts</Text>
+    <Text style={{ fontSize: 20, color: "white" }}>RPE Workouts</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
         <Ionicons name="settings-sharp" size={32} color="white" />
       </TouchableOpacity>

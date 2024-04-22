@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import BackButton from "../Components/BackButton";
 import { useNavigation } from '@react-navigation/native';
+import { RPELogo } from '../Components/Logo';
 
 export default function Settings() {
   const navigation = useNavigation();
@@ -28,43 +29,51 @@ export default function Settings() {
 
   return (
     <View style={styles.container}>
+      <RPELogo/>
+      <BackButton onPress={() => navigation.goBack()} />
+
       <View style={styles.settingsContainer}>
-        <BackButton onPress={() => navigation.goBack()} />
-        <Text style={{ fontSize: 20, color: "white", paddingLeft: 50 }}>Setting</Text>
+        <Text style={{ fontSize: 20, color: "white" }}>Track Momentary RPE</Text>
+       
       </View>
       
       <ScrollView style={styles.scrollView}>
         <View style={styles.usersContainer}>
+          <View style={styles.itemContainer}>
           <TouchableOpacity onPress={navigateToRPE}>
-            <View style={styles.itemContainer}>
+            <View >
               <Text style={styles.text}>What is RPE? </Text>
             </View>
           </TouchableOpacity>
-          
+          </View>
+          <View style={styles.itemContainer}>
           <TouchableOpacity onPress={navigateToWhenTrackWorkout}>
-            <View style={styles.itemContainer}>
+            <View >
               <Text style={styles.text}>When should I use the app to track my workout?</Text>
             </View>
           </TouchableOpacity>
-          
+          </View>
+          <View style={styles.itemContainer}>
           <TouchableOpacity onPress={navigateToWhoAccessMyData}>
-            <View style={styles.itemContainer}>
+            <View >
               <Text style={styles.text}>Who can access my data ?</Text>
             </View>
           </TouchableOpacity>
-          
+          </View>
+          <View style={styles.itemContainer}>
           <TouchableOpacity onPress={navigateToUserToCoach}>
-            <View style={styles.itemContainer}>
+            <View >
               <Text style={styles.text}>How do I change from user to coach?</Text>
             </View>
           </TouchableOpacity>
-
+          </View>
+          <View style={styles.itemContainer}>
           <TouchableOpacity onPress={navigateToSafelyStoreData}>
-            <View style={styles.itemContainer}>
+            <View >
               <Text style={styles.text}>How can I safely store my data?</Text>
             </View>
           </TouchableOpacity>
-
+          </View>
 
 
         </View>
@@ -77,23 +86,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1F283A",
-    paddingTop: 80,
   },
   settingsContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "space-between",
+    alignSelf: "center",
+    width: "100%",
+    marginTop: 100,
     padding: 20,
   },
   scrollView: {
     flex: 1,
+    width: "100%"
   },
   usersContainer: {
-    flex: 1,
     alignItems: "center",
     paddingHorizontal: 30,
     paddingBottom: 100,
     paddingTop: 10,
+    width: "100%"
   },
   itemContainer: {
     width: "100%",
