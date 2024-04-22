@@ -10,7 +10,7 @@ const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.8;
 
 export default function MomentaryRPE({ navigation }) {
-  const [selectedRPE, setSelectedRPE] = useState(5);
+  const [selectedRPE, setSelectedRPE] = useState(6);
   const [modalVisible, setModalVisible] = useState(false);
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
@@ -53,6 +53,7 @@ export default function MomentaryRPE({ navigation }) {
 
   const renderRPEButton = (value, label) => {
     return (
+      <View>
       <TouchableOpacity
         key={value}
         style={[styles.row, selectedRPE === value && styles.selected]}
@@ -60,6 +61,7 @@ export default function MomentaryRPE({ navigation }) {
       >
         <Text style={styles.text}>{label}</Text>
       </TouchableOpacity>
+      </View>
     );
   };
     
@@ -202,29 +204,29 @@ export default function MomentaryRPE({ navigation }) {
         <View style={styles.workoutContainer}>
           <View style={styles.row}>
           <View style={styles.column}>
-              <Text style={styles.text}>Interval</Text>
+              <Text style={styles.entryText}>Interval</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.text}>Time of Entry</Text>
+              <Text style={styles.entryText}>Time of Entry</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.text}>Workout Length</Text>
+              <Text style={styles.entryText}>Workout Length</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.text}>RPE</Text>
+              <Text style={styles.entryText}>RPE</Text>
             </View>
           </View>
           {timeEntries.map((entry, index) => (
             <View style={styles.row} key={index}>
               <View style={styles.column}>
-                <Text style={styles.text}>{entry.interval}</Text>
+                <Text style={styles.entryText}>{entry.interval}</Text>
               </View>
               <View style={styles.column}>
-                <Text style={styles.text}>{entry.actualTime}</Text>
+                <Text style={styles.entryText}>{entry.actualTime}</Text>
               </View>
               <View style={styles.column}>
-                <Text style={styles.text}>
-                <Text style={styles.text}>
+                <Text style={styles.entryText}>
+                <Text style={styles.entryText}>
                   {entry.workoutTime >= 3600 ? `${Math.floor(entry.workoutTime / 3600)}h ` : ''}
                   {entry.workoutTime >= 60 ? `${Math.floor((entry.workoutTime % 3600) / 60)}m ` : ''}
                   {`${entry.workoutTime % 60}s`}
@@ -255,19 +257,19 @@ export default function MomentaryRPE({ navigation }) {
         </View>
         <View style={styles.RPEcontainer}>
           <Text style={{ fontSize: 16, color: "white", textAlign: 'center', borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5 }}>Rating: Perceived Exertion Level</Text>
-          {renderRPEButton(6, ' 6. No Exertion At All')}
-          {renderRPEButton(7, ' 7. Minimal Exertion')}
-          {renderRPEButton(8, ' 8. ')}
-          {renderRPEButton(9, ' 9. ')}
-          {renderRPEButton(10, '10. ')}
-          {renderRPEButton(11, '11. ')}
-          {renderRPEButton(12, '12. ')}
-          {renderRPEButton(13, '13. ')}
-          {renderRPEButton(14, '14. ')}
-          {renderRPEButton(15, '15. ')}
-          {renderRPEButton(16, '16. ')}
-          {renderRPEButton(17, '17. ')}
-          {renderRPEButton(18, '18. ')}
+          {renderRPEButton(6, '6. No Exertion At All')}
+          {renderRPEButton(7, '7. Minimal Exertion')}
+          {renderRPEButton(8, '8. Minimal Effort')}
+          {renderRPEButton(9, '9. Very Light')}
+          {renderRPEButton(10, '10. Light')}
+          {renderRPEButton(11, '11. Fairly Light')}
+          {renderRPEButton(12, '12. Moderate')}
+          {renderRPEButton(13, '13. Somewhat Hard')}
+          {renderRPEButton(14, '14. Hard')}
+          {renderRPEButton(15, '15. Hard (Heavy)')}
+          {renderRPEButton(16, '16. Very Hard')}
+          {renderRPEButton(17, '17. Very Hard (Very Heavy)')}
+          {renderRPEButton(18, '18. Extremely Hard')}
           {renderRPEButton(19, '19. Almost Maximal Exertion')}
           {renderRPEButton(20, '20. Maximal Exertion')}
         </View>
@@ -318,7 +320,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 30,
+    height:"100%",
     paddingHorizontal: 10,
   },
   selected: {
@@ -326,6 +328,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#FFFFFF',
+    width: "100%",
+    fontSize: 20,
+    margin:5
   },
   inputContainer: {
     padding: 20,
@@ -453,6 +458,10 @@ column: {
 
 disabledButton: {
   opacity: 0.5,
+},
+entryText:{
+  color: "white",
+  textAlign: "center"
 }
 
 

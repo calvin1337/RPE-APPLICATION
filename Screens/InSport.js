@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 30,
+    height: 40,
     paddingHorizontal: 10,
   },
   selected: {
@@ -196,6 +196,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#FFFFFF',
+    fontSize: 20,
+    margin: 5
   },
   inputContainer: {
     padding: 20,

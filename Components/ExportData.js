@@ -55,13 +55,47 @@ const shareCSVFile = async (fileUri) => {
   }
 };
 
+const filterData = async (fetchedData) => {
+  const formattedData = fetchedData
+      .map(workout => {
+          const [day, month, year] = workout.date.split('/');
+          const workoutDate = new Date(`${year}-${month}-${day}`);
+          return { ...workout };
+      })
+      .sort((a, b) => {
+        const [dayA, monthA, yearA] = a.date.split('/');
+        const [dayB, monthB, yearB] = b.date.split('/');
+        const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
+        const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+        return dateA - dateB;
+    })
+
+  return formattedData
+}
+
+export const justExport = async () => {
+  const fetchedData = await fetchWorkoutsData();
+
+  const formatData = await filterData(fetchedData);
+
+    // Export data to CSV file
+    const csvFileUri = await exportDataToCSV(formatData);
+
+    // Share CSV file
+    if (csvFileUri) {
+      shareCSVFile(csvFileUri);
+    }
+}
+
 const ExportButton = ({width}) => {
   const handleExport = async () => {
     // Fetch workouts data
     const fetchedData = await fetchWorkoutsData();
 
+    const formatData = await filterData(fetchedData);
+
     // Export data to CSV file
-    const csvFileUri = await exportDataToCSV(fetchedData);
+    const csvFileUri = await exportDataToCSV(formatData);
 
     // Share CSV file
     if (csvFileUri) {
