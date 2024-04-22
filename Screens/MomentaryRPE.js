@@ -234,7 +234,7 @@ export default function MomentaryRPE({ navigation }) {
                 </Text>
               </View>
               <View style={styles.column}>
-                <Text style={styles.text}>{entry.rpe}</Text>
+                <Text style={styles.entryText}>{entry.rpe}</Text>
               </View>
             </View>
           ))}
@@ -282,10 +282,22 @@ export default function MomentaryRPE({ navigation }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Momentary RPE Information</Text>
-            <Text>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fuga consequatur incidunt mollitia ut accusantium necessitatibus corrupti voluptates reiciendis veniam blanditiis, nulla velit labore similique quas inventore. Ipsam ullam modi culpa officia, ducimus quos, error esse numquam amet est nulla id.
-            </Text>
+          <Text style={styles.modalHeader}>
+              Borg RPE Scale Timer
+          </Text>
+          <Text style={styles.modalText}>
+              The Borg RPE scale measures exercise intensity based on perceived exertion. 
+              Start the timer and periodically assess your exertion level using the scale.
+          </Text>
+          <Text style={styles.modalText}>
+              Adjust your workout intensity based on your perceived exertion to optimize your workout.
+          </Text>
+          <Text style={styles.modalText}>
+    Maintain a level of exertion that challenges you but is sustainable throughout your workout.
+          </Text>
+          <Text style={styles.modalText}>
+              Use the timer and Borg RPE scale together to track and adjust your exercise intensity effectively.
+          </Text>
             <TouchableOpacity onPress={closeModal}>
               <Text style={styles.closeButton}>Close</Text>
             </TouchableOpacity>
@@ -462,7 +474,16 @@ disabledButton: {
 entryText:{
   color: "white",
   textAlign: "center"
-}
+},
+modalHeader: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  marginBottom: 10,
+},
+modalText: {
+  fontSize: 16,
+  marginBottom: 5,
+},
 
 
 });

@@ -148,6 +148,8 @@ const UserStack = ({userData}) => {
       <Stack.Screen name="UserPage">
         {(props) => <User {...props} userData={userData} />}
       </Stack.Screen>
+      <Stack.Screen name="SettingsPage" component={UserSettings} />
+
     </Stack.Navigator>
   )
 }

@@ -7,6 +7,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import {Spinner} from "../Components/Spinner"
 import ExportButton from '../Components/ExportData';
 import { RPELogo } from '../Components/Logo';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function Users({ userData }) {
 
@@ -14,7 +16,7 @@ export default function Users({ userData }) {
   const [isLoading, setIsLoading] = useState(true);
   const [userProfilePicture, setUserProfilePicture] = useState(null)
   const [workouts, setWorkouts] = useState([])
-
+  const navigation = useNavigation();
   const { width } = Dimensions.get('window');
   const buttonWidth = width * 0.8; 
 

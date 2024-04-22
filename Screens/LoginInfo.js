@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from "react";
 import BackButton from '../Components/BackButton';
+import { RPELogo } from '../Components/Logo';
 
 
 const { width } = Dimensions.get("window");
@@ -119,17 +120,18 @@ export default function LoginInformation({ route  }) {
     >
       <View style={styles.container}>
       <BackButton onPress={() => navigation.goBack()} />
+      <RPELogo />
         <View style={styles.topContainer}>
           <Text
             style={{
               textAlign: "center",
-              margin: 10,
+              margin: 20,
               color: "#EDF2F4",
               fontSize: 20,
               fontWeight: "bold",
             }}
           >
-            Login Information
+            Enter Login Information
           </Text>
           <View style={styles.inputContainer}>
            
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
     width: "100%",
-    paddingTop: 70,
+    paddingTop: 100,
   },
   inputContainer: {
     marginTop: 20,

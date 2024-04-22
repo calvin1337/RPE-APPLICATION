@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../Components/BackButton';
+import { RPELogo } from '../Components/Logo';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = width * 0.8;
@@ -44,9 +45,10 @@ export default function WeightPicker({ route }) {
       }}
     >
       <View style={styles.container}>
+        <RPELogo />
         <BackButton onPress={() => navigation.goBack()} />
         <View style={styles.topContainer}>
-          <Text style={{ textAlign: 'center', margin: 10, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold' }}>
+          <Text style={{ textAlign: 'center', margin: 20, color: '#EDF2F4', fontSize: 20, fontWeight: 'bold' }}>
             Select Your Weight
           </Text>
           {/* Weight Selector */}

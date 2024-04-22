@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import BackButton from '../Components/BackButton';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebase';
+import { RPELogo } from '../Components/Logo';
 
 const { width } = Dimensions.get("window");
 const buttonWidth = width * 0.8;
@@ -47,6 +48,7 @@ export default function Login() {
     >
       <View style={styles.container}>
         <BackButton onPress={() => navigation.goBack()} />
+        <RPELogo />
         <View style={styles.topContainer}>
           <Text
             style={{
@@ -145,11 +147,11 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
     width: "100%",
-    paddingTop: 100,
+    paddingTop: 150,
   },
   inputContainer: {
-    marginTop: 40,
-    marginBottom: 40,
+    marginTop: 20,
+    marginBottom: 20,
     width: "100%",
     alignItems: "center",
   },
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 15, 
     padding: 10,
     fontSize: 16,
-    height: 50,
+    height: 60,
     color: '#EDF2F4',
     backgroundColor: "#1B1727",
   },
