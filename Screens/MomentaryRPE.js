@@ -356,6 +356,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     marginVertical: 10,
+    
   },
   buttonContainer: {
     flexDirection: 'column',
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   buttonText: {
-    color: '#030303', 
+    color: 'white', 
     fontWeight: 'bold',
     textAlign: 'center'
   },

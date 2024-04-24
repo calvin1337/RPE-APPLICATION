@@ -132,8 +132,12 @@ export default function Users({ userData }) {
               <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#66AEC5'} ]} onPress={handleSignOut} >
               <Text style={styles.buttonText}>Sign Out</Text>
               </TouchableOpacity>
+              <TouchableOpacity style={[styles.button,{ width: buttonWidth },{backgroundColor:'#e74c3c'} ]}  >
+              <Text style={styles.buttonText}>Delete Account</Text>
+              </TouchableOpacity>
               
-              <ExportButton width={buttonWidth} data={workouts}/>
+              
+              {/* <ExportButton width={buttonWidth} data={workouts}/> */}
               </View>
               <View style={styles.itemContainer}>
                 <View style={[styles.column, { alignItems: "center" }]}>
@@ -233,7 +237,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   buttonText: {
-    color: '#030303', 
+    color: '#fff', 
     fontWeight: 'bold',
     textAlign: 'center'
   },

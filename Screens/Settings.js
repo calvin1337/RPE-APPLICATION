@@ -33,7 +33,7 @@ export default function Settings() {
       <BackButton onPress={() => navigation.goBack()} />
 
       <View style={styles.settingsContainer}>
-        <Text style={{ fontSize: 20, color: "white" }}>Track Momentary RPE</Text>
+        <Text style={{ fontSize: 20, color: "white" }}>Settings</Text>
        
       </View>
       

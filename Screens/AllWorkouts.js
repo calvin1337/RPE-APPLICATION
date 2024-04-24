@@ -31,8 +31,22 @@ export default function MyWorkouts(){
 
         const unsubscribe = onSnapshot(workoutsRef, (snapshot) => {
           const workoutsData = snapshot.docs.map((doc) => doc.data());
-          setWorkouts(workoutsData);
-          console.log(workoutsData); 
+
+          const formattedData = workoutsData
+          .map(workout => {
+              const [day, month, year] = workout.date.split('/');
+              const workoutDate = new Date(`${year}-${month}-${day}`);
+              return { ...workout };
+          })
+          .sort((a, b) => {
+            const [dayA, monthA, yearA] = a.date.split('/');
+            const [dayB, monthB, yearB] = b.date.split('/');
+            const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
+            const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+            return dateB - dateA;
+        })
+          setWorkouts(formattedData);
+          
         });
 
         return () => unsubscribe();
@@ -49,7 +63,7 @@ export default function MyWorkouts(){
       <RPELogo />
     <BackButton onPress={() => navigation.goBack()} />
     <View style={styles.settingsContainer}>
-    <Text style={{ fontSize: 20, color: "white" }}>RPE Workouts</Text>
+    <Text style={{ fontSize: 20, color: "white" }}>Session RPE Workouts</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
         <Ionicons name="settings-sharp" size={32} color="white" />
       </TouchableOpacity>
@@ -119,7 +133,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: 'lightgrey'
+    backgroundColor: '#66AEC5'
   },
   column: {
     height: 50, 
@@ -136,8 +150,8 @@ const styles = StyleSheet.create({
     
   },
   headerText: {
-    color: '#000',
-    fontWeight: '900',
+    color: '#FFFFFF',
+    
   },
   rowsContainer: {
     marginTop: 10,

@@ -31,7 +31,7 @@ export default function Home() {
                   imageStyle={styles.itemImage}
                 >
                   <View style={styles.overlay}>
-                    <Text style={styles.overlayText}>RPE</Text>
+                    <Text style={styles.overlayText}>Session RPE</Text>
                   </View>
                 </ImageBackground>
               </TouchableOpacity>
