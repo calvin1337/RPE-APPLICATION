@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput, Modal, Alert } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
+import { doc, collection, addDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db,FIREBASE_AUTH  } from '../firebase';
 import { RPELogo } from '../Components/Logo';
 
@@ -74,7 +74,13 @@ export default function InSport({ navigation, route }) {
 
         const userDocRef = doc(db, 'Users', userId)
         const workoutsCollectionRef = collection(userDocRef, 'Workouts');
-        await addDoc(workoutsCollectionRef, workoutData); 
+
+        const docRef = await addDoc(workoutsCollectionRef, workoutData);
+
+        const workoutId = docRef.id;
+        await updateDoc(docRef, { id: workoutId });
+
+        
 
         Alert.alert(
           'Workout Added',
@@ -103,7 +109,7 @@ export default function InSport({ navigation, route }) {
       <RPELogo />
       <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.settingsContainer}>
-        <Text style={{ fontSize: 20, color: "white" }}>Add RPE</Text>
+        <Text style={{ fontSize: 20, color: "white" }}>Add Session RPE</Text>
         <TouchableOpacity onPress={handleInfoClick}>
         <Ionicons name="information-circle" size={32} color="white" />
         </TouchableOpacity>
@@ -154,6 +160,14 @@ export default function InSport({ navigation, route }) {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>RPE Information</Text>
+            <Text>RPE, also known as rate of perceived exertion, is a scale which measures the
+                    intensity levels of the person currently training. It is decided on by the key
+                    factors of heart rate, breathing and muscle fatigue of the athlete training.
+                    </Text>
+                    <Text>
+                    These factors then correspond to a scale in which the higher the number
+                    reported the more intense the exercise is
+                    </Text>
             <TouchableOpacity onPress={closeModal}>
               <Text style={styles.closeButton}>Close</Text>
             </TouchableOpacity>

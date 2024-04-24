@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, Alert } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
+import { doc, collection, addDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db, FIREBASE_AUTH } from '../firebase';
 import { RPELogo } from '../Components/Logo';
 
@@ -118,7 +118,6 @@ export default function MomentaryRPE({ navigation }) {
       }
 
       const userId = currentUser.uid;
-      console.log(userId)
 
       const currentDate = new Date();
       const date = currentDate.toLocaleDateString();
@@ -136,7 +135,12 @@ export default function MomentaryRPE({ navigation }) {
 
       const userDocRef = doc(db, 'Users', userId)
       const workoutsCollectionRef = collection(userDocRef, 'MomentaryWorkouts');
-      await addDoc(workoutsCollectionRef, workoutData); 
+      
+      const docRef = await addDoc(workoutsCollectionRef, workoutData);
+
+      const workoutId = docRef.id;
+      await updateDoc(docRef, { id: workoutId });
+      
       
       Alert.alert(
         'Workout Added',
@@ -356,6 +360,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     marginVertical: 10,
+    
   },
   buttonContainer: {
     flexDirection: 'column',
@@ -363,7 +368,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   buttonText: {
-    color: '#030303', 
+    color: 'white', 
     fontWeight: 'bold',
     textAlign: 'center'
   },

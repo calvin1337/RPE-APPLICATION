@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { RPELogo } from "../Components/Logo";
 import BackButton from "../Components/BackButton";
-import { justExport } from "../Components/ExportData";
+import { exportMomentary, justExport } from "../Components/ExportData";
 
 
 export default function WorkoutHome() {
@@ -31,7 +31,7 @@ export default function WorkoutHome() {
               <View style={styles.item}>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RPEWorkouts')} >
                 
-                      <Text style={styles.overlayText}>RPE Workouts</Text>
+                      <Text style={styles.overlayText}>Session RPE Workouts</Text>
                    
                   
                 </TouchableOpacity>
@@ -39,7 +39,7 @@ export default function WorkoutHome() {
             </View>
             <View style={styles.column}>
               <View style={styles.item}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RPEWorkouts')} >
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MomentaryWorkouts')} >
                 
                       <Text style={styles.overlayText}>Momentary RPE Workouts</Text>
                    
@@ -51,11 +51,21 @@ export default function WorkoutHome() {
               <View style={styles.item}>
                 <TouchableOpacity style={styles.button} onPress={() => justExport()} >
                 
-                      <Text style={styles.overlayText}>Export Data</Text>
+                      <Text style={styles.overlayText}>Export Session Data</Text>
                    
                   
                 </TouchableOpacity>
               </View>
+              <View style={styles.column}>
+              <View style={styles.item}>
+                <TouchableOpacity style={styles.button} onPress={() => exportMomentary()} >
+                
+                      <Text style={styles.overlayText}>Export Momentary Data</Text>
+                   
+                  
+                </TouchableOpacity>
+              </View>
+            </View>
             </View>
             
         
@@ -95,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   item: {
-    height: 150,
+    height: 110,
     width: '90%',
     backgroundColor: 'rgba(27, 23, 39, 0.8)',
     marginHorizontal: 10,
