@@ -18,7 +18,7 @@ const fetchWorkoutsData = async () => {
     return [];
   }
 };
-
+// Session Convert 
 const convertToCSV = (data) => {
   // Reorder the columns and remove "load" property
   const reorderedData = data.map(item => ({
@@ -32,6 +32,29 @@ const convertToCSV = (data) => {
   const csvData = reorderedData.map(item => Object.values(item).join(',')).join('\n');
   return csvHeader + csvData;
 };
+
+const fetchMomentaryData = async () => {
+  try {
+    const currentUser = FIREBASE_AUTH.currentUser;
+    const workoutsRef = collection(db, 'Users', currentUser.uid, 'MomentaryWorkouts');
+    const workoutsSnapshot = await getDocs(workoutsRef);
+    return workoutsSnapshot.docs.map(doc => doc.data());
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return [];
+  }
+}
+
+// Momentary Convert
+const convertMomentaryToCSV = (data) => {
+  // Reorder the columns and remove "load" property
+  const reorderedData = data.map(item => ({
+    date: item.date,
+  }));
+
+  console.log(reorderedData)
+};
+
 
 // Function to export data to CSV file
 const exportDataToCSV = async (data) => {
@@ -71,7 +94,7 @@ const filterData = async (fetchedData) => {
     })
 
   return formattedData
-}
+} 
 
 export const justExport = async () => {
   const fetchedData = await fetchWorkoutsData();
@@ -85,6 +108,16 @@ export const justExport = async () => {
     if (csvFileUri) {
       shareCSVFile(csvFileUri);
     }
+}
+
+export const exportMomentary = async () => {
+  const fetchedData = await fetchMomentaryData();
+
+  const formatData = await filterData(fetchedData)
+
+  const csvFileUri = await convertMomentaryToCSV(formatData);
+
+
 }
 
 const ExportButton = ({width}) => {

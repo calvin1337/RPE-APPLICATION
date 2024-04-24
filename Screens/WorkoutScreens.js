@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { RPELogo } from "../Components/Logo";
 import BackButton from "../Components/BackButton";
-import { justExport } from "../Components/ExportData";
+import { exportMomentary, justExport } from "../Components/ExportData";
 
 
 export default function WorkoutHome() {
@@ -58,7 +58,7 @@ export default function WorkoutHome() {
               </View>
               <View style={styles.column}>
               <View style={styles.item}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RPEWorkouts')} >
+                <TouchableOpacity style={styles.button} onPress={() => exportMomentary()} >
                 
                       <Text style={styles.overlayText}>Export Momentary Data</Text>
                    

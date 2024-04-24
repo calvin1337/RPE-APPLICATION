@@ -29,10 +29,8 @@ export default function MomentaryWorkouts(){
         const userId = currentUser.uid;
         const userDocRef = doc(db, 'Users', userId);
         const workoutsRef = collection(userDocRef, 'MomentaryWorkouts');
-
         const unsubscribe = onSnapshot(workoutsRef, (snapshot) => {
           const workoutsData = snapshot.docs.map((doc) => doc.data());
-
           const formattedData = workoutsData
           .map(workout => {
               const [day, month, year] = workout.date.split('/');
@@ -60,7 +58,9 @@ export default function MomentaryWorkouts(){
     fetchWorkouts();
   }, []);
 
-
+  const handleDeleteButton = (index) => {
+    console.log(index)
+  }
 
   const handleWorkoutPress = (workoutIndex) => {
     if (expandedWorkout === workoutIndex) {
@@ -94,7 +94,7 @@ export default function MomentaryWorkouts(){
               <Text style={styles.text}>{workout.date}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleWorkoutPress(index)}>
-              <Ionicons name="arrow-down-circle" size={32} color="white" />
+              <Ionicons name={expandedWorkout === index ? 'arrow-up-circle' : 'arrow-down-circle'} size={32} color="white" />
             </TouchableOpacity>
           </View>
             {expandedWorkout === index && (
@@ -131,7 +131,7 @@ export default function MomentaryWorkouts(){
                 </View>
                 
               ))}
-              <TouchableOpacity style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.buttonContainer} onPress={() => handleDeleteButton(workouts)}>
               <Text style={[styles.button, {backgroundColor:'#e74c3c'}]}>Delete Entry</Text>
               </TouchableOpacity>
             </View>

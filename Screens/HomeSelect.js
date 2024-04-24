@@ -24,7 +24,7 @@ export default function Home() {
         <View style={styles.sportsContainer}>
           <View style={styles.row}>
             <View style={styles.item}>
-              <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+              <TouchableOpacity onPress={() => navigation.navigate('SessionInfo')}>
               <ImageBackground
                   source={{ uri: "https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" }} 
                   style={styles.item}
