@@ -29,6 +29,8 @@ import MomentaryRPE from "./Screens/MomentaryRPE";
 import WorkoutHome from './Screens/WorkoutScreens';
 import MomentaryWorkouts from './Screens/MomentaryWorkouts';
 import SessionInfo from './Screens/SessionInfo';
+import MomentaryInfo from './Screens/MomentaryInfo';
+import DataUsage from './Screens/DataInfo';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -119,6 +121,8 @@ const HomeStack = () => {
       <Stack.Screen name="WorkoutHome" component={WorkoutHome} />
       <Stack.Screen name="MomentaryWorkouts" component={MomentaryWorkouts} />
       <Stack.Screen name="SessionInfo" component={SessionInfo} />
+      <Stack.Screen name="MomentaryInfo" component={MomentaryInfo} />
+      <Stack.Screen name="DataInfo" component={DataUsage} />
     </Stack.Navigator>
   );
 };

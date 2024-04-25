@@ -99,10 +99,21 @@ export default function AnalyticsPage() {
             },
         ],
     };
-      console.log(data)
       setFilteredWorkouts(data)
+      const width = calculateChartWidth(data); 
+      setBarWidth(width)
+      
       setIsLoading(false);
       
+  };
+
+  const calculateChartWidth = (data) => {
+    const barWidth = 10 ; // Adjust the width of each bar as needed
+    const numDataPoints = data.labels.length;
+    const screenWidth = Dimensions.get('window').width;
+    const maxChartWidth = screenWidth * 0.9; // Maximum 90% of screen width
+    const calculatedWidth = Math.max(numDataPoints * barWidth, maxChartWidth);
+    return calculatedWidth;
   };
   
   const handleDateChange = (timescale) => {
@@ -149,14 +160,21 @@ export default function AnalyticsPage() {
         </TouchableOpacity>
       </View>
     
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-
-        <View style={styles.graphContainer}>
+    
 
         
 
 
-          <View style={styles.box}>
+         
+
+          {isLoading ? (
+      <Spinner /> // Render the spinner if isLoading is true
+    ) : (
+      // Your component content when data is not loading
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        
+        <View style={styles.graphContainer}>
+        <View style={styles.box}>
             <Text style={styles.heading}>Graph Timescale</Text>
             <View style={styles.buttonGroup}>
               <TouchableOpacity style={styles.button} onPress={() => handleDateChange("week")}>
@@ -170,37 +188,29 @@ export default function AnalyticsPage() {
               </TouchableOpacity>
             </View>
           </View>
-
-          {isLoading ? (
-      <Spinner /> // Render the spinner if isLoading is true
-    ) : (
-      // Your component content when data is not loading
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.graphContainer}>
-          <ScrollView horizontal>
+          <ScrollView>
             <View style={styles.graph}>
               {filteredWorkouts.labels.length > 0 ? (
                 <BarChart
-                  data={filteredWorkouts}
-                  width={width * 1.4}
-                  height={400}
-                  chartConfig={{
-                    backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
-                    backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
-                    barPercentage: 0.8,
-                    fillShadowGradient: `rgba(1, 122, 205, 1)`,
-                    fillShadowGradientOpacity: 1,
-                    decimalPlaces: 0, // optional, defaults to 2dp
-                    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-                    labelColor: (opacity = 1) => `rgba(255, 255, 255, 1)`,
-                    //fromZero: true, // Ensure bars start from zero
-                  }}
-                  style={styles.chart}
-                  verticalLabelRotation={60}
-                  withInnerLines={false}
-                  showBarTops={true}
-                  showValuesOnTopOfBars={true} // Display the load numbers above bars
-                />
+                data={filteredWorkouts}
+                width={barWidth} // Set the width dynamically
+                height={450}
+                chartConfig={{
+                  backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
+                  backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
+                  barPercentage: 0.3, // Adjusted bar width
+                  fillShadowGradient: `rgba(1, 122, 205, 1)`,
+                  fillShadowGradientOpacity: 1,
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(1, 122, 205, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                }}
+                style={styles.chart}
+                verticalLabelRotation={90}
+                withInnerLines={false}
+                showBarTops={true}
+                showValuesOnTopOfBars={true}
+              />
               ) : (
                 <View style={styles.noDataContainer}>
                   <Text style={styles.noDataText}>No data available.</Text>
@@ -216,19 +226,15 @@ export default function AnalyticsPage() {
           
 
         </View>
-      </ScrollView>
-      </View>
+      
   );
 }
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: "#1F283A",
     flexGrow: 1, 
-    paddingBottom: 100
+    paddingBottom: 70,
+    margin: 10
   },
   backContainer: {
     flexDirection: "row",
@@ -247,10 +253,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginBottom: 5,
-    
+    alignItems: 'center',
   },
   graph: {
-    padding: 20,
+    marginTop: 10,
     marginBottom: 10,
   },
   heading: {
@@ -272,17 +278,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(43, 45, 66, 0.8)',
     borderRadius: 5,
     marginBottom: 10,
+    margin: 5,
     alignItems: 'center',
-    padding: 10
+    padding: 10,
     
   },
   buttonText: {
     color: 'white',
     fontSize: 12,
-  },
-  chart: {
-    marginVertical: 8,
-    borderRadius: 16,
   },
   noDataContainer: {
     alignItems: 'center',
@@ -309,7 +312,9 @@ const styles = StyleSheet.create({
   },
   graphContainer: {
     flex: 1,
-    alignItems: "center",
+    backgroundColor: 'rgba(27, 23, 39, 1)',
+    borderRadius: 16,
+
   }
 });
 

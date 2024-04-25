@@ -1,14 +1,61 @@
-import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React,{ useState } from "react";
+import React,{ useState, useEffect } from "react";
 import { RPELogo } from "../Components/Logo";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Home() {
 
   const navigation = useNavigation();
+  const [dontShowAgainSession, setDontShowAgainSession] = useState(false)
+  const [dontShowAgainMomentary, setDontShowAgainMomentary] = useState(false)
 
+  
+  const loadDontShowAgainSession = async (callback) => {
+    try {
+        const dontShowSession = await AsyncStorage.getItem('dontShowAgain');
+        setDontShowAgainSession(dontShowSession);
+        callback(dontShowSession); 
+    } catch (error) {
+        console.error('Error loading dontShowAgain state:', error);
+    }
+};
+
+
+const handleMomentaryButtonPress = () => {
+    loadDontShowAgainMomentary((dontShowSession) => {
+        if (dontShowSession === 'true') {
+            navigation.navigate("MRPE")
+        } else {
+            navigation.navigate("MomentaryInfo")    
+          }
+    });
+};
+
+const loadDontShowAgainMomentary = async (callback) => {
+  try {
+      const dontShowSession = await AsyncStorage.getItem('dontShowAgainMomentary');
+      setDontShowAgainMomentary(dontShowSession);
+      callback(dontShowSession); 
+  } catch (error) {
+      console.error('Error loading dontShowAgain state:', error);
+  }
+};
+
+
+const handleSessionButtonPress = () => {
+  loadDontShowAgainSession((dontShowSession) => {
+      if (dontShowSession === 'true') {
+          navigation.navigate("HomePage")
+      } else {
+          navigation.navigate("SessionInfo")    
+        }
+  });
+};
+
+   
 
 
   return (
@@ -24,7 +71,7 @@ export default function Home() {
         <View style={styles.sportsContainer}>
           <View style={styles.row}>
             <View style={styles.item}>
-              <TouchableOpacity onPress={() => navigation.navigate('SessionInfo')}>
+            <TouchableOpacity onPress={() => handleSessionButtonPress()}>
               <ImageBackground
                   source={{ uri: "https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" }} 
                   style={styles.item}
@@ -37,7 +84,7 @@ export default function Home() {
               </TouchableOpacity>
             </View>
             <View style={styles.item}>
-              <TouchableOpacity onPress={() => navigation.navigate('MRPE')} >   
+              <TouchableOpacity onPress={() => handleMomentaryButtonPress()} >   
               <ImageBackground
                   source={{ uri: "https://blog.nasm.org/hubfs/rpe-scale.jpg" }} 
                   style={styles.item}
@@ -65,7 +112,7 @@ export default function Home() {
               </TouchableOpacity>
             </View> 
             <View style={styles.item}>
-              <TouchableOpacity  >
+              <TouchableOpacity>
               <ImageBackground
                   source={{ uri: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }} 
                   style={styles.item}

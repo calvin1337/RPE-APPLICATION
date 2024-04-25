@@ -4,25 +4,39 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { RPELogo } from '../Components/Logo';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../Components/BackButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 
 export default function SessionInfo() {
 
   const navigation = useNavigation();
-  const [dontShowAgain, setDontShowAgain] = useState(false);
   const [toggleDontShowAgain, setToggleDontShowAgain] = useState(false)
 
-  const handleDontShowAgain = () => {
+
+  const handleDontShowAgain = async () => {
     setToggleDontShowAgain(!toggleDontShowAgain)
   };
 
-  const handleContinue = () => {
-    navigation.navigate('HomePage')
-    setDontShowAgain(toggleDontShowAgain)
-  }
+  const handleContinue = async () => {
+    try {
+      let dontShow = ""
+      if (toggleDontShowAgain) {
+        dontShow = "true";
+        } else {
+        dontShow = "false";
+        setToggleDontShowAgain(false)
+        }
+      
+      await AsyncStorage.setItem('dontShowAgain', dontShow);
+    } catch (error) {
+      console.error('Error saving dontShowAgain state:', error);
+    }
+    navigation.navigate("HomePage")
+  };
 
-
+  
 
   return (
     <View style={styles.container}>
@@ -84,7 +98,7 @@ export default function SessionInfo() {
           <Ionicons name={toggleDontShowAgain ? 'checkbox' : 'square'} size={24} color="white" />
           <Text style={styles.checkboxLabel}>Don't Show Again</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button,{ width: "100%" },{backgroundColor:'#66AEC5'} ]} onPress={() => handleContinue()}>
+          <TouchableOpacity style={[styles.button,{ width: "100%" },{backgroundColor:'#66AEC5'} ]} onPress={() => handleContinue(toggleDontShowAgain)}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
