@@ -29,7 +29,7 @@ export default function Settings() {
             </View>
             <View style={styles.column}>
               <View style={styles.item}>
-                <TouchableOpacity style={styles.button}>               
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SessionInfo')}>               
                       <Text style={styles.overlayText}>Session RPE Information</Text> 
                 </TouchableOpacity>
               </View>

@@ -4,6 +4,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { RPELogo } from '../Components/Logo';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../Components/BackButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 
@@ -13,21 +15,34 @@ export default function SessionInfo() {
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [toggleDontShowAgain, setToggleDontShowAgain] = useState(false)
 
-  const handleDontShowAgain = () => {
+
+  const handleDontShowAgain = async () => {
     setToggleDontShowAgain(!toggleDontShowAgain)
+    const dontShowSession = await AsyncStorage.getItem('dontShowAgain');
+        console.log(dontShowSession);
   };
 
-  const handleContinue = () => {
-    navigation.navigate('HomePage')
-    setDontShowAgain(toggleDontShowAgain)
-  }
+  const handleContinue = async () => {
+    try {
+      let dontShow = ""
+      if (toggleDontShowAgain) {
+        dontShow = "true";
+        } else {
+        dontShow = "false";
+        }
+      await AsyncStorage.setItem('dontShowAgain', dontShow);
+      console.log(dontShow)
+    } catch (error) {
+      console.error('Error saving dontShowAgain state:', error);
+    }
+    
+  };
 
-
+  
 
   return (
     <View style={styles.container}>
       <RPELogo />
-      <BackButton onPress={() => navigation.goBack()} />
           <View style={styles.settingsContainer}>
           <Text style={{ fontSize: 20, color: "white" }}>Session RPE Information</Text>
             <Text style={{ fontSize: 20, color: "white" }}></Text>
@@ -84,7 +99,7 @@ export default function SessionInfo() {
           <Ionicons name={toggleDontShowAgain ? 'checkbox' : 'square'} size={24} color="white" />
           <Text style={styles.checkboxLabel}>Don't Show Again</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button,{ width: "100%" },{backgroundColor:'#66AEC5'} ]} onPress={() => handleContinue()}>
+          <TouchableOpacity style={[styles.button,{ width: "100%" },{backgroundColor:'#66AEC5'} ]} onPress={() => handleContinue(toggleDontShowAgain)}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>

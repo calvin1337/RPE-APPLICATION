@@ -1,14 +1,34 @@
 import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React,{ useState } from "react";
+import React,{ useState, useEffect } from "react";
 import { RPELogo } from "../Components/Logo";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Home() {
 
   const navigation = useNavigation();
+  const [dontShowAgainSession, setDontShowAgainSession] = useState(null)
+  const [dontShowAgainMomentary, setDontShowAgainMomentary] = useState(null)
 
+  
+  const loadDontShowAgainState = async () => {
+    try {
+        const dontShowSession = await AsyncStorage.getItem('dontShowAgain');
+        console.log(dontShowSession);
+        setDontShowAgainSession(dontShowSession);
+    } catch (error) {
+        console.error('Error loading dontShowAgain state:', error);
+    }
+};
+
+// Assuming this is your button press handler
+const handleButtonPress = () => {
+    loadDontShowAgainState(); // Call the function when the button is pressed
+};
+
+   
 
 
   return (
@@ -24,7 +44,7 @@ export default function Home() {
         <View style={styles.sportsContainer}>
           <View style={styles.row}>
             <View style={styles.item}>
-              <TouchableOpacity onPress={() => navigation.navigate('SessionInfo')}>
+            <TouchableOpacity onPress={() => handleButtonPress()}>
               <ImageBackground
                   source={{ uri: "https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" }} 
                   style={styles.item}
