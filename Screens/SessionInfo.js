@@ -12,14 +12,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function SessionInfo() {
 
   const navigation = useNavigation();
-  const [dontShowAgain, setDontShowAgain] = useState(false);
   const [toggleDontShowAgain, setToggleDontShowAgain] = useState(false)
 
 
   const handleDontShowAgain = async () => {
     setToggleDontShowAgain(!toggleDontShowAgain)
-    const dontShowSession = await AsyncStorage.getItem('dontShowAgain');
-        console.log(dontShowSession);
   };
 
   const handleContinue = async () => {
@@ -29,13 +26,14 @@ export default function SessionInfo() {
         dontShow = "true";
         } else {
         dontShow = "false";
+        setToggleDontShowAgain(false)
         }
+      
       await AsyncStorage.setItem('dontShowAgain', dontShow);
-      console.log(dontShow)
     } catch (error) {
       console.error('Error saving dontShowAgain state:', error);
     }
-    
+    navigation.navigate("HomePage")
   };
 
   
@@ -43,6 +41,7 @@ export default function SessionInfo() {
   return (
     <View style={styles.container}>
       <RPELogo />
+      <BackButton onPress={() => navigation.goBack()} />
           <View style={styles.settingsContainer}>
           <Text style={{ fontSize: 20, color: "white" }}>Session RPE Information</Text>
             <Text style={{ fontSize: 20, color: "white" }}></Text>

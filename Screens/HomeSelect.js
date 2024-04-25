@@ -9,23 +9,50 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Home() {
 
   const navigation = useNavigation();
-  const [dontShowAgainSession, setDontShowAgainSession] = useState(null)
-  const [dontShowAgainMomentary, setDontShowAgainMomentary] = useState(null)
+  const [dontShowAgainSession, setDontShowAgainSession] = useState(false)
+  const [dontShowAgainMomentary, setDontShowAgainMomentary] = useState(false)
 
   
-  const loadDontShowAgainState = async () => {
+  const loadDontShowAgainSession = async (callback) => {
     try {
         const dontShowSession = await AsyncStorage.getItem('dontShowAgain');
-        console.log(dontShowSession);
         setDontShowAgainSession(dontShowSession);
+        callback(dontShowSession); 
     } catch (error) {
         console.error('Error loading dontShowAgain state:', error);
     }
 };
 
-// Assuming this is your button press handler
-const handleButtonPress = () => {
-    loadDontShowAgainState(); // Call the function when the button is pressed
+
+const handleMomentaryButtonPress = () => {
+    loadDontShowAgainMomentary((dontShowSession) => {
+        if (dontShowSession === 'true') {
+            navigation.navigate("MRPE")
+        } else {
+            navigation.navigate("MomentaryInfo")    
+          }
+    });
+};
+
+const loadDontShowAgainMomentary = async (callback) => {
+  try {
+      const dontShowSession = await AsyncStorage.getItem('dontShowAgainMomentary');
+      setDontShowAgainMomentary(dontShowSession);
+      callback(dontShowSession); 
+  } catch (error) {
+      console.error('Error loading dontShowAgain state:', error);
+  }
+};
+
+
+const handleSessionButtonPress = () => {
+  loadDontShowAgainSession((dontShowSession) => {
+      if (dontShowSession === 'true') {
+          navigation.navigate("HomePage")
+      } else {
+          navigation.navigate("SessionInfo")    
+        }
+  });
 };
 
    
@@ -44,7 +71,7 @@ const handleButtonPress = () => {
         <View style={styles.sportsContainer}>
           <View style={styles.row}>
             <View style={styles.item}>
-            <TouchableOpacity onPress={() => handleButtonPress()}>
+            <TouchableOpacity onPress={() => handleSessionButtonPress()}>
               <ImageBackground
                   source={{ uri: "https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" }} 
                   style={styles.item}
@@ -57,7 +84,7 @@ const handleButtonPress = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.item}>
-              <TouchableOpacity onPress={() => navigation.navigate('MRPE')} >   
+              <TouchableOpacity onPress={() => handleMomentaryButtonPress()} >   
               <ImageBackground
                   source={{ uri: "https://blog.nasm.org/hubfs/rpe-scale.jpg" }} 
                   style={styles.item}

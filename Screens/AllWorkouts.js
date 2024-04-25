@@ -100,10 +100,12 @@ export default function MyWorkouts(){
     
       <View style={styles.workoutContainer}>
       <View style={[styles.column, styles.infoColumn]}><Text style={styles.headerText}>Date</Text></View>
+      <View style={[styles.column, styles.infoColumn]}><Text style={styles.headerText}>Time</Text></View>
       <View style={[styles.column, styles.infoColumn]}><Text style={styles.headerText}>Workout</Text></View>
       <View style={[styles.column, styles.infoColumn]}><Text style={styles.headerText}>RPE</Text></View>
       <View style={[styles.column, styles.iconColumn]}>
-      <View style={[styles.column, styles.infoColumn]}><Text style={styles.headerText}>Delete</Text></View>
+      <View style={[styles.column, styles.infoColumn]}><Ionicons name="filter-outline" size={20} color="white" />
+</View>
 
       </View>
       </View>
@@ -115,6 +117,9 @@ export default function MyWorkouts(){
           <Text style={styles.text}>{workout.date}</Text>
         </View>
         <View style={[styles.column, styles.infoColumn]}>
+          <Text style={styles.text}>{workout.time}</Text>
+        </View>
+        <View style={[styles.column, styles.infoColumn]}>
           <Text style={styles.text}>{workout.sport}</Text>
         </View>
         <View style={[styles.column, styles.infoColumn]}>
@@ -122,7 +127,7 @@ export default function MyWorkouts(){
         </View>
         <View style={[styles.column, styles.iconColumn]}>
           <TouchableOpacity onPress={() => handleDeleteButton(workout.id)}>
-            <Ionicons name="trash" size={32} color="white" />
+            <Ionicons name="trash" size={20} color="white" />
           </TouchableOpacity>
         </View>
       </View>
@@ -152,6 +157,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#FFFFFF',
+    fontSize: 12
   },
   scrollView: {
     flex: 1,
