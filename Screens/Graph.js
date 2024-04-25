@@ -198,7 +198,7 @@ export default function AnalyticsPage() {
                 chartConfig={{
                   backgroundGradientFrom: 'rgba(27, 23, 39, 0.8)',
                   backgroundGradientTo: 'rgba(27, 23, 39, 0.8)',
-                  barPercentage: 0.2, // Adjusted bar width
+                  barPercentage: 0.3, // Adjusted bar width
                   fillShadowGradient: `rgba(1, 122, 205, 1)`,
                   fillShadowGradientOpacity: 1,
                   decimalPlaces: 0,

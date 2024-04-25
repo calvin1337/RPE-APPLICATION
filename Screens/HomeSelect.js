@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React,{ useState, useEffect } from "react";
@@ -112,7 +112,7 @@ const handleSessionButtonPress = () => {
               </TouchableOpacity>
             </View> 
             <View style={styles.item}>
-              <TouchableOpacity  >
+              <TouchableOpacity>
               <ImageBackground
                   source={{ uri: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }} 
                   style={styles.item}

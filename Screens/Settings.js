@@ -43,7 +43,7 @@ export default function Settings() {
             </View>
             <View style={styles.column}>
               <View style={styles.item}>
-                <TouchableOpacity style={styles.button}>               
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DataInfo')}>               
                       <Text style={styles.overlayText}>Data Usage Information</Text> 
                 </TouchableOpacity>
               </View>
