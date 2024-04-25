@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { db, FIREBASE_AUTH } from '../firebase';
-import { doc, onSnapshot} from 'firebase/firestore';
+import { doc, onSnapshot, deleteDoc} from 'firebase/firestore';
 import { RPELogo } from '../Components/Logo';
 
 
@@ -58,6 +58,34 @@ export default function MyWorkouts(){
     fetchWorkouts();
   }, []);
 
+  const handleDeleteButton = async (index) => {
+    try {
+      Alert.alert(
+        'Confirm Deletion',
+        'Are you sure you want to delete this workout?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+            const currentUser = FIREBASE_AUTH.currentUser;
+            const userId = currentUser.uid;
+            const userDocRef = doc(db, 'Users', userId);
+            const workoutsRef = doc(userDocRef, 'Workouts', index);
+            await deleteDoc(workoutsRef);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error('Error deleting document:', error);
+    }  
+  }
+
   return(
     <View style={styles.container}>
       <RPELogo />
@@ -92,7 +120,7 @@ export default function MyWorkouts(){
           <Text style={styles.text}>{workout.RPE}</Text>
         </View>
         <View style={[styles.column, styles.iconColumn]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDeleteButton(workout.id)}>
             <Ionicons name="trash" size={32} color="white" />
           </TouchableOpacity>
         </View>

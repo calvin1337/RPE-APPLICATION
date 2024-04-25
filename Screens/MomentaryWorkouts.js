@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { getFirestore, collection, getDocs, deleteDoc } from 'firebase/firestore';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import BackButton from '../Components/BackButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -58,8 +58,32 @@ export default function MomentaryWorkouts(){
     fetchWorkouts();
   }, []);
 
-  const handleDeleteButton = (index) => {
-    console.log(index)
+  const handleDeleteButton = async (index) => {
+    try {
+      Alert.alert(
+        'Confirm Deletion',
+        'Are you sure you want to delete this workout?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+            const currentUser = FIREBASE_AUTH.currentUser;
+            const userId = currentUser.uid;
+            const userDocRef = doc(db, 'Users', userId);
+            const workoutsRef = doc(userDocRef, 'MomentaryWorkouts', index);
+            await deleteDoc(workoutsRef);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error('Error deleting document:', error);
+    }  
   }
 
   const handleWorkoutPress = (workoutIndex) => {
@@ -131,7 +155,7 @@ export default function MomentaryWorkouts(){
                 </View>
                 
               ))}
-              <TouchableOpacity style={styles.buttonContainer} onPress={() => handleDeleteButton(workouts)}>
+              <TouchableOpacity style={styles.buttonContainer} onPress={() => handleDeleteButton(workout.id)}>
               <Text style={[styles.button, {backgroundColor:'#e74c3c'}]}>Delete Entry</Text>
               </TouchableOpacity>
             </View>

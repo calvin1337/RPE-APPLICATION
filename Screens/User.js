@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     height: 120, 
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10
+    marginBottom: 10,
   },
   profilePictureBorder: {
     width: 110, 

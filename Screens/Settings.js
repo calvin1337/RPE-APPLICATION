@@ -1,81 +1,53 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import BackButton from "../Components/BackButton";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from '@react-navigation/native';
 import { RPELogo } from '../Components/Logo';
 
 export default function Settings() {
   const navigation = useNavigation();
 
-  const navigateToRPE = () => {
-    navigation.navigate('RPE');
-  };
-
-  const navigateToWhenTrackWorkout = () => {
-    navigation.navigate('WhenTrackWorkout');
-  };
-
-  const navigateToWhoAccessMyData = () => {
-    navigation.navigate('WhoAccessMyData');
-  };
-
-  const navigateToUserToCoach = () => {
-    navigation.navigate('UserToCoach');
-  };
-
-  const navigateToSafelyStoreData = () => {
-    navigation.navigate('SafelyStoreData');
-  };
-
   return (
     <View style={styles.container}>
-      <RPELogo/>
+      <RPELogo />
       <BackButton onPress={() => navigation.goBack()} />
-
       <View style={styles.settingsContainer}>
         <Text style={{ fontSize: 20, color: "white" }}>Settings</Text>
-       
+        <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
+        <Ionicons name="settings-sharp" size={32} color="white" />
+        </TouchableOpacity>
       </View>
-      
       <ScrollView style={styles.scrollView}>
-        <View style={styles.usersContainer}>
-          <View style={styles.itemContainer}>
-          <TouchableOpacity onPress={navigateToRPE}>
-            <View >
-              <Text style={styles.text}>What is RPE? </Text>
+        <View style={styles.sportsContainer}>
+            <View style={styles.column}>
+              <View style={styles.item}>
+                <TouchableOpacity style={styles.button}>               
+                      <Text style={styles.overlayText}>Coach Requests</Text> 
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.itemContainer}>
-          <TouchableOpacity onPress={navigateToWhenTrackWorkout}>
-            <View >
-              <Text style={styles.text}>When should I use the app to track my workout?</Text>
+            <View style={styles.column}>
+              <View style={styles.item}>
+                <TouchableOpacity style={styles.button}>               
+                      <Text style={styles.overlayText}>Session RPE Information</Text> 
+                </TouchableOpacity>
+              </View>
+            </View>  
+            <View style={styles.column}>
+              <View style={styles.item}>
+                <TouchableOpacity style={styles.button}>               
+                      <Text style={styles.overlayText}>Momentary RPE Information</Text> 
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.itemContainer}>
-          <TouchableOpacity onPress={navigateToWhoAccessMyData}>
-            <View >
-              <Text style={styles.text}>Who can access my data ?</Text>
-            </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.itemContainer}>
-          <TouchableOpacity onPress={navigateToUserToCoach}>
-            <View >
-              <Text style={styles.text}>How do I change from user to coach?</Text>
-            </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.itemContainer}>
-          <TouchableOpacity onPress={navigateToSafelyStoreData}>
-            <View >
-              <Text style={styles.text}>How can I safely store my data?</Text>
-            </View>
-          </TouchableOpacity>
-          </View>
-
-
+            <View style={styles.column}>
+              <View style={styles.item}>
+                <TouchableOpacity style={styles.button}>               
+                      <Text style={styles.overlayText}>Data Usage Information</Text> 
+                </TouchableOpacity>
+              </View>
+            </View> 
         </View>
       </ScrollView>
     </View>
@@ -84,7 +56,7 @@ export default function Settings() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: "100%",
     backgroundColor: "#1F283A",
   },
   settingsContainer: {
@@ -96,35 +68,37 @@ const styles = StyleSheet.create({
     marginTop: 100,
     padding: 20,
   },
-  scrollView: {
+  sportsContainer: {
     flex: 1,
-    width: "100%"
-  },
-  usersContainer: {
     alignItems: "center",
-    paddingHorizontal: 30,
-    paddingBottom: 100,
-    paddingTop: 10,
     width: "100%"
   },
-  itemContainer: {
+  
+  column: {
+    flex: 1,
     width: "100%",
-    flexDirection: "row",
-    marginBottom: 10,
-    backgroundColor: "#2B2D42",
-    borderRadius: 15,
-    marginBottom: 25,
-    height: 70,
+    marginTop: 10,
+    justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
   },
-  text: {
-    color: "white",
-    fontSize: 16,
-    padding: 4,
+  item: {
+    height: 110,
+    width: '90%',
+    backgroundColor: 'rgba(27, 23, 39, 0.8)',
+    marginHorizontal: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 15,
+    
   },
-  title: {
-    fontSize: 20,
-    color: "white",
+
+  button: {
+    width: "100%"
+  },
+  overlayText: {
+    color: '#EDF2F4',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: "center"
   },
 });

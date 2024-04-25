@@ -88,8 +88,6 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 100,
     padding: 20,
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
   sportsContainer: {
     flex: 1,
