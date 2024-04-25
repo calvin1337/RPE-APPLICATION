@@ -28,9 +28,9 @@ const convertToCSV = (data) => {
     RPE: item.RPE
   }));
 
-  const csvHeader = Object.keys(reorderedData[0]).join(',') + '\n';
+  const csvHeader = 'Date, Time, Sport, RPE\n';
   const csvData = reorderedData.map(item => Object.values(item).join(',')).join('\n');
-  return csvHeader + csvData;
+  return csvHeader + csvData
 };
 
 const fetchMomentaryData = async () => {
@@ -47,12 +47,31 @@ const fetchMomentaryData = async () => {
 
 // Momentary Convert
 const convertMomentaryToCSV = (data) => {
-  // Reorder the columns and remove "load" property
   const reorderedData = data.map(item => ({
     date: item.date,
+    workouts: item.workout.map(workout => ({
+      rpe: workout.rpe,
+      interval: workout.interval,
+      workoutTime: workout.workoutTime,
+      actualTime: workout.actualTime
+    }))
   }));
+  
+  // Create CSV header
+  const csvHeader = 'Interval,Time of Entry, Workout Length(s), RPE\n';
+  
+  // Create CSV rows
+  const csvRows = reorderedData.map(item => {
+    const { date, workouts } = item;
+    const dateRow = `Date,${date}\n`; // Date row
+    const workoutRows = workouts.map(workout => `${workout.interval},${workout.actualTime}, ${workout.workoutTime}, ${workout.rpe}`).join('\n'); // Workouts rows
+    return `${dateRow}${csvHeader}${workoutRows}\n`; 
+  });
+  
+  // Combine all rows into CSV data
+  const csvData = csvRows.join('\n');
 
-  console.log(reorderedData)
+  return csvData
 };
 
 
@@ -68,6 +87,18 @@ const exportDataToCSV = async (data) => {
     return null;
   }
 };
+
+const exportMomentaryDataToCSV = async (data) => {
+  try {
+    const csv = convertMomentaryToCSV(data);
+    const fileUri = FileSystem.cacheDirectory + 'momentary-workouts.csv';
+    await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: FileSystem.EncodingType.UTF8 });
+    return fileUri;
+  } catch (error) {
+    console.error('Error exporting data to CSV:', error);
+    return null;
+  }
+}
 
 // Function to share CSV file
 const shareCSVFile = async (fileUri) => {
@@ -101,13 +132,12 @@ export const justExport = async () => {
 
   const formatData = await filterData(fetchedData);
 
-    // Export data to CSV file
-    const csvFileUri = await exportDataToCSV(formatData);
+  // Export data to CSV file
+  const csvFileUri = await exportDataToCSV(formatData);
 
-    // Share CSV file
-    if (csvFileUri) {
-      shareCSVFile(csvFileUri);
-    }
+  if (csvFileUri) {
+    shareCSVFile(csvFileUri);
+  }
 }
 
 export const exportMomentary = async () => {
@@ -115,9 +145,11 @@ export const exportMomentary = async () => {
 
   const formatData = await filterData(fetchedData)
 
-  const csvFileUri = await convertMomentaryToCSV(formatData);
+  const csvFileUri = await exportMomentaryDataToCSV(formatData);
 
-
+  if (csvFileUri) {
+    shareCSVFile(csvFileUri);
+  }
 }
 
 const ExportButton = ({width}) => {
