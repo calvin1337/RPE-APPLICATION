@@ -116,7 +116,7 @@ export default function InSport({ navigation, route }) {
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
         <View style={styles.RPEcontainer}>
-        <Text style={{ fontSize: 16, color: "white", textAlign: 'center',borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5  }}>Rating: Perceived Exertion Level</Text>
+        {/* <Text style={{ fontSize: 16, color: "white", textAlign: 'center',borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5  }}>Rating: Perceived Exertion Level</Text> */}
           {renderRPEButton(1, '1. Rest')}
           {renderRPEButton(2, '2. Minimal Exertion')}
           {renderRPEButton(3, '3. Very Light Exertion')}
@@ -160,13 +160,14 @@ export default function InSport({ navigation, route }) {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>RPE Information</Text>
-            <Text>RPE, also known as rate of perceived exertion, is a scale which measures the
-                    intensity levels of the person currently training. It is decided on by the key
-                    factors of heart rate, breathing and muscle fatigue of the athlete training.
+            <Text>1. Select Session RPE: Start by selecting the perceived exertion level for your training session. You can do this by tapping on the corresponding buttons provided on the screen. Each button represents a different level of exertion, ranging from 1 (very low) to 10 (maximal).
+            </Text>
+                    <Text>
+                    2. Enter Workout Time: After selecting the Session RPE, enter the duration of your workout session in minutes using the input field provided. This helps calculate the overall training load for your session.
+
                     </Text>
                     <Text>
-                    These factors then correspond to a scale in which the higher the number
-                    reported the more intense the exercise is
+                    3. Add Workout: Once you've selected the Session RPE and entered the workout time, tap the "Add Workout" button to save your session to the app. You'll receive a confirmation message once the workout has been successfully added.
                     </Text>
             <TouchableOpacity onPress={closeModal}>
               <Text style={styles.closeButton}>Close</Text>

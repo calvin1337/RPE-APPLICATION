@@ -260,7 +260,7 @@ export default function MomentaryRPE({ navigation }) {
         </TouchableOpacity>
         </View>
         <View style={styles.RPEcontainer}>
-          <Text style={{ fontSize: 16, color: "white", textAlign: 'center', borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5 }}>Rating: Perceived Exertion Level</Text>
+          {/* <Text style={{ fontSize: 16, color: "white", textAlign: 'center', borderBottomWidth: 1, borderBottomColor: "white", marginBottom: 5 }}>Rating: Perceived Exertion Level</Text> */}
           {renderRPEButton(6, '6. No Exertion At All')}
           {renderRPEButton(7, '7. Minimal Exertion')}
           {renderRPEButton(8, '8. Minimal Effort')}
@@ -290,17 +290,20 @@ export default function MomentaryRPE({ navigation }) {
               Borg RPE Scale Timer
           </Text>
           <Text style={styles.modalText}>
-              The Borg RPE scale measures exercise intensity based on perceived exertion. 
-              Start the timer and periodically assess your exertion level using the scale.
+          1. Select RPE: Begin by selecting the perceived exertion level (RPE) for your momentary assessment. Tap on the buttons representing different RPE levels ranging from 6 (no exertion) to 20 (maximal exertion).
+
           </Text>
           <Text style={styles.modalText}>
-              Adjust your workout intensity based on your perceived exertion to optimize your workout.
+          2. Track Time: As you perform your activity, start the stopwatch by tapping the "Start" button. The timer will begin counting the duration of your workout session. If you need to pause the stopwatch, tap the "Pause" button.
+
           </Text>
           <Text style={styles.modalText}>
-    Maintain a level of exertion that challenges you but is sustainable throughout your workout.
+          3. Record Entries: After each interval of your workout, tap the "Add Time Entry" button to record your RPE along with the time elapsed since the last entry. This helps in tracking your exertion levels throughout the session.
+
           </Text>
           <Text style={styles.modalText}>
-              Use the timer and Borg RPE scale together to track and adjust your exercise intensity effectively.
+          4. Finish Workout: Once you've completed your workout, tap the "Finish Workout" button. Confirm your action, and the app will save your workout data, including RPE levels and workout durations, for future reference.
+
           </Text>
             <TouchableOpacity onPress={closeModal}>
               <Text style={styles.closeButton}>Close</Text>
