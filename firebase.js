@@ -4,26 +4,34 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeAuth, getReactNativePersistence } from '@firebase/auth';
-
+import {
+  ANDROID_API_KEY,
+  ANDROID_APP_ID,
+  IOS_API_KEY,
+  IOS_APP_ID,
+  AUTH_DOMAIN,
+  PROJECT_ID,
+  STORAGE_BUCKET
+} from '@env';
 
 
 
 // Firebase configuration for Android
 const firebaseConfig = {
-  apiKey: "AIzaSyDeYrrkGAfjZhWLFgrlbr4aeL9jsnNa03M",
-  authDomain: "rpe-app-cc0c7.firebaseapp.com",
-  projectId: "rpe-app-cc0c7",
-  storageBucket: "rpe-app-cc0c7.appspot.com",
-  appId: "1:695845550647:android:035e59f1df9a71868e1db2"
+  apiKey: ANDROID_API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  appId: ANDROID_APP_ID
 };
 
 // Firebase configuration for iOS
 const firebaseConfigiOS = {
-  apiKey: "AIzaSyDbwUtgGFBtJEu7iuodKf9kNsjp6JGmbHU",
-  authDomain: "rpe-app-cc0c7.firebaseapp.com",
-  projectId: "rpe-app-cc0c7",
-  storageBucket: "rpe-app-cc0c7.appspot.com",
-  appId: "1:695845550647:ios:bafbbd7218eba99c8e1db2"
+  apiKey: IOS_API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  appId: IOS_APP_ID
 };
 
 export const FIREBASE_APP = initializeApp(firebaseConfig);
